@@ -152,6 +152,43 @@ details.acc .body{padding:0 18px 16px 48px}
 .proc .stepname{font-size:20px;font-weight:800;color:var(--brand-ink)}
 .proc .nav{display:flex;justify-content:space-between;gap:10px}
 
+/* App picker */
+.pick{border:1px solid var(--line);border-radius:12px;padding:18px 20px;background:var(--surface);display:flex;flex-direction:column;gap:12px}
+.pick .q{font-weight:700;font-size:18px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.appchip{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;min-height:44px;box-sizing:border-box;border:1.5px solid var(--line);border-radius:22px;background:var(--bg);cursor:pointer;font-weight:700}
+.appchip input{accent-color:var(--brand);width:18px;height:18px;margin:0}
+.appchip:has(input:checked){border-color:var(--brand);background:var(--accent-soft)}
+.pset{display:flex;flex-direction:column;gap:14px}
+
+/* Decision flowchart */
+.flow{display:flex;flex-direction:column;align-items:center;font-size:15.5px;line-height:1.4}
+.flow .fq{background:var(--brand);color:var(--on-brand);border-radius:10px;padding:12px 16px;text-align:center;font-weight:700;max-width:400px;box-sizing:border-box}
+.flow .fq small{display:block;font-weight:400;font-size:14px;margin-top:4px}
+.flow .vl{width:2px;height:16px;background:var(--muted);flex:none}
+.flow .yn{font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:2px 10px;border-radius:12px;border:1.5px solid var(--muted);color:var(--ink);background:var(--bg)}
+.flow .fbr{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;width:100%;position:relative}
+.flow .fbr::before{content:"";position:absolute;top:0;left:25%;right:25%;height:2px;background:var(--muted)}
+.flow .fcol{display:flex;flex-direction:column;align-items:center;min-width:0}
+.flow .leaf{border:2px solid var(--accent);background:var(--bg);border-radius:10px;padding:12px 14px;width:100%;box-sizing:border-box;flex:1}
+.flow .leaf .ln{font-weight:800;font-size:17px;color:var(--brand-ink)}
+.flow .leaf .lw{font-size:14px;color:var(--muted);margin:2px 0 8px}
+.flow .leaf ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:14.5px}
+.flow .fbr .fbr .fcol{align-items:stretch}
+.flow .fbr .fbr .fcol>.vl,.flow .fbr .fbr .fcol>.yn{align-self:center}
+@media (max-width:640px){
+  .flow .fbr .fbr{grid-template-columns:1fr;gap:10px}
+  .flow .fbr .fbr::before{display:none}
+  .flow .fbr .fbr .fcol+.fcol>.vl:first-child{display:none}
+  .flow .fbr .fbr .fcol+.fcol{border-top:1px dashed var(--line);padding-top:10px}
+}
+@media (max-width:440px){
+  .flow{font-size:14.5px}
+  .flow .fbr{gap:0 8px}
+  .flow .fq{padding:10px}
+  .flow .leaf{padding:10px}
+}
+
 /* Flashcards */
 .fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:12px}
 .flash{perspective:900px;border:0;padding:0;background:none;height:170px;cursor:pointer;text-align:center;color:var(--ink)}
@@ -418,14 +455,14 @@ const LESSONS = [
   ]
 },
 {
-  title: "Chat, project or agent", min: 7,
+  title: "Chat, project or agent", min: 10,
   terms: "Tool use, agentic AI, agent, approval prompt, prompt injection",
   order: "third",
   builds: "Emily wants the AI to do the work, not list the steps. You compare the chat and project from Lesson 2 with an agent, which opens files and runs searches itself.",
   scenario: "Every Friday, Emily turns five project updates into one status report for a client. She asks Copilot Chat for help, and it lists six steps. Emily still opens each file, copies the updates and builds the report herself, and the work takes an hour. She wants the AI to do the steps, not list them. The same folder holds the client’s training plan, so before anything opens her files, Emily wants to know what it can change.",
   why: "Lessons 1 and 2 covered chats. In a chat, the AI writes a reply, and you do the work. An agent does the work itself: it opens files, runs searches and takes several steps before it stops. To decide when to use an agent, you compare it with a chat and a project, which Lesson 2 taught.",
   matters: "An agent can do in minutes a task that takes you an hour. It can also change dozens of files before you check one. Choosing the right option for each task saves your time and protects your client’s files.",
-  goal: "When you finish, you can tell the difference between an agent and a chat that lists steps. You can tell an approval prompt from a prompt injection. You can also choose chat, a project or an agent for a task.",
+  goal: "When you finish, you can tell the difference between an agent and a chat that lists steps. You can tell an approval prompt from a prompt injection. You can also choose chat, a project or an agent for a task, and find that option in the apps you use.",
   blocks: [
     {t:"h", text:"Part 1. An agent does the steps, and a chat describes them"},
     {t:"p", html:`<b>Tool use</b> is an action an AI takes outside the conversation, such as searching the web, reading a file or sending an email.`},
@@ -471,14 +508,14 @@ const LESSONS = [
     {t:"gate"},
     {t:"h", text:"Part 3. Choose chat, a project or an agent based on the task"},
     {t:"p", html:`Choose the simplest option that can do the task. Check the options in this order: chat, then a project, then an agent.`},
-    {t:"table", head:["Option","Choose it when"], rows:[
-      ["Chat","The task fits in one conversation. You give the AI the text or files, and you copy the result out."],
-      ["Project","You do the same kind of task again, with the same files or rules each time."],
-      ["Agent","The AI has to open several files or apps and do the steps itself, or the result is something that runs, such as a script."]]},
+    {t:"apppick"},
+    {t:"flow"},
+    {t:"p", html:`Answer the questions from the top. The first question checks whether chat or a project can do the task. You need an agent only when the answer is no.`},
     {t:"case", label:"Case 1", task:"Turn this week’s five project updates, saved in one folder, into a status report.",
       html:`<p>Does it fit in one chat? Only if you paste in five files and copy parts of the answer back out. That is too much copying for a chat. Is it the same files every time? No, the updates change each week. Does the AI have to open several files? Yes.</p><p><b>Choice: an agent,</b> such as Claude Cowork or ChatGPT Work. <b>The reason:</b> the AI has to open several files and build the report itself.</p>`},
     {t:"case", label:"Case 2", task:"Each month, draft a newsletter introduction for one client, in that client’s style.",
       html:`<p>Does it fit in one chat? Yes, the AI writes one draft that you copy out. Is it the same files every time? Yes, the client’s style guide, every month.</p><p><b>Choice: a project</b> with the client’s style guide. <b>The reason:</b> you repeat the task with the same file each time.</p>`},
+    {t:"practice"},
     {t:"note", html:`${a(L.tool,"Choose the Right AI Tool for a Task")} has a table for Claude, ChatGPT and Copilot, and a checklist to follow before you start an agent.`},
     {t:"gate"},
     {t:"h", text:"Check: choose the option for six tasks"},
@@ -508,7 +545,7 @@ const LESSONS = [
       ["Agent","An AI tool that completes a task with several steps, such as Claude Cowork, Claude Code, ChatGPT Work or Codex."],
       ["Approval prompt","A pause in which the agent asks you before it takes an action."],
       ["Prompt injection","An instruction that someone hides in a web page, email or file to make the AI do something you did not ask for."]]},
-    {t:"end", html:`You can now tell an agent from a chat, tell an approval prompt from a prompt injection, and choose chat, a project or an agent for a task. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 4 covers add-ons, accounts and saved versions.`}
+    {t:"end", html:`You can now tell an agent from a chat, tell an approval prompt from a prompt injection, and choose chat, a project or an agent for a task in the apps you use. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 4 covers add-ons, accounts and saved versions.`}
   ]
 },
 {
@@ -642,7 +679,7 @@ function renderHome(){
   const wrap = el("div","home");
   wrap.append(el("div","stack",`<p class="eyebrow">A self-paced course for Fredrickson staff</p>
     <h1>Learn the AI terms you see at work, and choose the right AI option for a task.</h1>
-    <p class="lede">Four short lessons, about 33 minutes in all. Each lesson teaches a few terms that people often mix up, lets you sort examples, and ends with a short check.</p>`));
+    <p class="lede">Four short lessons, about 36 minutes in all. Each lesson teaches a few terms that people often mix up, lets you sort examples, and ends with a short check.</p>`));
   wrap.append(el("div","stack",`<h2>How the four lessons build on each other</h2>
     <p>Each lesson asks two questions: what can the AI read, and what can it do? Each lesson gives a bigger answer than the one before, and uses the terms the earlier lessons taught.</p>
     <p>Lesson 1 defines the basic terms the other lessons use. Lessons 2, 3 and 4 follow Emily, who works at Fredrickson, as her task grows from one chat to letting an agent change her files.</p>`));
@@ -746,6 +783,9 @@ function renderBlock(b, ctx, seg, n){
     }
     case "acc": { const d = el("details","acc"); d.innerHTML = `<summary>${b.title}</summary><div class="body">${b.html}</div>`; return d; }
     case "case": return caseBlock(b);
+    case "apppick": return appPickBlock(ctx);
+    case "flow": return flowBlock(ctx);
+    case "practice": return practiceBlock(ctx, seg);
     case "mock": return mockBlock();
     case "tabs": return tabsBlock(b);
     case "process": return processBlock(b);
@@ -756,6 +796,170 @@ function renderBlock(b, ctx, seg, n){
     case "score": { const s = el("div","score"); s.hidden = true; ctx.scoreEls.push({s, pass:b.pass}); return s; }
     case "end": return endBlock(b, n);
   }
+}
+
+/* ---------- choose an option: apps, flowchart and practice (Lesson 3) ---------- */
+const APPS = [["claude","Claude"],["chatgpt","ChatGPT"],["copilot","Microsoft 365 Copilot"]];
+const APPS_KEY = "wwai-apps";
+
+// The four places the flowchart ends, and each app's name for that option.
+const LEAVES = {
+  chat:    {name:"Chat", why:"One conversation, done once.",
+            apps:{claude:"Chat", chatgpt:"Chat", copilot:"Copilot Chat, or Copilot in Word, Excel or PowerPoint when the change belongs in the file you have open"}},
+  project: {name:"Project", why:"The same files or rules each time.",
+            apps:{claude:"Projects", chatgpt:"Projects", copilot:"An agent made in Agent Builder, which works like a project"}},
+  docs:    {name:"Agent for documents", why:"The AI opens files or apps and builds a document people read.",
+            apps:{claude:"Cowork", chatgpt:"Work", copilot:"Copilot Cowork, Researcher for a researched report, or Analyst for data in a spreadsheet"}},
+  code:    {name:"Agent for software", why:"The result is something people run.",
+            apps:{claude:"Claude Code", chatgpt:"Codex", copilot:"This course does not cover a Copilot option for building software."}}
+};
+
+// Practice tasks for each app. The choices are that app's own names for the options.
+const PRACTICE = {
+  claude: [
+    {q:"You need a thank-you email to a client after today’s kickoff meeting.", choices:["Chat","Projects","Cowork","Claude Code"], correct:0,
+      right:"Correct. The email fits in one conversation, and you write it only once.", wrong:"Not quite. The email fits in one conversation, and you write it only once, so Chat can do it."},
+    {q:"Each month, you write a progress update for one client, using the client’s style guide and last month’s update.", choices:["Chat","Projects","Cowork","Claude Code"], correct:1,
+      right:"Correct. The update fits in one conversation, and you use the same files every month.", wrong:"Not quite. You repeat the task every month with the same files, so a project keeps them ready for each chat."},
+    {q:"Eight sets of interview notes are in one folder. You need one findings report in Word.", choices:["Chat","Projects","Cowork","Claude Code"], correct:2,
+      right:"Correct. Claude has to open eight files and build a document people read.", wrong:"Not quite. In a chat, you would paste in eight files and copy parts of the answer back out. Claude has to open the files and build a document, so use Cowork."},
+    {q:"Staff need a small web page where they can look up course codes.", choices:["Chat","Projects","Cowork","Claude Code"], correct:3,
+      right:"Correct. A web page is something people run, so Claude Code builds and tests it.", wrong:"Not quite. A web page is something people run, not a document they read. Use Claude Code."}],
+  chatgpt: [
+    {q:"You want a plain explanation of one term in a client’s report.", choices:["Chat","Projects","Work","Codex"], correct:0,
+      right:"Correct. One question and one answer fit in one conversation.", wrong:"Not quite. One question and one answer fit in one conversation, so Chat can do it."},
+    {q:"Over the next six weeks, you will answer questions about one client’s RFP, using the RFP and your notes each time.", choices:["Chat","Projects","Work","Codex"], correct:1,
+      right:"Correct. Each answer fits in one chat, and every chat needs the same two files.", wrong:"Not quite. Every chat needs the same RFP and notes, so a project saves you uploading them each time."},
+    {q:"You need a briefing deck on four competitors, researched on the web.", choices:["Chat","Projects","Work","Codex"], correct:2,
+      right:"Correct. ChatGPT has to research, read and build a deck, which takes several steps.", wrong:"Not quite. The task takes several steps and ends in a deck people read, so use Work."},
+    {q:"Every Monday, you combine 30 spreadsheets into one. You want a script that does it, tested before you use it.", choices:["Chat","Projects","Work","Codex"], correct:3,
+      right:"Correct. A script is something people run, so Codex builds and tests it.", wrong:"Not quite. A script is something people run. Codex can build it and test it, so you don’t run it and paste the errors back."}],
+  copilot: [
+    {q:"You need the decisions from a long email thread, to paste into your notes.", choices:["Copilot Chat","Researcher","Copilot Cowork","Analyst"], correct:0,
+      right:"Correct. The task fits in one conversation, and you copy the result out.", wrong:"Not quite. The task fits in one conversation, and you copy the result out, so Copilot Chat can do it."},
+    {q:"The second section of the proposal you have open in Word is too long.", choices:["Copilot Chat","Copilot in Word","An agent made in Agent Builder","Copilot Cowork"], correct:1,
+      right:"Correct. The change belongs in the file you have open.", wrong:"Not quite. Copilot Chat gives you text to paste back in. The change belongs in the open file, so use Copilot in Word."},
+    {q:"Your team answers the same travel-policy questions every week, using one SharePoint site.", choices:["Copilot Chat","An agent made in Agent Builder","Researcher","Copilot Cowork"], correct:1,
+      right:"Correct. The team repeats the task with the same files, so an Agent Builder agent works like a project.", wrong:"Not quite. The team repeats the task with the same files. An agent made in Agent Builder keeps those files ready, like a project."},
+    {q:"Before a sales call, you need a background brief on the client, built from your email, your files and the web.", choices:["Copilot Chat","Analyst","Researcher","Copilot in Word"], correct:2,
+      right:"Correct. Researcher builds a researched report from your work files, email and the web.", wrong:"Not quite. The brief needs research across your email, files and the web, so use Researcher."},
+    {q:"You need to know which courses lost enrollment this year, from a spreadsheet with three years of data.", choices:["Researcher","Analyst","Copilot Chat","An agent made in Agent Builder"], correct:1,
+      right:"Correct. Analyst finds trends and comparisons in a spreadsheet.", wrong:"Not quite. The task is finding a trend in a spreadsheet, so use Analyst."},
+    {q:"Each Friday, you collect updates from several files and draft the weekly roll-up.", choices:["Copilot Chat","An agent made in Agent Builder","Copilot Cowork","Copilot in Word"], correct:2,
+      right:"Correct. Copilot has to open several files and do the steps. The files change each week, so a project would not help.", wrong:"Not quite. The files change each week, so a project would not help. Copilot has to open several files and do the steps, so use Copilot Cowork."}]
+};
+
+function appsOf(ctx){
+  if(!ctx.apps){
+    let saved = [];
+    try { saved = JSON.parse(localStorage.getItem(APPS_KEY) || "[]"); } catch(e){}
+    ctx.apps = saved.filter(k => APPS.some(([id]) => id === k));
+    ctx.appSubs = [];
+  }
+  return ctx.apps;
+}
+function setApps(ctx, list){
+  ctx.apps = list;
+  try { localStorage.setItem(APPS_KEY, JSON.stringify(list)); } catch(e){}
+  ctx.appSubs.forEach(f => f());
+}
+
+function appPickBlock(ctx){
+  const chosen = appsOf(ctx);
+  const w = el("div","pick");
+  const q = el("p","q","Which AI apps do you use? Select one or more."); q.id = "pick"+(++uid);
+  const chips = el("div","chips"); chips.setAttribute("role","group"); chips.setAttribute("aria-labelledby", q.id);
+  APPS.forEach(([id,name])=>{
+    const lab = el("label","appchip"); const inp = document.createElement("input");
+    inp.type = "checkbox"; inp.value = id; inp.checked = chosen.includes(id);
+    inp.addEventListener("change",()=>setApps(ctx, [...chips.querySelectorAll("input:checked")].map(x=>x.value)));
+    lab.append(inp, el("span",null,name)); chips.append(lab);
+  });
+  w.append(q, chips, el("p","cap","The chart and the practice below show only the apps you select. You can change your choice at any time."));
+  return w;
+}
+
+function flowBlock(ctx){
+  appsOf(ctx);
+  const w = el("figure","flow"); w.style.margin = "0";
+  w.setAttribute("aria-label","Flowchart for choosing chat, a project or an agent");
+  const leaf = k => `<div class="leaf" data-leaf="${k}"><p class="ln">${LEAVES[k].name}</p><p class="lw">${LEAVES[k].why}</p><ul></ul></div>`;
+  const branch = (yn, inner) => `<div class="fcol"><span class="vl"></span><span class="yn">${yn}</span><span class="vl"></span>${inner}</div>`;
+  w.innerHTML = `
+    <p class="fq">1. Does the task fit in one conversation?<small>You give the AI the text or files, and you copy the result out.</small></p>
+    <span class="vl"></span>
+    <div class="fbr">
+      ${branch("Yes", `<p class="fq">2. Will you do this task again, with the same files or rules?</p><span class="vl"></span>
+        <div class="fbr">${branch("Yes", leaf("project"))}${branch("No", leaf("chat"))}</div>`)}
+      ${branch("No", `<p class="fq">3. Is the result something people run?<small>Such as a script, tool, website or automation.</small></p><span class="vl"></span>
+        <div class="fbr">${branch("Yes", leaf("code"))}${branch("No", leaf("docs"))}</div>`)}
+    </div>`;
+  function fill(){
+    const show = ctx.apps.length ? APPS.filter(([id]) => ctx.apps.includes(id)) : APPS;
+    w.querySelectorAll(".leaf").forEach(lf=>{
+      const L2 = LEAVES[lf.dataset.leaf];
+      lf.querySelector("ul").innerHTML = show.map(([id,name]) => `<li><b>${name}:</b> ${L2.apps[id]}</li>`).join("");
+    });
+  }
+  ctx.appSubs.push(fill); fill();
+  return w;
+}
+
+function practiceBlock(ctx, seg){
+  appsOf(ctx);
+  const state = { seg, done:false }; ctx.interactives.push(state);
+  const w = el("div","stack");
+  w.append(el("h3",null,"Practice: choose the option in the apps you use"));
+  const intro = el("p");
+  const sets = {};      // built once per app, so answers stay when an app is unselected and selected again
+  const holder = el("div","stack");
+  w.append(intro, holder);
+  function build(id, name){
+    const s = el("div","pset");
+    s.append(el("p","eyebrow",name));
+    if(id === "copilot") s.append(el("p","cap","Copilot Cowork, Researcher and Analyst depend on your license and your admin."));
+    s.qs = PRACTICE[id].map(item => practiceQ(item, s, () => check()));
+    return s;
+  }
+  function draw(){
+    const on = APPS.filter(([id]) => ctx.apps.includes(id));
+    intro.textContent = on.length
+      ? "Use the flowchart to choose the option for each task. These questions do not count toward your score."
+      : "Select at least one app above to see practice tasks for it.";
+    holder.replaceChildren(...on.map(([id,name]) => sets[id] || (sets[id] = build(id, name))));
+    check();
+  }
+  function check(){
+    const on = ctx.apps.filter(id => sets[id]);
+    state.done = on.length > 0 && on.every(id => sets[id].qs.every(q => q.done));
+    if(ctx.update) ctx.update();
+  }
+  ctx.appSubs.push(draw); draw();
+  return w;
+}
+
+function practiceQ(b, parent, onDone){
+  const name = "pq"+(++uid); const st = { done:false };
+  const w = el("div","kc");
+  w.append(el("p","eyebrow","Practice"));
+  const q = el("p","q",b.q); q.id = name+"-q"; w.append(q);
+  const fs = el("div","opts"); fs.setAttribute("role","radiogroup"); fs.setAttribute("aria-labelledby", q.id);
+  const labels = b.choices.map((c,i)=>{
+    const lab = el("label","opt"); const inp = document.createElement("input");
+    inp.type="radio"; inp.name=name; inp.value=i;
+    lab.append(inp, el("span",null,c)); fs.append(lab); return {lab, inp};
+  });
+  const submit = el("button","btn","Submit"); submit.type="button"; submit.disabled = true;
+  const fb = el("div","fb"); fb.hidden = true; fb.setAttribute("aria-live","polite");
+  fs.addEventListener("change",()=>{ submit.disabled = false; });
+  submit.addEventListener("click",()=>{
+    const pick = labels.findIndex(x=>x.inp.checked); if(pick<0) return;
+    const ok = pick === b.correct;
+    labels.forEach((x,i)=>{ x.inp.disabled = true; if(i===b.correct) x.lab.classList.add("right"); else if(i===pick) x.lab.classList.add("wrong"); });
+    fb.hidden = false; fb.className = "fb "+(ok?"ok":"no"); fb.textContent = ok ? b.right : b.wrong;
+    submit.remove(); st.done = true; onDone();
+  });
+  w.append(fs, submit, fb); parent.append(w); return st;
 }
 
 function caseBlock(b){
