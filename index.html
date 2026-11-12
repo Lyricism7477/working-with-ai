@@ -57,6 +57,7 @@ p{margin:0}
 .lrow .num{width:40px;height:40px;border-radius:50%;background:var(--brand);color:var(--on-brand);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
 .lrow .txt{min-width:0;display:flex;flex-direction:column;gap:2px}
 .lrow .t{font-weight:700;font-size:18px;color:var(--brand-ink)}
+.lrow .b{font-size:16px;margin-top:2px}
 .lrow .m{font-size:15px;color:var(--muted)}
 .lrow.done .num{background:var(--good)}
 .chip{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:3px 10px;border-radius:20px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
@@ -73,6 +74,7 @@ p{margin:0}
 .frame{display:flex;flex-direction:column;gap:12px;font-size:17px}
 .frame p{margin:0}
 .frame ol.list{margin:6px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:4px}
+.scenario{background:var(--surface);border-radius:8px;padding:14px 18px;font-size:17px;margin:0}
 .goal{border-left:4px solid var(--brand);background:var(--surface);padding:12px 16px;border-radius:0 8px 8px 0;font-size:16.5px}
 .seg{display:flex;flex-direction:column;gap:26px;padding-top:26px}
 .gate{display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0;border-top:1px dashed var(--line)}
@@ -202,6 +204,8 @@ const LESSONS = [
   title: "The AI apps, the models inside them, and where they go wrong", min: 8,
   terms: "App, model, AI engine, hallucination, knowledge cutoff",
   order: "first",
+  builds: "Emily checks an AI answer before a client sees it. You learn that the app you type in and the model that writes the reply are two different things, and which answers to check.",
+  scenario: "Emily works at Fredrickson. She is writing a proposal for a new client, and she asks Copilot for the client’s size and three recent news stories. The reply reads like fact, and it names a CEO who retired last year. Before the proposal goes out, Emily needs to know which parts of an AI answer to check, and what to change when a reply is wrong.",
   why: "The course starts with the apps you use and what is inside them. Every later lesson uses one idea from this lesson: the app you type in and the model that writes the reply are two different things.",
   matters: "You use these apps for client work, and each one can give a wrong answer that looks as sure as a right one. When you know what to change when a reply fails, what each app can read and where AI goes wrong, you know which answers to check before a client sees them.",
   goal: "When you finish, you can choose whether to change the prompt, the files, the search setting or the model when a reply fails. You can say how Copilot, ChatGPT, Claude and Gemini differ. You can also name what you can set up once to prevent wrong answers, and what you still check each time.",
@@ -290,12 +294,14 @@ const LESSONS = [
   ]
 },
 {
-  title: "What the AI reads in a conversation", min: 6,
-  terms: "Chat, prompt, custom instructions, project, context window, token",
+  title: "What the AI reads in a conversation", min: 9,
+  terms: "Chat, prompt, custom instructions, project, context window, token, memory",
   order: "second",
+  builds: "Emily wants the AI to follow her rules in every draft. Using the app and model from Lesson 1, you learn what the AI reads in one chat and where to save rules so it keeps them.",
+  scenario: "Emily drafts a client newsletter in Claude. In her first message, she gives the client’s name and a 150-word limit. Two hours later, the drafts run 300 words and use the wrong client name. The next morning, she opens a new chat, and Claude knows nothing about the newsletter. Emily wants Claude to follow her rules in every draft, without typing them again.",
   why: "Lesson 1 showed what an app can read across Microsoft 365. This lesson looks at one conversation: what the AI reads each time you send a message.",
-  matters: "Two common problems come from what the AI reads. It ignores your directions, or it misses something you said earlier in a long chat. Each problem has a different fix, and this lesson shows which fix goes with which problem.",
-  goal: "When you finish, you can tell the difference between custom instructions and a project. You can also tell the context window from the knowledge cutoff.",
+  matters: "Two common problems come from what the AI reads. It ignores your directions, or it seems to forget something you told it. Each problem has more than one cause, and this lesson shows which fix goes with which cause.",
+  goal: "When you finish, you can tell the difference between custom instructions and a project, and between the context window and the knowledge cutoff. You can also name the likely cause when the AI seems to forget, and choose the fix.",
   blocks: [
     {t:"h", text:"Part 1. Custom instructions apply to every chat, and a project applies to the chats inside it"},
     {t:"p", html:`A <b>chat</b> is a conversation in which you type a request and the AI replies with text.`},
@@ -337,8 +343,34 @@ const LESSONS = [
       <li>The long file: context window. The file and the chat together were more than the model could read at once.</li>
       <li>The newest product: knowledge cutoff. The product was the newest before the cutoff.</li></ul>`},
     {t:"gate"},
+    {t:"h", text:"Part 3. When the AI seems to forget, find the cause before you fix it"},
+    {t:"p", html:`People often say the AI forgot something. A chat that got longer than the context window is one cause. Six other causes look the same in the chat, and each one needs a different fix.`},
+    {t:"table", plain:true, head:["What happened","What you see","The fix"], rows:[
+      [`<b>The chat got longer than the context window.</b> The app dropped or shortened early messages.`,"The AI misses a rule or a file from the start of a long chat.","Start a new chat. Paste a handoff note into it."],
+      [`<b>The rule is in the middle of a long chat.</b> Even when the whole chat fits in the context window, models follow the start and the end of a chat more closely than the middle.`,"The AI follows some of your earlier rules and skips others.","Repeat the rule at the end of your prompt."],
+      [`<b>A newer message disagrees with an older rule.</b> The AI usually follows what it read most recently.`,"You asked for 100 words, then pasted a long example. The reply is as long as the example.","Repeat the rule in the same prompt as the example."],
+      [`<b>It is a new chat.</b> Each chat starts empty. The AI does not read your other chats, except for what memory saved.`,"The AI does not know what you told it yesterday.","Put rules you use often in custom instructions or a project."],
+      [`<b>Memory did not save it.</b> <b>Memory</b> is a feature that saves a few facts about you between chats. The app chooses what to save, and it saves a short note, not the whole chat.`,"The AI uses some facts from past chats, but not the one you need.",`Check what memory saved in the app’s settings. ${a(L.directions,"Get AI to Follow Your Directions")} shows where. Put rules you need every time in custom instructions, not memory.`],
+      [`<b>It never read the whole file.</b> The file was too long, a scanned image, or a type the app cannot open. Lesson 1 covered this.`,"The AI knows nothing about part of a file you attached.","Ask which pages it could read, and ask for the page of each point."],
+      [`<b>Two sets of instructions disagree.</b> Your custom instructions, a project’s instructions and your prompt say different things, so the AI follows one of them.`,"The AI follows one rule and ignores a rule you wrote somewhere else.","Delete the rule from the place where it does not belong."]]},
+    {t:"statement", text:"When the AI seems to forget, ask where the information was: early in this chat, in another chat, in a file, or in another set of instructions. The fix depends on where it was."},
+    {t:"sort", prompt:"Drag each problem to the fix that works, or select a pile.", piles:["Start a new chat","Repeat it in this prompt","Set it up once","Check what it read"],
+      cards:[["After three hours in one chat, Claude no longer uses the client name you gave it at the start.",0],
+        ["You asked for bullets, then pasted a paragraph to edit. The reply is a paragraph.",1],
+        ["Every Monday you start a new chat and type the same five rules for the newsletter.",2],
+        ["ChatGPT summarizes a 90-page report and says nothing about the last chapter.",3],
+        ["Your custom instructions say “Be brief.” Your client project says “Explain each step in detail.” Replies in the project are sometimes short and sometimes long.",2],
+        ["In a long chat that still fits in the context window, Copilot skips one rule you gave halfway through.",1]]},
+    {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
+      <li>The client name after three hours: start a new chat. The chat got longer than the context window. Paste a handoff note with the client name.</li>
+      <li>The paragraph instead of bullets: repeat it in this prompt. The AI followed the paragraph it read last. Put “Reply in bullets” in the same prompt as the paragraph.</li>
+      <li>The five newsletter rules: set it up once. A new chat starts empty, so keep the rules in a newsletter project.</li>
+      <li>The missing last chapter: check what it read. Ask which pages it could read, and give it the last chapter on its own if it could not.</li>
+      <li>Short and long replies: set it up once. The two sets of instructions disagree. Delete “Be brief” from custom instructions, or add “except in this project” to it.</li>
+      <li>The skipped rule from halfway through: repeat it in this prompt. The chat fits, but the model follows the middle of a chat less closely than the end.</li></ul>`},
+    {t:"gate"},
     {t:"h", text:"Check: name the term in each description"},
-    {t:"p", html:`Answer all five. Your score appears after the last question.`},
+    {t:"p", html:`Answer all six. Your score appears after the last question.`},
     {t:"kc", check:true, q:"You save “Write plainly, in short paragraphs” in your app’s settings. Every new chat follows it. What did you set up?", choices:["Custom instructions","A project"], correct:0,
       right:"Correct. The rule applies to every chat you start.", wrong:"Not quite. The rule applies to every chat you start, so it is custom instructions."},
     {t:"kc", check:true, q:"Every chat inside a workspace called “Quarterly report” can read last quarter’s report. Chats outside it cannot. What is the workspace?", choices:["Custom instructions","A project"], correct:1,
@@ -349,21 +381,26 @@ const LESSONS = [
       right:"Correct. The chat grew too long for Claude to read all of it at once.", wrong:"Not quite. You gave the format in this chat, so the chat got longer than the context window."},
     {t:"kc", check:true, q:"You ask ChatGPT about a product that launched last month. ChatGPT says it has no information about it. Which limit explains it?", choices:["The context window","The knowledge cutoff"], correct:1,
       right:"Correct. The product launched after the model’s learning stopped.", wrong:"Not quite. The product launched after the model’s learning stopped, so it is the knowledge cutoff."},
-    {t:"score", pass:4},
+    {t:"kc", check:true, q:"Yesterday you told ChatGPT that your client’s fiscal year ends in June. In a new chat today, ChatGPT does not know it. What is the most likely cause?", choices:["The new chat started empty, and memory did not save that fact.","The chat got longer than the context window."], correct:0,
+      right:"Correct. Each chat starts empty. To use that fact in every chat about the client, put it in the client’s project.", wrong:"Not quite. Today’s chat is new and short. Each chat starts empty, and memory did not save that fact. Put it in the client’s project."},
+    {t:"score", pass:5},
     {t:"cards", cards:[
       ["Chat","A conversation in which you type a request and the AI replies with text."],
       ["Prompt","Everything you send in one message: your request, instructions, examples and attached files."],
       ["Custom instructions","Saved directions the AI follows in every chat, such as your role, tone or preferred format."],
       ["Project","A workspace that gives every chat inside it the same files and instructions."],
       ["Context window","The most text a model can read at one time: the whole chat, any files and its own replies."],
-      ["Token","The unit AI apps use to measure text. One token is about three-quarters of an English word."]]},
-    {t:"end", html:`You can now tell the difference between custom instructions and a project, and between the context window and the knowledge cutoff. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 3 shows when to use a chat, a project or an agent.`}
+      ["Token","The unit AI apps use to measure text. One token is about three-quarters of an English word."],
+      ["Memory","A feature that saves a few facts about you between chats. The app chooses what to save."]]},
+    {t:"end", html:`You can now tell the difference between custom instructions and a project, and between the context window and the knowledge cutoff. When the AI seems to forget, you can find the cause and choose the fix. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 3 shows when to use a chat, a project or an agent.`}
   ]
 },
 {
   title: "Chat, project or agent", min: 7,
   terms: "Tool use, agentic AI, agent, approval prompt, prompt injection",
   order: "third",
+  builds: "Emily wants the AI to do the work, not list the steps. You compare the chat and project from Lesson 2 with an agent, which opens files and runs searches itself.",
+  scenario: "Every Friday, Emily turns five project updates into one status report for a client. She asks Copilot Chat for help, and it lists six steps. Emily still opens each file, copies the updates and builds the report herself, and the work takes an hour. She wants the AI to do the steps, not list them. The same folder holds the client’s training plan, so before anything opens her files, Emily wants to know what it can change.",
   why: "Lessons 1 and 2 covered chats. In a chat, the AI writes a reply, and you do the work. An agent does the work itself: it opens files, runs searches and takes several steps before it stops. To decide when to use an agent, you compare it with a chat and a project, which Lesson 2 taught.",
   matters: "An agent can do in minutes a task that takes you an hour. It can also change dozens of files before you check one. Choosing the right option for each task saves your time and protects your client’s files.",
   goal: "When you finish, you can tell the difference between an agent and a chat that lists steps. You can tell an approval prompt from a prompt injection. You can also choose chat, a project or an agent for a task.",
@@ -456,6 +493,8 @@ const LESSONS = [
   title: "Add-ons, accounts and saved versions", min: 7,
   terms: "Connector, plugin, skill, MCP, work account, your own account, version control",
   order: "last",
+  builds: "Emily lets the AI read more of her files. You learn what each add-on lets the agent from Lesson 3 read and change, which account to use, and how to undo a change.",
+  scenario: "Emily wants Claude to read her Outlook calendar and the client’s SharePoint files, so it can plan next week’s sessions. She also pays for her own ChatGPT Plus account, and she wonders whether she can use it for the same client. Last month, an agent rewrote a facilitator guide, and she could not get the old version back. Before she adds anything to her AI app, Emily wants to know what each add-on can read, which account to use, and how to undo a change.",
   why: "Lesson 3 showed what an agent does on its own. This last lesson covers what you add to an AI app, and how you protect the files it changes.",
   matters: "Each add-on lets the AI read or change more of your files. A work account and your own account follow different rules for what the AI company does with your chats. With version control, you can undo the changes an agent makes to your files.",
   goal: "When you finish, you can tell the difference between a connector and a plugin, a skill and custom instructions, and a work account and your own account. You can also protect client data in your own account and choose where to keep versions of your files.",
@@ -581,13 +620,16 @@ function renderHome(){
   const wrap = el("div","home");
   wrap.append(el("div","stack",`<p class="eyebrow">A self-paced course for Fredrickson staff</p>
     <h1>Learn the AI terms you see at work, and choose the right AI option for a task.</h1>
-    <p class="lede">Four short lessons, about 28 minutes in all. Each lesson teaches a few terms that people often mix up, lets you sort examples, and ends with a short check.</p>`));
+    <p class="lede">Four short lessons, about 31 minutes in all. Each lesson teaches a few terms that people often mix up, lets you sort examples, and ends with a short check.</p>`));
+  wrap.append(el("div","stack",`<h2>How the four lessons build on each other</h2>
+    <p>Each lesson asks two questions: what can the AI read, and what can it do? Each lesson gives a bigger answer than the one before, and uses the terms the earlier lessons taught.</p>
+    <p>All four lessons follow Emily, who works at Fredrickson. Her task grows in each lesson, from checking one AI answer to letting an agent change her files.</p>`));
   const list = el("ol","lessons");
   LESSONS.forEach((ls,i)=>{
     const isDone = done.includes(i);
     const li = el("li","lrow"+(isDone?" done":""));
     li.append(el("span","num",isDone?"✓":String(i+1)));
-    li.append(el("div","txt",`<span class="t">${ls.title}</span><span class="m">${ls.min} minutes. ${ls.terms}.</span>`));
+    li.append(el("div","txt",`<span class="t">${ls.title}</span><span class="b">${ls.builds}</span><span class="m">${ls.min} minutes. ${ls.terms}.</span>`));
     const go = el("div","go");
     if(ls.soon){ go.append(el("span","chip","Coming soon")); }
     else {
@@ -612,6 +654,7 @@ function renderLesson(n){
   const head = el("div","lesson-head");
   head.append(el("p","eyebrow",`Lesson ${n+1} of ${LESSONS.length}, ${ls.min} minutes`));
   head.append(el("h1",null,ls.title));
+  if(ls.scenario) head.append(el("p","scenario",`<b>The situation.</b> ${ls.scenario}`));
   const frame = el("div","frame");
   frame.append(el("p",null,`<b>Why this lesson comes ${ls.order}.</b> ${ls.why}`));
   const parts = ls.blocks.filter(b => b.t === "h" && /^Part \d/.test(b.text)).map(b => `<li>${b.text.replace(/^Part \d+\. /,"")}</li>`).join("");
