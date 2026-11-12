@@ -215,15 +215,18 @@ const LESSONS = [
       ["An AI model","Writes new text from patterns it learned","A new reply that no page may contain","The model itself. It can write a fact that no source contains."]]},
     {t:"p", html:`Many apps now search the web when a question needs current facts. The app runs the search, and the model writes a reply from the pages it found. The reply then lists its sources.`},
     {t:"note", html:`<b>Easy to mix up.</b> A reply with sources can still be wrong. The model can say a page states something the page does not say. Open the source and find the sentence.`},
-    {t:"sort", prompt:"Drag each card to App, Model or Search engine, or select a pile.", piles:["App","Model","Search engine"],
-      cards:[["Copilot, open in Outlook",0],["Writes a new opening paragraph for your proposal",1],["Returns ten links to pages that already exist",2],
-        ["Keeps your chat history and settings",0],["Writes the summary above a list of web sources",1]]},
+    {t:"sort", prompt:"Each card is something a colleague says. Drag it to what the colleague is talking about: the app, the model or a search engine.", piles:["App","Model","Search engine"],
+      cards:[["“I signed in with my work account and found last week’s chat.”",0],
+        ["“I picked a different option from the menu at the top, and the replies got shorter.”",1],
+        ["“I typed my question and got a list of ten websites.”",2],
+        ["“The vendor says its tool runs on a powerful AI engine.”",1],
+        ["“I uploaded a PDF and turned on dark mode.”",0]]},
     {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
-      <li>Copilot in Outlook: app. Copilot is the window you type in.</li>
-      <li>The new opening paragraph: model. The model writes every reply.</li>
-      <li>Ten links: search engine. It finds pages and writes nothing new.</li>
-      <li>Chat history and settings: app. The app stores them, whichever model you choose.</li>
-      <li>The summary above the sources: model. The app ran the search, and the model wrote the summary. Check it against the sources.</li></ul>`},
+      <li>Signing in and finding an old chat: app. The app holds your account and your chat history.</li>
+      <li>A different option from the menu: model. The menu chooses which model writes the reply, so the replies changed.</li>
+      <li>A list of ten websites: search engine. It found pages that already exist and wrote nothing new.</li>
+      <li>A powerful AI engine: model. “Engine” usually means the model. Ask the vendor which model it is.</li>
+      <li>Uploading a PDF and dark mode: app. Uploads and settings are part of the window you type in.</li></ul>`},
     {t:"gate"},
     {t:"h", text:"Part 2. The four apps differ most in what they can read"},
     {t:"p", html:`All four apps can write, summarize and answer questions, so most tasks can start in any of them. The biggest difference is what each app can read with no setup. Fredrickson keeps its email, meetings and files in Microsoft 365.`},
