@@ -262,11 +262,6 @@ const LESSONS = [
   terms: "Chat, prompt, custom instructions, project, context window, token",
   goal: "When you finish, you can tell custom instructions from a project, and tell the context window from the knowledge cutoff.",
   blocks: [
-    {t:"kc", warm:true, q:"You start a Claude chat in the morning by pasting a style guide. By late afternoon, in the same chat, Claude stops following the style guide. What is the most likely reason?",
-      choices:["The style guide is newer than Claude’s knowledge cutoff.","The chat has grown so long that Claude can no longer read all of it at once.","Claude reads a file only once, for the first reply."], correct:1,
-      right:"Correct. Part 2 shows why a long chat makes Claude miss early messages.",
-      wrong:"Not quite. Keep your answer in mind. Part 2 shows why a long chat makes Claude miss early messages."},
-    {t:"gate"},
     {t:"h", text:"Part 1. Custom instructions go everywhere, and a project stays in one place"},
     {t:"p", html:`A <b>chat</b> is a conversation in which you type a request and the AI replies with text.`},
     {t:"p", html:`A <b>prompt</b> is everything you send in one message: your request, your instructions, any examples and any attached files. A rule in a prompt applies to that message.`},
@@ -305,7 +300,6 @@ const LESSONS = [
       <li>The software update: knowledge cutoff. The update came after the model’s learning stopped.</li>
       <li>The long file: context window. The file and the chat together were more than the model could read at once.</li>
       <li>The newest product: knowledge cutoff. The product was the newest before the cutoff.</li></ul>`},
-    {t:"p", html:`<b>Your answer from the start.</b> Claude stopped following the style guide because the chat outgrew the context window. The style guide was in the chat’s first message, and the app dropped or shortened it. A new chat with the style guide pasted again fixes it. If you use that style guide often, put it in a project.`},
     {t:"gate"},
     {t:"h", text:"Check: name the term in each description"},
     {t:"p", html:`Answer all five. Your score appears after the last question.`},
@@ -335,11 +329,6 @@ const LESSONS = [
   terms: "Tool use, agentic AI, agent, approval prompt, prompt injection",
   goal: "When you finish, you can tell an agent from a chat that lists steps, and tell an approval prompt from a prompt injection. You can also choose chat, a project or an agent for a task.",
   blocks: [
-    {t:"kc", warm:true, q:"You ask ChatGPT how to turn five meeting notes into one status report. ChatGPT replies with a numbered list of six steps. Did an agent do the task?",
-      choices:["Yes. ChatGPT planned every step of the task.","No. ChatGPT described the steps, and you still have to do them."], correct:1,
-      right:"Correct. Part 1 shows what an agent does that a chat does not.",
-      wrong:"Not quite. Keep your answer in mind. Part 1 shows what an agent does that a chat does not."},
-    {t:"gate"},
     {t:"h", text:"Part 1. An agent does the steps, and a chat describes them"},
     {t:"p", html:`<b>Tool use</b> is an action an AI takes outside the conversation, such as searching the web, reading a file or sending an email.`},
     {t:"p", html:`<b>Agentic AI</b> works toward a goal on its own. It makes a plan, takes actions, checks the results, and repeats until the task is done.`},
@@ -364,7 +353,6 @@ const LESSONS = [
       <li>The code: chat. You run the code yourself, so the work stays with you.</li>
       <li>The briefing: agent. ChatGPT Work searches, reads and builds the briefing itself.</li>
       <li>The web search: chat. Claude used a tool once, then stopped and waited for you.</li></ul>`},
-    {t:"p", html:`<b>Your answer from the start.</b> No agent did the task. ChatGPT described the steps in one reply, and you still have to do them. An agent such as Claude Cowork or ChatGPT Work would open the five notes and build the report itself.`},
     {t:"gate"},
     {t:"h", text:"Part 2. An approval prompt asks you, and a prompt injection hides in what the agent reads"},
     {t:"p", html:`An agent takes real actions, so two more terms matter.`},
@@ -430,11 +418,6 @@ const LESSONS = [
   terms: "Connector, plugin, skill, MCP, work account, your own account, version control",
   goal: "When you finish, you can tell a connector from a plugin, a skill from custom instructions, and a work account from your own account. You can also protect client data in your own account and choose where to keep versions of your files.",
   blocks: [
-    {t:"kc", warm:true, q:"You install one add-on in Claude Cowork. Afterward, Cowork has a new /wrap-up command, a skill for job aids and a link to Notion. What did you install?",
-      choices:["A connector","A plugin","A skill"], correct:1,
-      right:"Correct. Part 1 shows how a plugin differs from the connectors and skills inside it.",
-      wrong:"Not quite. Keep your answer in mind. Part 1 shows how a plugin differs from the connectors and skills inside it."},
-    {t:"gate"},
     {t:"h", text:"Part 1. A connector links one app, and a plugin is a package"},
     {t:"p", html:`A <b>connector</b> is a link that lets an AI tool read or change data in another app, such as Outlook, SharePoint or Notion. The AI can reach everything the connector allows.`},
     {t:"p", html:`Many connectors are built on <b>MCP (Model Context Protocol)</b>, a shared standard for building connectors. Because of MCP, one connector can work in Claude, ChatGPT and Copilot. You see the letters MCP when you add a connector.`},
@@ -452,7 +435,6 @@ const LESSONS = [
       <li>The three commands and two skills: plugin. One install added several abilities.</li>
       <li>The SharePoint search: connector. It links ChatGPT to one app.</li>
       <li>The skill and the Notion link: plugin. The package held a skill and a connector.</li></ul>`},
-    {t:"p", html:`<b>Your answer from the start.</b> You installed a plugin. It held a command, a skill and a Notion connector, so one install added all three.`},
     {t:"gate"},
     {t:"h", text:"Part 2. A skill loads for one kind of task, and custom instructions load in every chat"},
     {t:"p", html:`A <b>skill</b> is a saved set of instructions an agent loads for one kind of task, such as building a Fredrickson job aid. The agent follows the same method every time, and you never retype it.`},
