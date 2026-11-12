@@ -195,11 +195,6 @@ const LESSONS = [
   terms: "Generative AI, model, large language model, hallucination, knowledge cutoff",
   goal: "When you finish, you can tell an AI app from the model inside it, say why Copilot can read your work files when the other apps cannot, and tell a made-up answer from an out-of-date one.",
   blocks: [
-    {t:"kc", warm:true, q:"You ask Copilot in Teams, “What date did we agree for the Acme pilot?” Copilot gives a date. You ask ChatGPT the same question, and it gives a different date just as confidently. Which answer should you trust less, and why?",
-      choices:["Copilot’s. It runs on another company’s models, so it is more likely to guess.","ChatGPT’s. It cannot read your Teams meetings, so its date did not come from the meeting.","ChatGPT’s. Its model is older than Copilot’s, so it knows less about recent work.","Neither. Both apps can use OpenAI models, so their answers are equally reliable."], correct:1,
-      right:"Correct. Part 2 shows why Copilot can read your meetings and ChatGPT cannot.",
-      wrong:"Not quite. Keep your answer in mind. Part 2 shows why Copilot can read your meetings and ChatGPT cannot."},
-    {t:"gate"},
     {t:"h", text:"Part 1. You work in the app, and the model writes"},
     {t:"p", html:`<b>Generative AI</b> writes new text, images or code from your request. Microsoft 365 Copilot, Claude, ChatGPT and Gemini are all generative AI.`},
     {t:"p", html:`Each of those tools is an <b>app</b>: the window you sign in to and type in. A <b>model</b> inside the app writes the reply. One app can offer several models. In ChatGPT, you can choose GPT-6 or another GPT model from a menu. In Claude, you can choose Claude Opus or Claude Sonnet. Either way, you stay in the same app.`},
@@ -222,7 +217,6 @@ const LESSONS = [
       <li>The Notion page: you add it first. Notion is outside Microsoft 365, so you paste the page in or link Notion to the app.</li>
       <li>The client’s email: Copilot reaches it. Outlook is part of Microsoft 365.</li>
       <li>The PDF on a USB drive: you add it first. The file is outside Microsoft 365 until you upload it.</li></ul>`},
-    {t:"p", html:`<b>Your answer from the start.</b> Trust ChatGPT’s date less. ChatGPT works outside Microsoft 365 and cannot read your Teams meetings, so it wrote a date that only sounds likely. The model did not cause the difference, because Copilot also runs OpenAI models. The app did. Lesson 4 shows how a connector links an app such as ChatGPT to your files.`},
     {t:"gate"},
     {t:"h", text:"Part 3. A wrong answer is made up or out of date"},
     {t:"p", html:`An AI answer can be wrong in two ways, and each has a name.`},
