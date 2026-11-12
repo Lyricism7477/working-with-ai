@@ -169,8 +169,7 @@ details.acc .body{padding:0 18px 16px 48px}
 
 @media (prefers-reduced-motion:reduce){.flash .in{transition:none}.card.shake{animation:none}}
 </style>
-</head>
-<body>
+</head><body>
 
 <header class="top"><div class="top-in">
   <a class="wordmark" href="#home">Working with AI</a>
@@ -436,8 +435,8 @@ const LESSONS = [
 },
 {
   title: "Add-ons, accounts and saved versions", min: 7,
-  terms: "Connector, plugin, skill, MCP, approved tool, personal account, version control",
-  goal: "When you finish, you can tell a connector from a plugin, a skill from custom instructions, and an approved tool from a personal account. You can also choose where to keep versions of your files.",
+  terms: "Connector, plugin, skill, MCP, work account, your own account, version control",
+  goal: "When you finish, you can tell a connector from a plugin, a skill from custom instructions, and a work account from your own account. You can also protect client data in your own account and choose where to keep versions of your files.",
   blocks: [
     {t:"kc", warm:true, q:"You install one add-on in Claude Cowork. Afterward, Cowork has a new /wrap-up command, a skill for job aids and a link to Notion. What did you install?",
       choices:["A connector","A plugin","A skill"], correct:1,
@@ -480,22 +479,22 @@ const LESSONS = [
       <li>“Keep answers short”: custom instructions. You want it in every chat.</li>
       <li>The proposal rules: skill. The agent loads them only for proposals.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 3. Approval covers the account, not the app"},
-    {t:"p", html:`An <b>approved tool</b> is an AI tool and account your organization allows for a given kind of data, such as client files.`},
-    {t:"p", html:`A <b>personal account</b> is an AI account you sign up for yourself, outside your organization’s plan. A personal account can use the same app and the same model as an approved tool. The difference is the account: a work account comes with a contract on how the company stores your data and whether it learns from it. A personal account may keep your chats or use them to train its models.`},
-    {t:"statement", text:"Who set up the account? If your organization set it up and allows it for this data, it is an approved tool. If you signed up yourself, it is a personal account, even in the same app."},
+    {t:"h", text:"Part 3. The account, not the app, decides what happens to your chats"},
+    {t:"p", html:`A <b>work account</b> is an AI account your organization pays for, such as a paid Copilot or Claude license. You sign in with your work email.`},
+    {t:"p", html:`<b>Your own account</b> is an AI account you sign up for yourself, free or paid, such as a ChatGPT Plus account you pay for personally. Your own account can run the same app and the same model as a work account. The difference is the contract. A work plan sets terms on how the company stores your data and keeps it out of model training. On a personal plan, even a paid one, the company may keep your chats and train its models on them unless you change your settings.`},
+    {t:"statement", text:"Who pays for the account? If your organization pays, it is a work account. If you pay, or it is free, it is your own account, even in the same app."},
     {t:"tabs", tabs:[
-      {title:"Approved tool", html:`<p>Your organization set up the account and allows it for this data.</p><ul class="list"><li>The Claude account your organization set up, which it allows for client files.</li><li>Microsoft 365 Copilot, signed in with your work account, for internal documents your organization allows in it.</li></ul>`},
-      {title:"Personal account", html:`<p>You signed up yourself, outside your organization’s plan.</p><ul class="list"><li>A ChatGPT Plus account you pay for yourself.</li><li>A free Claude account you made with your personal email address.</li></ul><p><b>Keep work data in your work account,</b> even when the personal account runs the same model.</p>`}]},
-    {t:"sort", prompt:"Drag each account to Approved tool or Personal account, or select a pile.", piles:["Approved tool","Personal account"],
-      cards:[["The ChatGPT Plus account you pay for on your phone",1],["The Claude account your organization set up, which it allows for client files",0],
-        ["A free Claude account you made with your Gmail address",1],["Copilot, signed in with your work account, for the internal documents your organization allows",0]]},
+      {title:"Work account", html:`<p>Your organization pays, and you sign in with your work email.</p><ul class="list"><li>Microsoft 365 Copilot on a paid license, signed in with your work account.</li><li>Claude on a paid license your organization set up for you.</li></ul>`},
+      {title:"Your own account", html:`<p>You signed up yourself, free or paid.</p><ul class="list"><li>A ChatGPT Plus account you pay for yourself.</li><li>A free Claude account you made with your personal email address.</li></ul>`}]},
+    {t:"sort", prompt:"Drag each account to Work account or Your own account, or select a pile.", piles:["Work account","Your own account"],
+      cards:[["The ChatGPT Plus account you pay for on your phone",1],["Claude on a paid license your organization set up for you",0],
+        ["A free Claude account you made with your Gmail address",1],["Copilot on a paid license, signed in with your work email",0]]},
     {t:"acc", title:"Why each account goes where it goes", html:`<ul class="list">
-      <li>ChatGPT Plus on your phone: personal account. You signed up and pay for it yourself.</li>
-      <li>The Claude account your organization set up: approved tool, for the client files your organization allows.</li>
-      <li>The free Claude account: personal account. It is the same app as the approved tool, but you set it up yourself.</li>
-      <li>Copilot with your work account: approved tool, for the documents your organization allows in it.</li></ul>`},
-    {t:"p", html:`Which tools Fredrickson approves for which data is a decision for leadership. Ask before you put client data into any AI tool.`},
+      <li>ChatGPT Plus on your phone: your own account. You signed up and pay for it yourself.</li>
+      <li>Claude on a paid license: work account. Your organization pays for it.</li>
+      <li>The free Claude account: your own account. It is the same app as the work account, but you set it up yourself.</li>
+      <li>Copilot on a paid license: work account. Your organization pays for it.</li></ul>`},
+    {t:"note", html:`<b>Before you use your own account for work,</b> take these four steps.<ul class="list"><li>Turn off model training. Open Settings, then Data controls or Privacy, and turn off the setting that lets the company train its models on your chats.</li><li>Leave out client names and personal details. Write “a healthcare client” instead of the client’s name.</li><li>Use a temporary chat when you do not want the app to save the conversation.</li><li>Check the client’s contract before you upload their files. Some contracts limit where client files may go.</li></ul>`},
     {t:"gate"},
     {t:"h", text:"Part 4. Version control lets you undo what an agent changed"},
     {t:"p", html:`<b>Version control</b> saves each version of your files, shows what changed, and lets you go back. An agent such as Cowork or Claude Code can change dozens of files in one run. With version control, you can undo the agent’s changes, or keep some and undo the rest.`},
@@ -519,12 +518,13 @@ const LESSONS = [
     {t:"kc", check:true, q:"One install adds a /wrap-up command, a skill and a connector to Cowork. What did you install?", choices:["A connector","A plugin"], correct:1,
       right:"Correct. One install added several abilities, so it is a plugin.", wrong:"Not quite. One install added a command, a skill and a connector, so it is a plugin."},
     {t:"kc", check:true, q:"A connector’s settings page says it is built on MCP. What does MCP tell you?",
-      choices:["The connector follows a shared standard, so it can work in many AI tools.","The connector is a plugin.","Your organization approved the connector."], correct:0,
-      right:"Correct. MCP is a shared standard for building connectors.", wrong:"Not quite. MCP is a shared standard for building connectors. It says nothing about plugins or approval."},
+      choices:["The connector follows a shared standard, so it can work in many AI tools.","The connector is a plugin.","Your organization pays for the connector."], correct:0,
+      right:"Correct. MCP is a shared standard for building connectors.", wrong:"Not quite. MCP is a shared standard for building connectors. It says nothing about plugins or who pays."},
     {t:"kc", check:true, q:"Cowork loads a full method for building a job aid only when you ask for a job aid. What is the method saved as?", choices:["A skill","Custom instructions"], correct:0,
       right:"Correct. It loads for one kind of task, so it is a skill.", wrong:"Not quite. Custom instructions load in every chat. This method loads only for job aids, so it is a skill."},
-    {t:"kc", check:true, q:"A colleague pastes a client’s contract into a ChatGPT account they signed up for with their personal email. Which kind of account did they use?", choices:["An approved tool","A personal account"], correct:1,
-      right:"Correct. Your colleague set up the account, so it is personal, whatever model it runs.", wrong:"Not quite. Your colleague signed up for the account outside the organization’s plan, so it is a personal account."},
+    {t:"kc", check:true, q:"You pay for ChatGPT Plus yourself and want to use it to draft a client proposal. What do you do first?",
+      choices:["Turn off model training in Settings, and leave the client’s name out of the chat.","Nothing. ChatGPT Plus is a paid plan, so it never trains on your chats.","Switch to a newer model."], correct:0,
+      right:"Correct. A paid personal plan can still train on your chats until you turn that off.", wrong:"Not quite. A paid personal plan can still train on your chats. Turn off model training and leave out the client’s name."},
     {t:"kc", check:true, q:"You save a commit in GitHub before Claude Code changes a folder of scripts. Afterward, you undo every change the agent made. What did GitHub give you?",
       choices:["Version control","A connector","A backup copy named “final v2”"], correct:0,
       right:"Correct. GitHub saved a version you could go back to.", wrong:"Not quite. GitHub saved a version and let you go back to it. That is version control."},
@@ -537,14 +537,14 @@ const LESSONS = [
       ["MCP (Model Context Protocol)","A shared standard for building connectors, so one connector works with many AI tools."],
       ["Plugin","An add-on you install that gives an AI tool new commands, skills or connectors."],
       ["Skill","A saved set of instructions an agent loads for one kind of task, such as building a job aid."],
-      ["Approved tool","An AI tool and account your organization allows for a given kind of data, such as client files."],
-      ["Personal account","An AI account you sign up for yourself, outside your organization’s plan."],
+      ["Work account","An AI account your organization pays for, with a contract on how the company stores your data."],
+      ["Your own account","An AI account you sign up for yourself, free or paid, outside your organization’s plan."],
       ["Version control","A system that saves each version of your files, shows what changed, and lets you go back."],
       ["Repository","A folder that version control tracks, together with the history of every saved version."],
       ["Commit","One saved version of the files in a repository, with a short note about what changed."],
       ["GitHub","A website that stores repositories online and keeps their full history."],
       ["Restore","Return a file or folder to an earlier saved version."]]},
-    {t:"end", html:`You can now tell a connector from a plugin, a skill from custom instructions, and an approved tool from a personal account, and you can choose where to keep versions of your files. That finishes the course. Look up any term in ${a(L.glossary,"AI Terms in Plain Words")}.`}
+    {t:"end", html:`You can now tell a connector from a plugin, a skill from custom instructions, and a work account from your own account. You can also protect client data in your own account and choose where to keep versions of your files. That finishes the course. Look up any term in ${a(L.glossary,"AI Terms in Plain Words")}.`}
   ]
 }
 ];
@@ -860,5 +860,3 @@ function route(){
 addEventListener("hashchange", route);
 route();
 </script>
-</body>
-</html>
