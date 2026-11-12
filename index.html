@@ -80,6 +80,11 @@ p{margin:0}
 .statement{font-size:22px;line-height:1.4;font-weight:700;color:var(--brand-ink);padding:18px 0;border-top:3px solid var(--accent);border-bottom:3px solid var(--accent);text-wrap:balance}
 .note{border-left:4px solid var(--accent);background:var(--accent-soft);padding:14px 18px;border-radius:0 8px 8px 0}
 .tbl{overflow-x:auto}
+.cmp table{min-width:640px;table-layout:fixed}
+.cmp thead th{font-size:16px;letter-spacing:0;text-transform:none;color:var(--brand-ink);font-weight:800;border-bottom:2px solid var(--accent)}
+.cmp thead th:first-child{width:18%}
+.cmp tbody th{font-size:12px;line-height:1.4}
+.cmp td.yes{background:var(--accent-soft);font-weight:700}
 table{border-collapse:collapse;width:100%;font-size:16px}
 th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
 th{font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
@@ -226,11 +231,11 @@ const LESSONS = [
     {t:"gate"},
     {t:"h", text:"Part 2. The four apps differ most in what they can read"},
     {t:"p", html:`All four apps can write, summarize and answer questions, so most tasks can start in any of them. The biggest difference is what each app can read with no setup. Fredrickson keeps its email, meetings and files in Microsoft 365.`},
-    {t:"apps", labels:["Made by","Where you use it","Your Outlook email, Teams meetings and OneDrive files","Often chosen for"], apps:[
-      ["Microsoft 365 Copilot","Microsoft","Inside Word, Excel, PowerPoint, Outlook and Teams","Reads them where they are, through your work sign-in","Work already in Microsoft 365, such as a meeting you missed or a long email thread"],
-      ["ChatGPT","OpenAI","Its own app and website","Reads none of them until you upload a file or link Microsoft 365","The widest set of features in one app, including images, voice and web search"],
-      ["Claude","Anthropic","Its own app and website","Reads none of them until you upload a file or link Microsoft 365","Long documents and careful writing, and agents that work with files on your computer"],
-      ["Gemini","Google","Its own app, and inside Gmail, Google Docs and Google Drive","Reads none of them until you upload a file or link Microsoft 365","Work already in Google, such as a Google Doc a client shares, or Google search and YouTube"]]},
+    {t:"compare", cols:["Copilot","ChatGPT","Claude","Gemini"], rows:[
+      ["Made by","Microsoft","OpenAI","Anthropic","Google"],
+      ["Built into","+Microsoft 365: Word, Excel, PowerPoint, Outlook and Teams","Nothing. It is its own app and website.","Nothing. It is its own app and website.","Google’s apps: Gmail, Google Docs and Google Drive"],
+      ["Reads your Fredrickson email, meetings and files","+Yes, with a Copilot license","Only after you upload a file or link Microsoft 365","Only after you upload a file or link Microsoft 365","Only after you upload a file or link Microsoft 365"],
+      ["Often chosen for","Work already in Microsoft 365, such as a missed meeting or a long email thread","The most features in one app, including images, voice and web search","Long documents, careful writing, and agents that work with files on your computer","Work already in Google, such as a Google Doc a client shares, and Google search"]]},
     {t:"p", html:`Gemini does for Google files what Copilot does for Microsoft 365 files. Fredrickson uses Microsoft 365, so Gemini reads your work files only after you add them.`},
     {t:"note", html:`<b>Easy to mix up.</b> Copilot reads your email, meetings and files only with a Microsoft 365 Copilot license. Without one, Copilot Chat reads the web and the files you add, like the other apps.`},
     {t:"statement", text:"Choose the app that can already read what the task needs. If none can, upload the file or link the app."},
@@ -660,6 +665,12 @@ function renderBlock(b, ctx, seg, n){
     case "table": {
       const w = el("div","tbl");
       w.innerHTML = `<table><thead><tr>${b.head.map(h=>`<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>${b.rows.map(r=>`<tr>${r.map((c,i)=>i===0?`<td>${c}</td>`:`<td><b>${c}</b></td>`).join("")}</tr>`).join("")}</tbody></table>`;
+      return w;
+    }
+    case "compare": {
+      const w = el("div","tbl cmp");
+      const cell = c => c.startsWith("+") ? `<td class="yes">${c.slice(1)}</td>` : `<td>${c}</td>`;
+      w.innerHTML = `<table><thead><tr><td></td>${b.cols.map(c=>`<th scope="col">${c}</th>`).join("")}</tr></thead><tbody>${b.rows.map(r=>`<tr><th scope="row">${r[0]}</th>${r.slice(1).map(cell).join("")}</tr>`).join("")}</tbody></table>`;
       return w;
     }
     case "apps": {
