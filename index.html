@@ -182,7 +182,7 @@ details.acc .body{padding:0 18px 16px 48px}
 
 <script>
 const L = {
-  glossary: "https://app.notion.com/p/416417ee1e9b8175b871dde9fb3fd9fb",
+  glossary: "https://app.notion.com/p/416417ee1e9b81cfabeae0f9a29da0f9",
   date: "https://app.notion.com/p/416417ee1e9b81bbbd84d2bdd72d52ec",
   directions: "https://app.notion.com/p/416417ee1e9b81feb5bbe02cf9fd9201",
   limits: "https://app.notion.com/p/416417ee1e9b810f8e9fec4091545f55",
@@ -279,7 +279,7 @@ const LESSONS = [
       ["Model","The part inside an AI app that writes the reply. One app can offer several models."],
       ["Hallucination","A false statement the AI gives as fact. It was never true."],
       ["Knowledge cutoff","The date the model’s learning stops. The model does not know later events unless it searches or you tell it."]]},
-    {t:"end", html:`You can now choose what to change when a reply fails, choose the app that can read what a task needs, and spot the six kinds of answers to check. Look up any term in ${a(L.glossary,"AI Terms in Plain Words")}. Lesson 2 shows what the AI reads in a conversation.`}
+    {t:"end", html:`You can now choose what to change when a reply fails, choose the app that can read what a task needs, and spot the six kinds of answers to check. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 2 shows what the AI reads in a conversation.`}
   ]
 },
 {
@@ -349,7 +349,7 @@ const LESSONS = [
       ["Project","A workspace that gives every chat inside it the same files and instructions."],
       ["Context window","The most text a model can read at one time: the whole chat, any files and its own replies."],
       ["Token","The unit AI apps use to measure text. One token is about three-quarters of an English word."]]},
-    {t:"end", html:`You can now tell the difference between custom instructions and a project, and between the context window and the knowledge cutoff. Look up any term in ${a(L.glossary,"AI Terms in Plain Words")}. Lesson 3 shows when to use a chat, a project or an agent.`}
+    {t:"end", html:`You can now tell the difference between custom instructions and a project, and between the context window and the knowledge cutoff. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 3 shows when to use a chat, a project or an agent.`}
   ]
 },
 {
@@ -441,7 +441,7 @@ const LESSONS = [
       ["Agent","An AI tool that completes a task with several steps, such as Claude Cowork, Claude Code, ChatGPT Work or Codex."],
       ["Approval prompt","A pause in which the agent asks you before it takes an action."],
       ["Prompt injection","An instruction that someone hides in a web page, email or file to make the AI do something you did not ask for."]]},
-    {t:"end", html:`You can now tell an agent from a chat, tell an approval prompt from a prompt injection, and choose chat, a project or an agent for a task. Look up any term in ${a(L.glossary,"AI Terms in Plain Words")}. Lesson 4 covers add-ons, accounts and saved versions.`}
+    {t:"end", html:`You can now tell an agent from a chat, tell an approval prompt from a prompt injection, and choose chat, a project or an agent for a task. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 4 covers add-ons, accounts and saved versions.`}
   ]
 },
 {
@@ -552,7 +552,7 @@ const LESSONS = [
       ["Commit","One saved version of the files in a repository, with a short note about what changed."],
       ["GitHub","A website that stores repositories online and keeps their full history."],
       ["Restore","Return a file or folder to an earlier saved version."]]},
-    {t:"end", html:`You can now tell the difference between a connector and a plugin, a skill and custom instructions, and a work account and your own account. You can also protect client data in your own account and choose where to keep versions of your files. That finishes the course. Look up any term in ${a(L.glossary,"AI Terms in Plain Words")}.`}
+    {t:"end", html:`You can now tell the difference between a connector and a plugin, a skill and custom instructions, and a work account and your own account. You can also protect client data in your own account and choose where to keep versions of your files. That finishes the course. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}.`}
   ]
 }
 ];
@@ -591,7 +591,7 @@ function renderHome(){
   });
   wrap.append(list);
   if(LESSONS.every((_,i)=>done.includes(i))) wrap.append(el("p","note","<b>You finished all four lessons.</b> Select Review on any lesson to go through it again."));
-  wrap.append(el("p","cap",`Look up any term in ${a(L.glossary,"AI Terms in Plain Words")}. Only this browser saves your progress.`));
+  wrap.append(el("p","cap",`Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Only this browser saves your progress.`));
   app.replaceChildren(wrap);
 }
 
