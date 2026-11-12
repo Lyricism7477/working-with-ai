@@ -194,73 +194,101 @@ const a = (href, text) => `<a href="${href}" target="_blank" rel="noopener">${te
 
 const LESSONS = [
 {
-  title: "The AI apps you can use, and why they get facts wrong", min: 7,
-  terms: "Generative AI, model, large language model, hallucination, knowledge cutoff",
+  title: "The AI apps, the models inside them, and where they go wrong", min: 10,
+  terms: "Generative AI, model, large language model, search engine, hallucination, knowledge cutoff",
   order: "first",
-  why: "The course starts with the apps you use. Every later lesson uses one idea from this lesson: the app you type in and the model that writes the reply are two different things.",
-  matters: "You use these apps for client work, and each one can give you a wrong fact that sounds as certain as a true one. When you know what an app can read, you know which answers to check before you send them to a client.",
-  goal: "When you finish, you can tell the difference between an AI app and the model inside it. You can say why Copilot can read your work files when the other apps cannot. You can also tell a made-up answer from an out-of-date one.",
+  why: "The course starts with the apps you use and what is inside them. Every later lesson uses one idea from this lesson: the app you type in and the model that writes the reply are two different things.",
+  matters: "You use these apps for client work, and each one can give a wrong answer that looks as sure as a right one. When you know what each app can read and where AI goes wrong, you know which answers to check before a client sees them.",
+  goal: "When you finish, you can tell an app from its model, and a model from a search engine. You can say how Copilot, ChatGPT, Claude and Gemini differ. You can also name six kinds of answers to check before you send them.",
   blocks: [
-    {t:"h", text:"Part 1. You type in the app, and the model writes the reply"},
-    {t:"p", html:`<b>Generative AI</b> writes new text, images or code from your request. Microsoft 365 Copilot, Claude, ChatGPT and Gemini are all generative AI.`},
-    {t:"p", html:`Each of those tools is an <b>app</b>: the window you sign in to and type in. A <b>model</b> inside the app writes the reply. One app can offer several models. In ChatGPT, you can choose GPT-6 or another GPT model from a menu. In Claude, you can choose Claude Opus or Claude Sonnet. Either way, you stay in the same app.`},
+    {t:"h", text:"Part 1. The app, the model and the search engine do different jobs"},
+    {t:"p", html:`<b>Generative AI</b> writes new text, images or code from your request. Microsoft 365 Copilot, ChatGPT, Claude and Gemini are all generative AI.`},
+    {t:"p", html:`Each of those tools is an <b>app</b>: the window you sign in to and type in. A <b>model</b> inside the app writes the reply. One app can offer several models, and you choose one from a menu without leaving the app.`},
     {t:"mock"},
     {t:"p", html:`The models behind these apps are <b>large language models (LLMs)</b>. An LLM learned patterns from a very large amount of text. It writes a reply one piece at a time, choosing the words most likely to come next.`},
+    {t:"p", html:`Three of the apps come from the company that makes their models. OpenAI makes ChatGPT, Anthropic makes Claude, and Google makes Gemini. Copilot is different: Microsoft makes the app, and the app runs models from other companies, such as OpenAI and Anthropic. So an app’s name does not tell you which model wrote a reply.`},
     {t:"statement", text:"You type in the app, and the model writes the reply."},
-    {t:"note", html:`<b>Easy to mix up.</b> An app and its models often share a name. The app is Claude, and the models are Claude Opus and Claude Sonnet. The app is ChatGPT, and GPT-6 is one of its models. Different apps can also share a model: Copilot runs on OpenAI’s GPT models, the same kind of model ChatGPT uses.`},
+    {t:"note", html:`<b>“AI engine” usually means the model.</b> You may hear “the AI engine behind Copilot” or “our product runs on a powerful AI engine.” “Engine” is not an exact term. Most people use it to mean the model that writes the replies. Some companies use it for the model plus the other software around it. When a vendor says “AI engine,” ask which model it is and which company makes it.`},
+    {t:"p", html:`A model is also not a <b>search engine</b>, even though both can be called an engine. The two do different jobs, and the difference explains most wrong AI answers.`},
+    {t:"apps", labels:["What it does","What you get","Where a wrong fact comes from"], apps:[
+      ["A search engine, such as Google or Bing","Finds pages that already exist on the web","A list of links to those pages","A page it found. The search engine does not write the page."],
+      ["An AI model","Writes new text from patterns it learned","A new reply that no page may contain","The model itself. It can write a fact that no source contains."]]},
+    {t:"p", html:`Many apps now search the web when a question needs current facts. The app runs the search, and the model writes a reply from the pages it found. The reply then lists its sources.`},
+    {t:"note", html:`<b>Easy to mix up.</b> A reply with sources can still be wrong. The model can say a page states something the page does not say. Open the source and find the sentence.`},
+    {t:"sort", prompt:"Drag each card to App, Model or Search engine, or select a pile.", piles:["App","Model","Search engine"],
+      cards:[["Copilot, open in Outlook",0],["Writes a new opening paragraph for your proposal",1],["Returns ten links to pages that already exist",2],
+        ["Keeps your chat history and settings",0],["Writes the summary above a list of web sources",1]]},
+    {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
+      <li>Copilot in Outlook: app. Copilot is the window you type in.</li>
+      <li>The new opening paragraph: model. The model writes every reply.</li>
+      <li>Ten links: search engine. It finds pages and writes nothing new.</li>
+      <li>Chat history and settings: app. The app stores them, whichever model you choose.</li>
+      <li>The summary above the sources: model. The app ran the search, and the model wrote the summary. Check it against the sources.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 2. Copilot is built into Microsoft 365, and the other apps are not"},
-    {t:"p", html:`Fredrickson keeps its email, meetings and files in Microsoft 365. Copilot works inside Microsoft 365, so it reads those files where they are. Claude, ChatGPT and Gemini work outside it. They read only what you give them, until you link them to Microsoft 365.`},
-    {t:"apps", labels:["Where you use it","Your Outlook email, Teams meetings and OneDrive files","A Notion page, or a PDF on your desktop"], apps:[
-      ["Microsoft 365 Copilot","Inside Word, Excel, PowerPoint, Outlook and Teams","Reads them where they are, through your work sign-in, with no setup","You add it first"],
-      ["Claude, ChatGPT and Gemini","In their own app or browser tab, outside Microsoft 365","Reads none of them until you upload the file or link Microsoft 365 to the app","You add it first"]]},
+    {t:"h", text:"Part 2. The four apps differ most in what they can read"},
+    {t:"p", html:`All four apps can write, summarize and answer questions, so most tasks can start in any of them. The biggest difference is what each app can read with no setup. Fredrickson keeps its email, meetings and files in Microsoft 365.`},
+    {t:"apps", labels:["Made by","Where you use it","Your Outlook email, Teams meetings and OneDrive files","Often chosen for"], apps:[
+      ["Microsoft 365 Copilot","Microsoft","Inside Word, Excel, PowerPoint, Outlook and Teams","Reads them where they are, through your work sign-in","Work already in Microsoft 365, such as a meeting you missed or a long email thread"],
+      ["ChatGPT","OpenAI","Its own app and website","Reads none of them until you upload a file or link Microsoft 365","The widest set of features in one app, including images, voice and web search"],
+      ["Claude","Anthropic","Its own app and website","Reads none of them until you upload a file or link Microsoft 365","Long documents and careful writing, and agents that work with files on your computer"],
+      ["Gemini","Google","Its own app, and inside Gmail, Google Docs and Google Drive","Reads none of them until you upload a file or link Microsoft 365","Work already in Google, such as a Google Doc a client shares, or Google search and YouTube"]]},
+    {t:"p", html:`Gemini does for Google files what Copilot does for Microsoft 365 files. Fredrickson uses Microsoft 365, so Gemini reads your work files only after you add them.`},
     {t:"note", html:`<b>Easy to mix up.</b> Copilot reads your email, meetings and files only with a Microsoft 365 Copilot license. Without one, Copilot Chat reads the web and the files you add, like the other apps.`},
-    {t:"statement", text:"Before you ask, check whether the app can read the files it needs. If it cannot, upload the file or link the app."},
-    {t:"sort", prompt:"Drag each item to Copilot can read it or You add it first, or select a pile.", piles:["Copilot can read it","You add it first"],
-      cards:[["The decisions from yesterday’s Teams meeting",0],["A job aid page in Notion",1],["A client’s email in your Outlook inbox",0],["A PDF on a USB drive a client gave you",1]]},
+    {t:"statement", text:"Choose the app that can already read what the task needs. If none can, upload the file or link the app."},
+    {t:"sort", prompt:"Drag each task to the app that can do it with no setup, or select a pile.", piles:["Copilot","Gemini","Any of the four"],
+      cards:[["Summarize the Teams meeting you missed this morning",0],["Rewrite a paragraph you paste into the chat",2],
+        ["Answer a question about a Google Doc a client shared with you in Google Drive",1],["Find the latest email from a client in your Outlook inbox",0],["Turn a PDF you upload into five quiz questions",2]]},
     {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
-      <li>The Teams meeting: Copilot can read it. Teams is part of Microsoft 365.</li>
-      <li>The Notion page: you add it first. Notion is outside Microsoft 365, so you paste the page in or link Notion to the app.</li>
-      <li>The client’s email: Copilot can read it. Outlook is part of Microsoft 365.</li>
-      <li>The PDF on a USB drive: you add it first. The file is outside Microsoft 365 until you upload it.</li></ul>`},
+      <li>The Teams meeting: Copilot. Teams is part of Microsoft 365.</li>
+      <li>The pasted paragraph: any of the four. Everything the app needs is in the chat.</li>
+      <li>The shared Google Doc: Gemini. Google Drive is part of Google’s apps.</li>
+      <li>The client’s email: Copilot. Outlook is part of Microsoft 365.</li>
+      <li>The uploaded PDF: any of the four. You gave the app the file.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 3. A wrong answer is made up or out of date"},
-    {t:"p", html:`An AI answer can be wrong in two ways, and each has a name.`},
-    {t:"p", html:`A <b>hallucination</b> is a false statement the AI gives as fact, and it was never true. The model writes the words most likely to come next, and nothing in that process checks whether a fact is true. So a made-up source looks just as real as a true one.`},
-    {t:"p", html:`An <b>out-of-date answer</b> was true once. A model learned from text up to a date called its <b>knowledge cutoff</b>. It does not know later events, or today’s date, unless it searches the web or you tell it.`},
-    {t:"statement", text:"Was this ever true? If never, it is a hallucination. If it was true before the cutoff, it is out of date."},
-    {t:"tabs", tabs:[
-      {title:"Hallucination", html:`<p>The answer was never true.</p><ul class="list"><li>A quote from a report, but the report has no such sentence.</li><li>A study with authors and a year, but no such study exists.</li></ul><p><b>To fix it,</b> check the fact against the original source.</p>`},
-      {title:"Out of date", html:`<p>The answer was true before the knowledge cutoff.</p><ul class="list"><li>“The current year is 2025.”</li><li>A product’s price from before last spring’s increase.</li></ul><p><b>To fix it,</b> tell the AI today’s date or ask it to search current sources. ${a(L.date,"Get AI to Use Today’s Date")} shows how.</p>`}]},
-    {t:"sort", prompt:"Drag each wrong answer to Hallucination or Out of date, or select a pile.", piles:["Hallucination","Out of date"],
-      cards:[["Claude names a “newest” model that has since been replaced.",1],["ChatGPT cites a magazine article that the magazine never published.",0],
-        ["Copilot names a client’s head of HR who left eight months ago.",1],["Claude cites a source for a statistic, but the source has no such number.",0]]},
+    {t:"h", text:"Part 3. AI is most often wrong in six kinds of answers"},
+    {t:"p", html:`The model writes the words most likely to come next, and nothing in that step checks whether a fact is true. So AI is wrong most often in the same six kinds of answers. A wrong reply reads just as sure as a right one.`},
+    {t:"table", head:["Where AI goes wrong","What to do"], rows:[
+      [`<b>Sources and quotes.</b> It cites a study, article or quote that does not exist. This is a <b>hallucination</b>: a false statement given as fact that was never true.`,"Open each source and find the sentence."],
+      [`<b>Recent events and today’s date.</b> It gives a fact that was true before its <b>knowledge cutoff</b>, the date its learning stops. It does not know later events unless it searches the web or you tell it.`,"Tell it today’s date, or ask it to search current sources."],
+      [`<b>Exact numbers.</b> It counts words, adds a column or works out a percent by writing likely digits, unless the app runs a calculation.`,"Check totals in Excel, or ask the app to calculate and show the steps."],
+      [`<b>Small or private facts.</b> It learned little or nothing about a client’s staff, a small local company or Fredrickson’s own process, so it writes something likely instead.`,"Give it the source, such as the client’s web page or your notes."],
+      [`<b>Files it cannot read.</b> If you mention a file it cannot read, or paste only part of one, it can reply as if it read the whole file.`,"Upload or link the full file, and ask what it could not read."],
+      [`<b>Questions that suggest an answer.</b> Ask “Isn’t this the best option?” and the reply usually says yes.`,"Ask a neutral question, or ask for the case against."]]},
+    {t:"note", html:`<b>Easy to mix up.</b> A hallucination and an out-of-date answer need different fixes. Ask: was this ever true? If never, check the source. If it was true before the cutoff, give the date or ask for a search. ${a(L.date,"Get AI to Use Today’s Date")} shows how.`},
+    {t:"statement", text:"A sure tone is not a sign of a right answer. Check these six kinds of answers before a client sees them."},
+    {t:"sort", prompt:"Drag each request to Check closely or Lower risk, or select a pile.", piles:["Check closely","Lower risk"],
+      cards:[["List ten title ideas for a workshop",1],["Find three studies that show microlearning works",0],["Add up the hours in a 40-row timesheet",0],
+        ["Make your own paragraph shorter",1],["Name the current head of HR at a regional client",0],["“Isn’t our proposal stronger than theirs?”",0]]},
     {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
-      <li>The replaced model: out of date. It was the newest model before the knowledge cutoff.</li>
-      <li>The magazine article: hallucination. The article never existed.</li>
-      <li>The head of HR: out of date. The person held the job once, before the change.</li>
-      <li>The statistic: hallucination. The number was never in the source.</li></ul>`},
+      <li>Title ideas: lower risk. You choose from them, and none is a fact.</li>
+      <li>Three studies: check closely. Sources are where hallucinations happen most.</li>
+      <li>The timesheet total: check closely. Exact numbers need a calculation.</li>
+      <li>Your own paragraph: lower risk. You know what it should say, so read the new version for meaning.</li>
+      <li>The head of HR: check closely. The fact is small, private and may be out of date.</li>
+      <li>“Isn’t our proposal stronger?”: check closely. The question suggests the answer.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Check: name the term in each description"},
-    {t:"p", html:`Answer all five. Your score appears after the last question.`},
-    {t:"kc", check:true, q:"You switch from Claude Sonnet to Claude Opus in the same Claude window. What did you change?", choices:["The app","The model"], correct:1,
-      right:"Correct. You stayed in the Claude app and chose a different model.", wrong:"Not quite. You stayed in the Claude app, so you changed the model."},
-    {t:"kc", check:true, q:"You ask Claude to turn a Notion job aid into a checklist. Claude says it cannot see the page. What fixes it?", choices:["Switch to a newer Claude model.","Paste the page in, or link Notion to Claude."], correct:1,
-      right:"Correct. The app could not read the page. A newer model cannot read it either.", wrong:"Not quite. The app could not read the page, and a newer model cannot read it either. Paste the page in, or link Notion to Claude."},
-    {t:"kc", check:true, q:"ChatGPT gives you a link to a study. The link leads nowhere, and the study does not exist. Which kind of wrong answer is it?", choices:["Hallucination","Out of date"], correct:0,
-      right:"Correct. The study was never real.", wrong:"Not quite. The study was never real, so it is a hallucination."},
+    {t:"h", text:"Check: apply what you learned"},
+    {t:"p", html:`Answer all six. Your score appears after the last question.`},
+    {t:"kc", check:true, q:"A colleague says, “Copilot and ChatGPT are the same, because they use the same AI.” What is wrong with that?", choices:["Nothing. They are the same app.","They can run the same kind of model, but they are two different apps.","Copilot does not use a model."], correct:1,
+      right:"Correct. Copilot can run OpenAI models, but it is a different app, with different settings and access to different files.", wrong:"Not quite. Copilot can run OpenAI models, but Copilot and ChatGPT are two different apps."},
+    {t:"kc", check:true, q:"ChatGPT answers your question and lists three web sources. What do you still check?", choices:["Nothing. The sources show it searched.","That each source says what the reply says."], correct:1,
+      right:"Correct. The app found real pages, but the model wrote the summary, and it can be wrong.", wrong:"Not quite. The app found real pages, but the model wrote the summary. Open the sources and find the sentences."},
+    {t:"kc", check:true, q:"You need a summary of a Teams meeting you missed. Which app can read the meeting with no setup?", choices:["Microsoft 365 Copilot, with a Copilot license","Gemini","Any of the four"], correct:0,
+      right:"Correct. Teams is part of Microsoft 365, and Copilot reads it through your work sign-in.", wrong:"Not quite. Teams is part of Microsoft 365, so only Copilot reads it with no setup."},
+    {t:"kc", check:true, q:"Claude gives a statistic with a source, but the source contains no such number. Which kind of wrong answer is it?", choices:["Hallucination","Out of date"], correct:0,
+      right:"Correct. The number was never in the source.", wrong:"Not quite. The number was never in the source, so it is a hallucination."},
     {t:"kc", check:true, q:"ChatGPT quotes the price of a software subscription. The price went up in the spring. Which kind of wrong answer is it?", choices:["Hallucination","Out of date"], correct:1,
       right:"Correct. The old price was true before the knowledge cutoff.", wrong:"Not quite. The old price was true once, so the answer is out of date."},
-    {t:"kc", check:true, q:"Copilot summarizes a meeting and adds a decision that nobody made. Which kind of wrong answer is it?", choices:["Hallucination","Out of date"], correct:0,
-      right:"Correct. Nobody made that decision, so it was never true.", wrong:"Not quite. Nobody made that decision, so it was never true. That makes it a hallucination."},
-    {t:"score", pass:4},
+    {t:"kc", check:true, q:"Claude gives you the total of a 40-row budget table you pasted in. What is the best check?", choices:["Ask Claude again and compare the two totals.","Check the total in Excel."], correct:1,
+      right:"Correct. A model can write likely digits instead of calculating. Excel calculates.", wrong:"Not quite. Asking again gets another set of likely digits. Check the total in Excel."},
+    {t:"score", pass:5},
     {t:"cards", cards:[
       ["Generative AI","AI that writes new text, images or code from your request."],
       ["Large language model (LLM)","A model that learned patterns from a very large amount of text and writes the words most likely to come next."],
       ["Model","The part inside an AI app that writes the reply. One app can offer several models."],
       ["Hallucination","A false statement the AI gives as fact. It was never true."],
       ["Knowledge cutoff","The date the model’s learning stops. The model does not know later events unless it searches or you tell it."]]},
-    {t:"end", html:`You can now tell an app from its model, check whether an app can read your work files, and tell a made-up answer from an out-of-date one. Look up any term in ${a(L.glossary,"AI Terms in Plain Words")}. Lesson 2 shows what the AI reads in a conversation.`}
+    {t:"end", html:`You can now tell an app from its model and a model from a search engine, choose the app that can read what a task needs, and spot the six kinds of answers to check. Look up any term in ${a(L.glossary,"AI Terms in Plain Words")}. Lesson 2 shows what the AI reads in a conversation.`}
   ]
 },
 {
@@ -554,7 +582,7 @@ function renderHome(){
   const wrap = el("div","home");
   wrap.append(el("div","stack",`<p class="eyebrow">A self-paced course for Fredrickson staff</p>
     <h1>Learn the AI terms you see at work, and choose the right AI option for a task.</h1>
-    <p class="lede">Four short lessons, about 27 minutes in all. Each lesson teaches a few terms that people often mix up, lets you sort examples, and ends with a short check.</p>`));
+    <p class="lede">Four short lessons, about 30 minutes in all. Each lesson teaches a few terms that people often mix up, lets you sort examples, and ends with a short check.</p>`));
   const list = el("ol","lessons");
   LESSONS.forEach((ls,i)=>{
     const isDone = done.includes(i);
@@ -810,7 +838,7 @@ function sortBlock(b, ctx, seg){
       if(missed) misses++; missed = false; k++; show();
     } else {
       missed = true;
-      status.textContent = "Not quite. That card belongs in the other pile. Try again.";
+      status.textContent = "Not quite. That card belongs in a different pile. Try again.";
       card.classList.remove("shake"); void card.offsetWidth; card.classList.add("shake");
     }
   }
