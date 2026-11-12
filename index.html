@@ -1,9 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
 <title>Working with AI</title>
+<meta name="claude:viewport-fit-sides" content="cover">
 <style>
 /* Layout: navy masthead band from the Fredrickson job aids, then one reading column of lesson blocks. */
 :root{
@@ -27,7 +24,7 @@
   --good:#6fd39a; --good-soft:#123423; --bad:#ff958a; --bad-soft:#3d1a18;
   --shadow:0 1px 3px rgba(0,0,0,.4); color-scheme:dark}
 
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17.5px;line-height:1.6}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17.5px;line-height:1.6}
 a{color:var(--brand-ink);text-underline-offset:2px}
 b{font-weight:700}
 button{font:inherit}
@@ -176,10 +173,12 @@ details.acc .body{padding:0 18px 16px 48px}
 .score{border:2px solid var(--accent);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:6px}
 .score .big{font-size:26px;font-weight:800;color:var(--brand-ink)}
 .finish{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.backnav{display:flex;flex-wrap:wrap;gap:6px 20px}
+.backlink{font-weight:700;text-decoration:none;font-size:16px;padding:6px 0;min-height:44px;display:inline-flex;align-items:center}
+.backlink:hover{text-decoration:underline}
 
 @media (prefers-reduced-motion:reduce){.flash .in{transition:none}.card.shake{animation:none}}
 </style>
-</head><body>
 
 <header class="top"><div class="top-in">
   <a class="wordmark" href="#home">Working with AI</a>
@@ -201,20 +200,56 @@ const a = (href, text) => `<a href="${href}" target="_blank" rel="noopener">${te
 
 const LESSONS = [
 {
-  title: "The AI apps, the models inside them, and where they go wrong", min: 8,
-  terms: "App, model, AI engine, hallucination, knowledge cutoff",
+  title: "The basic terms, and where AI goes wrong", min: 10,
+  terms: "App, model, AI engine, prompt, custom instructions, hallucination, knowledge cutoff",
   order: "first",
-  builds: "Emily checks an AI answer before a client sees it. You learn that the app you type in and the model that writes the reply are two different things, and which answers to check.",
-  scenario: "Emily works at Fredrickson. She is writing a proposal for a new client, and she asks Copilot for the client’s size and three recent news stories. The reply reads like fact, and it names a CEO who retired last year. Before the proposal goes out, Emily needs to know which parts of an AI answer to check, and what to change when a reply is wrong.",
-  why: "The course starts with the apps you use and what is inside them. Every later lesson uses one idea from this lesson: the app you type in and the model that writes the reply are two different things.",
-  matters: "You use these apps for client work, and each one can give a wrong answer that looks as sure as a right one. When you know what to change when a reply fails, what each app can read and where AI goes wrong, you know which answers to check before a client sees them.",
-  goal: "When you finish, you can choose whether to change the prompt, the files, the search setting or the model when a reply fails. You can say how Copilot, ChatGPT, Claude and Gemini differ. You can also name what you can set up once to prevent wrong answers, and what you still check each time.",
+  builds: "The terms every later lesson uses: the app and the model inside it, what people mean by “AI engine”, and a prompt compared with custom instructions. Then you learn which AI answers to check.",
+  why: "Every later lesson uses three pairs of terms that people often mix up: the app and the model, the model and the “AI engine”, and a prompt and custom instructions. This lesson defines them first, so no later part uses a term before it is explained.",
+  matters: "When you know which part of an AI app does what, you know what to change when a reply is wrong, and which answers to check before a client sees them.",
+  goal: "When you finish, you can tell an app from its model, say what people mean by “AI engine”, and tell a prompt from custom instructions. You can also choose what to change when a reply fails, say how Copilot, ChatGPT, Claude and Gemini differ, and name what to check before a client sees an answer.",
   blocks: [
-    {t:"h", text:"Part 1. The app and the model do different jobs"},
+    {t:"h", text:"Part 1. The app, the model and the “AI engine”"},
     {t:"p", html:`Copilot, ChatGPT, Claude and Gemini are each an <b>app</b>: the window you sign in to, type in and upload files to. A <b>model</b> inside the app writes the reply. Most apps let you choose from several models in a menu.`},
     {t:"p", html:`Three of the apps come from the company that makes their models. OpenAI makes ChatGPT, Anthropic makes Claude, and Google makes Gemini. Copilot is different: Microsoft makes the app, and the app runs models from other companies, such as OpenAI and Anthropic. So an app’s name does not tell you which model wrote a reply.`},
     {t:"statement", text:"You type in the app, and the model writes the reply."},
-    {t:"note", html:`<b>“AI engine” usually means the model.</b> You may hear “the AI engine behind Copilot” or “our product runs on a powerful AI engine.” “Engine” is not an exact term. Most people use it to mean the model that writes the replies. Some companies use it for the model plus the other software around it. When a vendor says “AI engine,” ask which model it is and which company makes it.`},
+    {t:"p", html:`You may hear “the AI engine behind Copilot” or “our product runs on a powerful AI engine.” <b>AI engine</b> is not an exact term. Most people use it to mean the model. Some companies use it for the model plus the other software around it.`},
+    {t:"note", html:`<b>Easy to mix up.</b> The engine is not a third part. When someone says “AI engine,” they almost always mean the model. Ask which model it is and which company makes it.`},
+    {t:"sort", prompt:"Drag each description to App or Model, or select a pile.", piles:["App","Model"],
+      cards:[["The window where you upload a proposal",0],
+        ["What a vendor means by “our AI engine”",1],
+        ["The part that writes the words of the reply",1],
+        ["Microsoft 365 Copilot",0],
+        ["The choice you make in the model menu at the top of a chat",1]]},
+    {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
+      <li>The window where you upload: app. You sign in to the app, type in it and add files to it.</li>
+      <li>“Our AI engine”: model. “Engine” usually means the model.</li>
+      <li>The part that writes the reply: model.</li>
+      <li>Microsoft 365 Copilot: app. Microsoft makes the app, and it runs models from other companies.</li>
+      <li>The menu choice: model. The app stays the same, and only the model changes.</li></ul>`},
+    {t:"gate"},
+    {t:"h", text:"Part 2. A prompt is one message, and custom instructions apply to every chat"},
+    {t:"p", html:`A <b>prompt</b> is everything you send in one message: your request, your instructions, any examples and any attached files. A rule in a prompt applies to that message only.`},
+    {t:"p", html:`<b>Custom instructions</b> are saved directions the AI follows in every chat you start, such as your role, your tone or the format you prefer. You write them once in the app’s settings, and the app adds them to every chat for you.`},
+    {t:"statement", text:"A prompt applies to one message. Custom instructions apply to every chat."},
+    {t:"tabs", tabs:[
+      {title:"Prompt", html:`<p>Applies to one message.</p><ul class="list"><li>“Summarize this email in three bullets,” with the email pasted below.</li><li>“This summary is for the client’s CFO, so lead with cost.”</li></ul>`},
+      {title:"Custom instructions", html:`<p>Apply to every chat you start.</p><ul class="list"><li>“I am an instructional designer. My audience is usually HR leaders.”</li><li>“Check today’s date before you answer.”</li></ul>`}]},
+    {t:"note", html:`<b>Easy to mix up.</b> Ask: do I want this in every chat, or only now? Every chat: custom instructions. Only now: the prompt. A rule for only one client goes in a project, which Lesson 2 covers.`},
+    {t:"sort", prompt:"Drag each rule to Prompt or Custom instructions, or select a pile.", piles:["Prompt","Custom instructions"],
+      cards:[["Every chat checks today’s date before it answers.",1],
+        ["This summary is for the client’s CFO, so it leads with cost.",0],
+        ["Replies link a source for every fact.",1],
+        ["You want the case against your own proposal.",0],
+        ["Write in US English.",1]]},
+    {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
+      <li>Today’s date: custom instructions. You want it in every chat.</li>
+      <li>The CFO summary: prompt. The reader changes with each task.</li>
+      <li>A source for every fact: custom instructions. It is a rule for every chat.</li>
+      <li>The case against your proposal: prompt. You want it for this proposal, not for every reply.</li>
+      <li>US English: custom instructions. It is true in every chat.</li></ul>`},
+    {t:"p", html:`${a(L.directions,"Get AI to Follow Your Directions")} shows how to set up custom instructions in Claude, ChatGPT and Copilot.`},
+    {t:"gate"},
+    {t:"h", text:"Part 3. When a reply fails, change the prompt first and the model last"},
     {t:"p", html:`Some apps also search the web when a question needs current facts. The app runs the search and lists the sources, and the model still writes the summary. Check the summary against the sources.`},
     {t:"p", html:`When a reply fails, check the causes in this order. First, the prompt: most weak replies come from a prompt that leaves out the goal, the reader or the format. Second, what the app can read. Third, whether the facts are newer than the model. Change the model last, after the prompt and the files are right.`},
     {t:"note", html:`<b>Prompt or model?</b> Imagine giving the same prompt and files to a capable new hire. If the new hire would need to ask questions or guess, the prompt is missing something, so rewrite the prompt. If the new hire would get it right and the AI does not, choose a more capable model. The difference shows most on hard tasks: plans with many steps, long analysis, and work with many rules at once. For quick tasks, such as a short email, a faster model is usually enough.`},
@@ -233,7 +268,7 @@ const LESSONS = [
       <li>The Notion page: add or link the file. Paste the page in, or link Notion to ChatGPT.</li>
       <li>The plan that still skips steps: choose a different model. The prompt and the files are right, so a more capable model is the next change.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 2. The four apps differ most in what they can read"},
+    {t:"h", text:"Part 4. The four apps differ most in what they can read"},
     {t:"p", html:`All four apps can write, summarize and answer questions, so most tasks can start in any of them. The biggest difference is what each app can read with no setup. Fredrickson keeps its email, meetings and files in Microsoft 365.`},
     {t:"compare", cols:["Copilot","ChatGPT","Claude","Gemini"], rows:[
       ["Made by","Microsoft","OpenAI","Anthropic","Google"],
@@ -244,9 +279,9 @@ const LESSONS = [
     {t:"note", html:`<b>Easy to mix up.</b> Copilot reads your email, meetings and files only with a Microsoft 365 Copilot license. Without one, Copilot Chat reads the web and the files you add, like the other apps.`},
     {t:"statement", text:"Choose the app that can already read what the task needs. If none can, upload the file or link the app."},
     {t:"gate"},
-    {t:"h", text:"Part 3. Where AI goes wrong, and what you can set up once"},
+    {t:"h", text:"Part 5. Where AI goes wrong, and what you can set up once"},
     {t:"p", html:`A model learned patterns from a very large amount of text, and it writes the words most likely to come next. Nothing in that step checks whether a fact is true. So AI is wrong most often in the same six kinds of answers, and a wrong reply reads just as sure as a right one.`},
-    {t:"p", html:`You can guard against most of them once, so the guard applies to every chat. Lesson 2 covers custom instructions and projects, and Lesson 4 covers connectors, plugins and skills. What is left for each prompt is short: your judgment about which facts matter.`},
+    {t:"p", html:`You can guard against most of them once, so the guard applies to every chat. Most guards are custom instructions, from Part 2. Two guards use terms that later lessons teach in full: a <b>project</b>, a workspace that gives every chat inside it the same files (Lesson 2), and a <b>connector</b>, a link that lets the app read another app, such as OneDrive (Lesson 4). What is left for each prompt is short: your judgment about which facts matter.`},
     {t:"table", plain:true, head:["Where AI goes wrong","Set up once","Still up to you"], rows:[
       [`<b>Sources and quotes.</b> It cites a study, article or quote that does not exist. This is a <b>hallucination</b>: a false statement given as fact that was never true.`,"Turn on web search. Add a custom instruction: link a source for every fact, and say when no source was found.","Open the sources behind the facts a client will rely on."],
       [`<b>Recent events and today’s date.</b> It gives a fact that was true before its <b>knowledge cutoff</b>, the date its learning stops.`,`Add a custom instruction: check today’s date, and search for anything that may have changed. ${a(L.date,"Get AI to Use Today’s Date")} shows how.`,"Little. Glance at the dates in the reply when timing matters."],
@@ -256,20 +291,6 @@ const LESSONS = [
       [`<b>Questions that suggest an answer.</b> Ask “Isn’t this the best option?” and the reply usually says yes.`,"Add a custom instruction: name weaknesses, and disagree when the evidence does.","Ask a neutral question. No setting can rewrite your question for you."]]},
     {t:"note", html:`<b>Easy to mix up.</b> A hallucination and an out-of-date answer need different guards. Ask: was this ever true? If never, the guard is a source for every fact. If it was true before the cutoff, the guard is the date and a web search.`},
     {t:"statement", text:"Set up once what you can. Then check the facts a client will rely on."},
-    {t:"sort", prompt:"Drag each want to Set up once or Put in this prompt, or select a pile.", piles:["Set up once","Put in this prompt"],
-      cards:[["Every chat checks today’s date before it answers.",0],
-        ["This summary is for the client’s CFO, so it leads with cost.",1],
-        ["Replies link a source for every fact.",0],
-        ["You want the case against your own proposal.",1],
-        ["Chats about one client use that client’s files.",0],
-        ["The total of these 40 rows is calculated, not estimated.",0]]},
-    {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
-      <li>Today’s date: set up once. You want it in every chat, so put it in custom instructions.</li>
-      <li>The CFO summary: put in this prompt. The reader and what to lead with change with each task.</li>
-      <li>A source for every fact: set up once. It is a rule for every chat.</li>
-      <li>The case against your proposal: put in this prompt. You want it for this proposal, not for every reply.</li>
-      <li>One client’s files: set up once. Keep them in a project for that client.</li>
-      <li>The calculated total: set up once. Turn on the app’s code or data analysis feature, and add “calculate, do not estimate” to custom instructions. It applies to every total after that.</li></ul>`},
     {t:"gate"},
     {t:"h", text:"Check: apply what you learned"},
     {t:"p", html:`Answer all six. Your score appears after the last question.`},
@@ -289,15 +310,17 @@ const LESSONS = [
     {t:"cards", cards:[
       ["Model","The part inside an AI app that writes the reply. One app can offer several models."],
       ["Hallucination","A false statement the AI gives as fact. It was never true."],
-      ["Knowledge cutoff","The date the model’s learning stops. The model does not know later events unless it searches or you tell it."]]},
-    {t:"end", html:`You can now choose what to change when a reply fails, choose the app that can read what a task needs, and set up once what you can to prevent wrong answers. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 2 shows what the AI reads in a conversation.`}
+      ["Knowledge cutoff","The date the model’s learning stops. The model does not know later events unless it searches or you tell it."],
+      ["Prompt","Everything you send in one message: your request, instructions, examples and attached files."],
+      ["Custom instructions","Saved directions the AI follows in every chat, such as your role, tone or preferred format."]]},
+    {t:"end", html:`You can now tell an app from its model and a prompt from custom instructions, choose what to change when a reply fails, choose the app that can read what a task needs, and set up once what you can to prevent wrong answers. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 2 shows what the AI reads in a conversation.`}
   ]
 },
 {
   title: "What the AI reads in a conversation", min: 9,
-  terms: "Chat, prompt, custom instructions, project, context window, token, memory",
+  terms: "Chat, project, context window, token, memory",
   order: "second",
-  builds: "Emily wants the AI to follow her rules in every draft. Using the app and model from Lesson 1, you learn what the AI reads in one chat and where to save rules so it keeps them.",
+  builds: "Emily wants the AI to follow her rules in every draft. Using the prompt and custom instructions from Lesson 1, you learn what the AI reads in one chat and where else to save rules so it keeps them.",
   scenario: "Emily drafts a client newsletter in Claude. In her first message, she gives the client’s name and a 150-word limit. Two hours later, the drafts run 300 words and use the wrong client name. The next morning, she opens a new chat, and Claude knows nothing about the newsletter. Emily wants Claude to follow her rules in every draft, without typing them again.",
   why: "Lesson 1 showed what an app can read across Microsoft 365. This lesson looks at one conversation: what the AI reads each time you send a message.",
   matters: "Two common problems come from what the AI reads. It ignores your directions, or it seems to forget something you told it. Each problem has more than one cause, and this lesson shows which fix goes with which cause.",
@@ -305,9 +328,7 @@ const LESSONS = [
   blocks: [
     {t:"h", text:"Part 1. Custom instructions apply to every chat, and a project applies to the chats inside it"},
     {t:"p", html:`A <b>chat</b> is a conversation in which you type a request and the AI replies with text.`},
-    {t:"p", html:`A <b>prompt</b> is everything you send in one message: your request, your instructions, any examples and any attached files. A rule in a prompt applies to that message.`},
-    {t:"p", html:`Two features let you write a rule once, instead of typing it in every prompt.`},
-    {t:"p", html:`<b>Custom instructions</b> are saved directions the AI follows in every chat, such as your role, your tone or the format you prefer. You write them once in the app’s settings.`},
+    {t:"p", html:`Lesson 1 taught the <b>prompt</b>, which applies to one message, and <b>custom instructions</b>, which apply to every chat you start. A third place to save rules sits between them.`},
     {t:"p", html:`A <b>project</b> is a workspace that gives every chat inside it the same files and instructions. Chats outside the project cannot use them.`},
     {t:"p", html:`ChatGPT and Claude have projects. Copilot is renaming its notebooks to projects, so you may see either name. Gemini has no projects yet.`},
     {t:"statement", text:"Custom instructions apply to every chat you start. A project’s files and instructions apply only to chats inside the project."},
@@ -324,7 +345,7 @@ const LESSONS = [
       <li>The brand guide: project. Only chats about that client need it, and it is a file.</li>
       <li>Your role and audience: custom instructions. They are true in every chat.</li>
       <li>The newsletter instructions: project. They are instructions, but only newsletter chats need them.</li></ul>`},
-    {t:"p", html:`${a(L.directions,"Get AI to Follow Your Directions")} shows how to set up custom instructions in Claude, ChatGPT and Copilot.`},
+    {t:"p", html:`${a(L.directions,"Get AI to Follow Your Directions")} shows how to set up custom instructions and projects in Claude, ChatGPT and Copilot.`},
     {t:"gate"},
     {t:"h", text:"Part 2. The context window limits how much the AI can read at one time"},
     {t:"p", html:`The <b>context window</b> is the most text a model can read at one time: the whole chat, any files and the model’s own replies. Each message adds to it. When a chat gets longer than the context window, the app drops or shortens early messages, and answers get worse.`},
@@ -386,8 +407,6 @@ const LESSONS = [
     {t:"score", pass:5},
     {t:"cards", cards:[
       ["Chat","A conversation in which you type a request and the AI replies with text."],
-      ["Prompt","Everything you send in one message: your request, instructions, examples and attached files."],
-      ["Custom instructions","Saved directions the AI follows in every chat, such as your role, tone or preferred format."],
       ["Project","A workspace that gives every chat inside it the same files and instructions."],
       ["Context window","The most text a model can read at one time: the whole chat, any files and its own replies."],
       ["Token","The unit AI apps use to measure text. One token is about three-quarters of an English word."],
@@ -620,10 +639,10 @@ function renderHome(){
   const wrap = el("div","home");
   wrap.append(el("div","stack",`<p class="eyebrow">A self-paced course for Fredrickson staff</p>
     <h1>Learn the AI terms you see at work, and choose the right AI option for a task.</h1>
-    <p class="lede">Four short lessons, about 31 minutes in all. Each lesson teaches a few terms that people often mix up, lets you sort examples, and ends with a short check.</p>`));
+    <p class="lede">Four short lessons, about 33 minutes in all. Each lesson teaches a few terms that people often mix up, lets you sort examples, and ends with a short check.</p>`));
   wrap.append(el("div","stack",`<h2>How the four lessons build on each other</h2>
     <p>Each lesson asks two questions: what can the AI read, and what can it do? Each lesson gives a bigger answer than the one before, and uses the terms the earlier lessons taught.</p>
-    <p>All four lessons follow Emily, who works at Fredrickson. Her task grows in each lesson, from checking one AI answer to letting an agent change her files.</p>`));
+    <p>Lesson 1 defines the basic terms the other lessons use. Lessons 2, 3 and 4 follow Emily, who works at Fredrickson, as her task grows from one chat to letting an agent change her files.</p>`));
   const list = el("ol","lessons");
   LESSONS.forEach((ls,i)=>{
     const isDone = done.includes(i);
@@ -652,6 +671,10 @@ function renderLesson(n){
   const ctx = { interactives: [], checks: [], scoreEls: [], last: n === LESSONS.length - 1 };
   const root = el("div");
   const head = el("div","lesson-head");
+  const back = el("nav","backnav"); back.setAttribute("aria-label","Course");
+  back.append(Object.assign(el("a","backlink","← All lessons"),{href:"#home"}));
+  if(n > 0) back.append(Object.assign(el("a","backlink",`← Lesson ${n}`),{href:"#lesson-"+n}));
+  head.append(back);
   head.append(el("p","eyebrow",`Lesson ${n+1} of ${LESSONS.length}, ${ls.min} minutes`));
   head.append(el("h1",null,ls.title));
   if(ls.scenario) head.append(el("p","scenario",`<b>The situation.</b> ${ls.scenario}`));
@@ -919,7 +942,9 @@ function endBlock(b, n){
   const btn = el("button","btn", nextOpen ? `Finish and start Lesson ${n+2}` : last ? "Finish the course" : "Finish this lesson"); btn.type="button";
   btn.addEventListener("click",()=>{ setDone(n); location.hash = nextOpen ? "#lesson-"+(n+2) : "#home"; });
   const home = el("a","btn ghost","All lessons"); home.href="#home";
-  f.append(btn, home); w.append(f); return w;
+  f.append(btn);
+  if(n > 0){ const prev = el("a","btn ghost",`Back to Lesson ${n}`); prev.href = "#lesson-"+n; f.append(prev); }
+  f.append(home); w.append(f); return w;
 }
 
 /* ---------- routing ---------- */
