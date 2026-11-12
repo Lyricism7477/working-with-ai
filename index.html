@@ -80,6 +80,12 @@ p{margin:0}
 table{border-collapse:collapse;width:100%;font-size:16px}
 th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
 th{font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+.apps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.app{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface)}
+.app h3{margin:0 0 10px;font-size:19px;color:var(--brand-ink)}
+.app dl{margin:0;display:flex;flex-direction:column;gap:10px}
+.app dt{font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:700}
+.app dd{margin:2px 0 0}
 ul.list{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
 
 /* Knowledge check */
@@ -186,9 +192,9 @@ const a = (href, text) => `<a href="${href}" target="_blank" rel="noopener">${te
 
 const LESSONS = [
 {
-  title: "What an AI tool is, and why it gets facts wrong", min: 6,
+  title: "The AI apps you can use, and why they get facts wrong", min: 7,
   terms: "Generative AI, model, large language model, hallucination, knowledge cutoff",
-  goal: "When you finish, you can tell an AI app from the model inside it, and tell a made-up answer from an out-of-date one.",
+  goal: "When you finish, you can tell an AI app from the model inside it, say what Copilot, Claude, ChatGPT and Gemini can each reach, and tell a made-up answer from an out-of-date one.",
   blocks: [
     {t:"kc", warm:true, q:"You ask Copilot and ChatGPT the same question about a sales report saved in your Fredrickson OneDrive. Copilot answers from the report. ChatGPT says it cannot find the report. Both apps can use OpenAI models. What explains the difference?",
       choices:["ChatGPT uses an older, weaker model than Copilot.","The report is newer than ChatGPT’s knowledge cutoff.","Copilot can open files in your Microsoft 365 account, and ChatGPT cannot."], correct:2,
@@ -196,25 +202,32 @@ const LESSONS = [
       wrong:"Not quite. Keep your answer in mind. Part 1 shows why the app, not the model, decides which files the AI can open."},
     {t:"gate"},
     {t:"h", text:"Part 1. You work in the app, and the model writes"},
-    {t:"p", html:`<b>Generative AI</b> writes new text, images or code from your request. Claude, ChatGPT and Microsoft 365 Copilot are all generative AI.`},
+    {t:"p", html:`<b>Generative AI</b> writes new text, images or code from your request. Microsoft 365 Copilot, Claude, ChatGPT and Gemini are all generative AI.`},
     {t:"p", html:`Each of those tools is an <b>app</b>: the window you sign in to and type in. A <b>model</b> inside the app writes the reply. One app can offer several models. In ChatGPT, you can choose GPT-6 or another GPT model from a menu. In Claude, you can choose Claude Opus or Claude Sonnet. Either way, you stay in the same app.`},
     {t:"mock"},
     {t:"p", html:`The models behind these apps are <b>large language models (LLMs)</b>. An LLM learned patterns from a very large amount of text. It writes a reply one piece at a time, choosing the words most likely to come next.`},
     {t:"statement", text:"You work in the app, and the model writes."},
-    {t:"table", head:["What you see","App or model"], rows:[
-      ["Claude, open in a browser tab","App"],["Claude Sonnet, chosen from a menu inside Claude","Model"],
-      ["Copilot, open in Word or Teams","App"],["ChatGPT, open on your phone","App"],["GPT-6, chosen from the model menu in ChatGPT","Model"]]},
     {t:"note", html:`<b>Easy to mix up.</b> An app and its models often share a name. The app is Claude, and the models are Claude Opus and Claude Sonnet. The app is ChatGPT, and GPT-6 is one of its models.`},
     {t:"p", html:`<b>Your answer from the start.</b> Copilot runs on models from other companies, including OpenAI, the company that makes ChatGPT. So the model did not cause the difference. The app did. Copilot is signed in to your Microsoft 365 account, so it can open your OneDrive files. ChatGPT is a different app, with different settings and access to different files.`},
-    {t:"sort", prompt:"Drag each name to App or Model, or select a pile.", piles:["App","Model"],
-      cards:[["ChatGPT",0],["Claude Opus",1],["Microsoft 365 Copilot",0],["GPT-6",1]]},
-    {t:"acc", title:"Why each name goes where it goes", html:`<ul class="list">
-      <li>ChatGPT is an app. You sign in to it.</li>
-      <li>Claude Opus is a model. You choose it inside the Claude app.</li>
-      <li>Microsoft 365 Copilot is an app. You open it in Word, Outlook or Teams.</li>
-      <li>GPT-6 is a model. You choose it inside the ChatGPT app.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 2. A wrong answer is made up or out of date"},
+    {t:"h", text:"Part 2. Each app reaches different files"},
+    {t:"p", html:`Fredrickson staff use four AI apps. They differ most in what they can reach: your email, your meetings, your files, or only what you give them.`},
+    {t:"apps", labels:["Where you open it","What it can reach","Models inside","Who pays at Fredrickson"], apps:[
+      ["Microsoft 365 Copilot","Word, Excel, PowerPoint, Outlook, Teams and the Copilot app","With a paid Copilot license: your email, Teams chats and meetings, and OneDrive and SharePoint files. Without one: the web and files you add.","OpenAI’s GPT models, and Claude models in some features","Fredrickson, for some staff"],
+      ["Claude","Browser, desktop app and phone","Files you add, and apps you link to it, such as Notion or Microsoft 365","Claude Opus, Claude Sonnet and Claude Haiku","Fredrickson, for some staff"],
+      ["ChatGPT","Browser, desktop app and phone","Files you add, and apps you link to it","OpenAI’s GPT models, such as GPT-6","Some staff pay for their own account"],
+      ["Gemini","Browser, phone, and Google apps such as Gmail","Files you add, and Google apps you sign in to","Google’s Gemini models","No work plan. Staff use free accounts."]]},
+    {t:"statement", text:"Before you ask, check whether the app can reach what it needs. If it cannot, add the file or link the app."},
+    {t:"p", html:`Fredrickson keeps its email, meetings and files in Microsoft 365. So with a paid license, Copilot reaches the most work files without any setup. Claude, ChatGPT and Gemini start with only what you add. Lesson 4 shows how a connector links an app to your files, and how a work account differs from one you pay for yourself.`},
+    {t:"sort", prompt:"Your colleague has a paid Copilot license. Drag each item to Copilot reaches it or You add it first, or select a pile.", piles:["Copilot reaches it","You add it first"],
+      cards:[["The decisions from yesterday’s Teams meeting",0],["A job aid page in Notion",1],["A client’s email in your Outlook inbox",0],["A PDF on a USB drive a client gave you",1]]},
+    {t:"acc", title:"Why each item goes where it goes", html:`<ul class="list">
+      <li>The Teams meeting: Copilot reaches it. A paid license covers Teams meetings.</li>
+      <li>The Notion page: you add it first. Notion is outside Microsoft 365, so you paste the page in or link Notion to the app.</li>
+      <li>The client’s email: Copilot reaches it. A paid license covers your Outlook inbox.</li>
+      <li>The PDF on a USB drive: you add it first. The file is outside Microsoft 365 until you upload it.</li></ul>`},
+    {t:"gate"},
+    {t:"h", text:"Part 3. A wrong answer is made up or out of date"},
     {t:"p", html:`An AI answer can be wrong in two ways, and each has a name.`},
     {t:"p", html:`A <b>hallucination</b> is a false statement the AI gives as fact, and it was never true. The model writes the words most likely to come next, and no step checks whether a fact is real. So a made-up source reads as confidently as a real one.`},
     {t:"p", html:`An <b>out-of-date answer</b> was true once. A model learned from text up to a date called its <b>knowledge cutoff</b>. It does not know later events, or today’s date, unless it searches the web or you tell it.`},
@@ -235,8 +248,8 @@ const LESSONS = [
     {t:"p", html:`Answer all five. Your score appears after the last question.`},
     {t:"kc", check:true, q:"You switch from Claude Sonnet to Claude Opus in the same Claude window. What did you change?", choices:["The app","The model"], correct:1,
       right:"Correct. You stayed in the Claude app and chose a different model.", wrong:"Not quite. You stayed in the Claude app, so you changed the model."},
-    {t:"kc", check:true, q:"A colleague says, “I drafted it in Copilot.” What did your colleague name?", choices:["An app","A model"], correct:0,
-      right:"Correct. Copilot is the app. Your colleague did not say which model wrote the draft.", wrong:"Not quite. Copilot is the app. Your colleague did not say which model wrote the draft."},
+    {t:"kc", check:true, q:"You ask Claude to turn a Notion job aid into a checklist. Claude says it cannot see the page. What fixes it?", choices:["Switch to a newer Claude model.","Paste the page in, or link Notion to Claude."], correct:1,
+      right:"Correct. The app could not reach the page. A newer model cannot reach it either.", wrong:"Not quite. The app could not reach the page, and a newer model cannot reach it either. Paste the page in, or link Notion to Claude."},
     {t:"kc", check:true, q:"ChatGPT gives you a link to a study. The link leads nowhere, and the study does not exist. Which kind of wrong answer is it?", choices:["Hallucination","Out of date"], correct:0,
       right:"Correct. The study was never real.", wrong:"Not quite. The study was never real, so it is a hallucination."},
     {t:"kc", check:true, q:"ChatGPT quotes the price of a software subscription. The price went up in the spring. Which kind of wrong answer is it?", choices:["Hallucination","Out of date"], correct:1,
@@ -250,7 +263,7 @@ const LESSONS = [
       ["Model","The part inside an AI app that writes the reply. One app can offer several models."],
       ["Hallucination","A false statement the AI gives as fact. It was never true."],
       ["Knowledge cutoff","The date the model’s learning stops. The model does not know later events unless it searches or you tell it."]]},
-    {t:"end", html:`You can now tell an app from its model, and a made-up answer from an out-of-date one. Look up any term in ${a(L.glossary,"AI Terms in Plain Words")}. Lesson 2 shows what the AI reads in a conversation.`}
+    {t:"end", html:`You can now tell an app from its model, check what an app can reach, and tell a made-up answer from an out-of-date one. Look up any term in ${a(L.glossary,"AI Terms in Plain Words")}. Lesson 2 shows what the AI reads in a conversation.`}
   ]
 },
 {
@@ -552,7 +565,7 @@ function renderHome(){
   const wrap = el("div","home");
   wrap.append(el("div","stack",`<p class="eyebrow">A self-paced course for Fredrickson staff</p>
     <h1>Learn the AI terms you meet at work, and choose the right AI option for a task.</h1>
-    <p class="lede">Four short lessons, about 26 minutes in all. Each lesson teaches a few terms that people often mix up, lets you sort examples, and ends with a short check.</p>`));
+    <p class="lede">Four short lessons, about 27 minutes in all. Each lesson teaches a few terms that people often mix up, lets you sort examples, and ends with a short check.</p>`));
   const list = el("ol","lessons");
   LESSONS.forEach((ls,i)=>{
     const isDone = done.includes(i);
@@ -627,6 +640,11 @@ function renderBlock(b, ctx, seg, n){
     case "table": {
       const w = el("div","tbl");
       w.innerHTML = `<table><thead><tr>${b.head.map(h=>`<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>${b.rows.map(r=>`<tr>${r.map((c,i)=>i===0?`<td>${c}</td>`:`<td><b>${c}</b></td>`).join("")}</tr>`).join("")}</tbody></table>`;
+      return w;
+    }
+    case "apps": {
+      const w = el("div","apps");
+      w.innerHTML = b.apps.map(r=>`<section class="app"><h3>${r[0]}</h3><dl>${b.labels.map((l,i)=>`<div><dt>${l}</dt><dd>${r[i+1]}</dd></div>`).join("")}</dl></section>`).join("");
       return w;
     }
     case "acc": { const d = el("details","acc"); d.innerHTML = `<summary>${b.title}</summary><div class="body">${b.html}</div>`; return d; }
