@@ -189,10 +189,10 @@ const LESSONS = [
   terms: "Generative AI, model, large language model, hallucination, knowledge cutoff",
   goal: "When you finish, you can tell an AI app from the model inside it, and tell a made-up answer from an out-of-date one.",
   blocks: [
-    {t:"kc", warm:true, q:"A colleague says, “ChatGPT and Copilot are the same thing, because they use the same AI.” Is your colleague right?",
-      choices:["Yes. They use the same AI, so they are the same thing.","No. They are different apps, even if a model comes from the same company.","No. They have nothing in common."], correct:1,
-      right:"Correct. Part 1 shows the difference between an app and a model.",
-      wrong:"Not quite. Keep your answer in mind. Part 1 shows the difference between an app and a model."},
+    {t:"kc", warm:true, q:"You ask Copilot and ChatGPT the same question about a sales report saved in your Fredrickson OneDrive. Copilot answers from the report. ChatGPT says it cannot find the report. Both apps can use OpenAI models. What explains the difference?",
+      choices:["ChatGPT uses an older, weaker model than Copilot.","The report is newer than ChatGPT’s knowledge cutoff.","Copilot can open files in your Microsoft 365 account, and ChatGPT cannot."], correct:2,
+      right:"Correct. Part 1 shows why the app, not the model, decides which files the AI can open.",
+      wrong:"Not quite. Keep your answer in mind. Part 1 shows why the app, not the model, decides which files the AI can open."},
     {t:"gate"},
     {t:"h", text:"Part 1. You work in the app, and the model writes"},
     {t:"p", html:`<b>Generative AI</b> writes new text, images or code from your request. Claude, ChatGPT and Microsoft 365 Copilot are all generative AI.`},
@@ -204,7 +204,7 @@ const LESSONS = [
       ["Claude, open in a browser tab","App"],["Claude Sonnet, chosen from a menu inside Claude","Model"],
       ["Copilot, open in Word or Teams","App"],["ChatGPT, open on your phone","App"]]},
     {t:"note", html:`<b>Easy to mix up.</b> The word “Claude” appears in the app’s name and in the models’ names. The app is Claude. The models are Claude Opus and Claude Sonnet.`},
-    {t:"p", html:`<b>Your answer from the start.</b> Your colleague mixed up the app and the model. Copilot runs on models from other companies, including OpenAI, the company that makes ChatGPT. Copilot and ChatGPT are still two different apps, with different settings and access to different files.`},
+    {t:"p", html:`<b>Your answer from the start.</b> Copilot runs on models from other companies, including OpenAI, the company that makes ChatGPT. So the model did not cause the difference. The app did. Copilot is signed in to your Microsoft 365 account, so it can open your OneDrive files. ChatGPT is a different app, with different settings and access to different files.`},
     {t:"sort", prompt:"Drag each name to App or Model, or select a pile.", piles:["App","Model"],
       cards:[["ChatGPT",0],["Claude Opus",1],["Microsoft 365 Copilot",0],["Claude Sonnet",1]]},
     {t:"acc", title:"Why each name goes where it goes", html:`<ul class="list">
