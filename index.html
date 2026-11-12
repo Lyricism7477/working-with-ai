@@ -199,7 +199,7 @@ const LESSONS = [
   order: "first",
   why: "The course starts with the apps you use and what is inside them. Every later lesson uses one idea from this lesson: the app you type in and the model that writes the reply are two different things.",
   matters: "You use these apps for client work, and each one can give a wrong answer that looks as sure as a right one. When you know what to change when a reply fails, what each app can read and where AI goes wrong, you know which answers to check before a client sees them.",
-  goal: "When you finish, you can choose whether to change the app, the model or the search setting when a reply fails. You can say how Copilot, ChatGPT, Claude and Gemini differ. You can also name six kinds of answers to check before you send them.",
+  goal: "When you finish, you can choose whether to change the prompt, the files, the search setting or the model when a reply fails. You can say how Copilot, ChatGPT, Claude and Gemini differ. You can also name six kinds of answers to check before you send them.",
   blocks: [
     {t:"h", text:"Part 1. The app and the model do different jobs"},
     {t:"p", html:`Copilot, ChatGPT, Claude and Gemini are each an <b>app</b>: the window you sign in to, type in and upload files to. A <b>model</b> inside the app writes the reply. Most apps let you choose from several models in a menu.`},
@@ -207,16 +207,22 @@ const LESSONS = [
     {t:"statement", text:"You type in the app, and the model writes the reply."},
     {t:"note", html:`<b>“AI engine” usually means the model.</b> You may hear “the AI engine behind Copilot” or “our product runs on a powerful AI engine.” “Engine” is not an exact term. Most people use it to mean the model that writes the replies. Some companies use it for the model plus the other software around it. When a vendor says “AI engine,” ask which model it is and which company makes it.`},
     {t:"p", html:`Some apps also search the web when a question needs current facts. The app runs the search and lists the sources, and the model still writes the summary. Check the summary against the sources.`},
-    {t:"p", html:`When a reply fails, the cause tells you what to change. The app may not be able to read what the task needs. The model may not be strong enough for a hard task. Or the facts may be newer than the model.`},
-    {t:"sort", prompt:"Drag each problem to the change that fixes it, or select a pile.", piles:["Change or link the app","Choose a different model","Turn on web search"],
-      cards:[["Claude cannot see a client email in your Outlook inbox.",0],["Replies to a hard planning question are short and skip steps, even with a clear prompt.",1],
-        ["You need news about a client from this week.",2],["ChatGPT cannot open a job aid page in Notion.",0],["A long analysis of survey results comes back shallow.",1]]},
+    {t:"p", html:`When a reply fails, check the causes in this order. First, the prompt: most weak replies come from a prompt that leaves out the goal, the reader or the format. Second, what the app can read. Third, whether the facts are newer than the model. Change the model last, after the prompt and the files are right.`},
+    {t:"note", html:`<b>Prompt or model?</b> Imagine giving the same prompt and files to a capable new hire. If the new hire would need to ask questions or guess, the prompt is missing something, so rewrite the prompt. If the new hire would get it right and the AI does not, choose a more capable model. The difference shows most on hard tasks: plans with many steps, long analysis, and work with many rules at once. For quick tasks, such as a short email, a faster model is usually enough.`},
+    {t:"sort", prompt:"Drag each problem to the change that fixes it, or select a pile.", piles:["Rewrite the prompt","Add or link the file","Turn on web search","Choose a different model"],
+      cards:[["You ask, “Help me plan the workshop,” and the reply is generic.",0],
+        ["Claude cannot see a client email in your Outlook inbox.",1],
+        ["You need a press release the client posted on its public website this week.",2],
+        ["The draft uses the wrong tone, and your prompt never said who will read it.",0],
+        ["ChatGPT cannot open a job aid page in Notion.",1],
+        ["Your prompt gives the goal, the reader, the format and an example. The app has every file it needs. The plan still skips steps.",3]]},
     {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
-      <li>The Outlook email: change or link the app. Copilot reads Outlook, or you can link Microsoft 365 to Claude. A different model cannot read the email either.</li>
-      <li>The short planning reply: choose a different model. The app read everything it needed, so choose a more capable model from the menu.</li>
-      <li>This week’s news: turn on web search. The news is newer than the model’s knowledge cutoff.</li>
-      <li>The Notion page: change or link the app. Paste the page in, or link Notion to ChatGPT.</li>
-      <li>The shallow analysis: choose a different model. The app had the results, so the model is what to change.</li></ul>`},
+      <li>The generic workshop plan: rewrite the prompt. Add the goal, the audience, the length and what you want back.</li>
+      <li>The Outlook email: add or link the file. Copilot reads Outlook, or you can link Microsoft 365 to Claude. A different model cannot read the email either.</li>
+      <li>The public press release: turn on web search. The page is newer than the model’s knowledge cutoff, and it is public, so a search can find it. A search cannot find news that is not public.</li>
+      <li>The wrong tone: rewrite the prompt. Say who the reader is.</li>
+      <li>The Notion page: add or link the file. Paste the page in, or link Notion to ChatGPT.</li>
+      <li>The plan that still skips steps: choose a different model. The prompt and the files are right, so a more capable model is the next change.</li></ul>`},
     {t:"gate"},
     {t:"h", text:"Part 2. The four apps differ most in what they can read"},
     {t:"p", html:`All four apps can write, summarize and answer questions, so most tasks can start in any of them. The biggest difference is what each app can read with no setup. Fredrickson keeps its email, meetings and files in Microsoft 365.`},
@@ -825,7 +831,7 @@ function sortBlock(b, ctx, seg){
     const [text, ans] = b.cards[k];
     if(pi === ans){
       pileEls[pi].querySelector("ul").append(el("li",null,text));
-      status.textContent = "Correct. " + text + " goes in " + b.piles[pi] + ".";
+      status.textContent = "Correct. That card goes in " + b.piles[pi] + ".";
       if(missed) misses++; missed = false; k++; show();
     } else {
       missed = true;
