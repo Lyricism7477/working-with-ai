@@ -239,15 +239,6 @@ const LESSONS = [
     {t:"p", html:`Gemini does for Google files what Copilot does for Microsoft 365 files. Fredrickson uses Microsoft 365, so Gemini reads your work files only after you add them.`},
     {t:"note", html:`<b>Easy to mix up.</b> Copilot reads your email, meetings and files only with a Microsoft 365 Copilot license. Without one, Copilot Chat reads the web and the files you add, like the other apps.`},
     {t:"statement", text:"Choose the app that can already read what the task needs. If none can, upload the file or link the app."},
-    {t:"sort", prompt:"Drag each task to the app that can do it with no setup, or select a pile. Assume you have a Copilot license unless the card says you do not.", piles:["Copilot","Gemini","None, until you add it"],
-      cards:[["Summarize the Teams meeting you missed this morning.",0],["Answer a question about a Google Doc a client shared with you in Google Drive.",1],
-        ["Summarize a Teams meeting in Copilot Chat, with no Copilot license.",2],["Find the latest email from a client in your Outlook inbox.",0],["Turn a Notion job aid page into a checklist.",2]]},
-    {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
-      <li>The Teams meeting: Copilot. Teams is part of Microsoft 365.</li>
-      <li>The shared Google Doc: Gemini. Google Drive is part of Google’s apps.</li>
-      <li>Copilot Chat with no license: none, until you add it. Without the license, Copilot Chat cannot read your meetings. Add the transcript first.</li>
-      <li>The client’s email: Copilot. Outlook is part of Microsoft 365.</li>
-      <li>The Notion page: none, until you add it. Notion is outside Microsoft 365 and Google, so paste the page in or link Notion to the app.</li></ul>`},
     {t:"gate"},
     {t:"h", text:"Part 3. AI is most often wrong in six kinds of answers"},
     {t:"p", html:`A model learned patterns from a very large amount of text, and it writes the words most likely to come next. Nothing in that step checks whether a fact is true. So AI is wrong most often in the same six kinds of answers, and a wrong reply reads just as sure as a right one.`},
