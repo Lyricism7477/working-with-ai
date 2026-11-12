@@ -70,6 +70,9 @@ p{margin:0}
 
 /* Lesson */
 .lesson-head{display:flex;flex-direction:column;gap:12px;margin-bottom:8px}
+.frame{display:flex;flex-direction:column;gap:12px;font-size:17px}
+.frame p{margin:0}
+.frame ol.list{margin:6px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:4px}
 .goal{border-left:4px solid var(--brand);background:var(--surface);padding:12px 16px;border-radius:0 8px 8px 0;font-size:16.5px}
 .seg{display:flex;flex-direction:column;gap:26px;padding-top:26px}
 .gate{display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0;border-top:1px dashed var(--line)}
@@ -193,6 +196,9 @@ const LESSONS = [
 {
   title: "The AI apps you can use, and why they get facts wrong", min: 7,
   terms: "Generative AI, model, large language model, hallucination, knowledge cutoff",
+  order: "first",
+  why: "The course starts with the apps themselves. Each later lesson uses one idea taught here: the app you open and the model that writes the reply are two different things.",
+  matters: "You use these apps for client work, and each one can state a wrong fact as confidently as a right one. When you know what an app can read, you know which answers to check before they reach a client.",
   goal: "When you finish, you can tell an AI app from the model inside it, say why Copilot can read your work files when the other apps cannot, and tell a made-up answer from an out-of-date one.",
   blocks: [
     {t:"h", text:"Part 1. You work in the app, and the model writes"},
@@ -260,6 +266,9 @@ const LESSONS = [
 {
   title: "What the AI reads in a conversation", min: 6,
   terms: "Chat, prompt, custom instructions, project, context window, token",
+  order: "second",
+  why: "Lesson 1 showed what an app can read across Microsoft 365. This lesson narrows to one conversation: what the AI reads each time you send a message.",
+  matters: "Two common problems come from what the AI reads. It ignores your directions, or it misses something you said earlier in a long chat. Each problem has a different fix, and this lesson shows which fix goes with which problem.",
   goal: "When you finish, you can tell custom instructions from a project, and tell the context window from the knowledge cutoff.",
   blocks: [
     {t:"h", text:"Part 1. Custom instructions go everywhere, and a project stays in one place"},
@@ -327,6 +336,9 @@ const LESSONS = [
 {
   title: "Chat, project or agent", min: 7,
   terms: "Tool use, agentic AI, agent, approval prompt, prompt injection",
+  order: "third",
+  why: "Lessons 1 and 2 covered chats, where the AI writes a reply and you act on it. An agent acts on its own: it opens files, runs searches and takes several steps before it stops. You choose an agent by comparing it with a chat and a project, so this lesson comes after Lesson 2.",
+  matters: "An agent can finish in minutes a task that takes you an hour. It can also change dozens of files before you check one. Choosing the right option for each task saves your time and protects your client’s files.",
   goal: "When you finish, you can tell an agent from a chat that lists steps, and tell an approval prompt from a prompt injection. You can also choose chat, a project or an agent for a task.",
   blocks: [
     {t:"h", text:"Part 1. An agent does the steps, and a chat describes them"},
@@ -416,6 +428,9 @@ const LESSONS = [
 {
   title: "Add-ons, accounts and saved versions", min: 7,
   terms: "Connector, plugin, skill, MCP, work account, your own account, version control",
+  order: "last",
+  why: "Lesson 3 showed what an agent does on its own. This last lesson covers what you add to an AI app, and how you protect the work it touches.",
+  matters: "Each add-on lets the AI reach more of your files. The account you use decides which terms cover what you type. Version control decides whether you can go back after an agent changes your files.",
   goal: "When you finish, you can tell a connector from a plugin, a skill from custom instructions, and a work account from your own account. You can also protect client data in your own account and choose where to keep versions of your files.",
   blocks: [
     {t:"h", text:"Part 1. A connector links one app, and a plugin is a package"},
@@ -570,6 +585,12 @@ function renderLesson(n){
   const head = el("div","lesson-head");
   head.append(el("p","eyebrow",`Lesson ${n+1} of ${LESSONS.length}, ${ls.min} minutes`));
   head.append(el("h1",null,ls.title));
+  const frame = el("div","frame");
+  frame.append(el("p",null,`<b>Why this lesson comes ${ls.order}.</b> ${ls.why}`));
+  const parts = ls.blocks.filter(b => b.t === "h" && /^Part \d/.test(b.text)).map(b => `<li>${b.text.replace(/^Part \d+\. /,"")}</li>`).join("");
+  frame.append(el("div",null,`<p><b>What it covers.</b></p><ol class="list">${parts}</ol>`));
+  frame.append(el("p",null,`<b>Why it matters.</b> ${ls.matters}`));
+  head.append(frame);
   head.append(el("p","goal",ls.goal));
   root.append(head);
 
