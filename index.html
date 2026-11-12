@@ -118,6 +118,7 @@ textarea.write{font:inherit;color:var(--ink);background:var(--bg);border:1.5px s
 .tab{flex:1 1 auto;padding:12px 16px;border:0;background:transparent;color:var(--muted);font-weight:700;cursor:pointer;border-bottom:3px solid transparent}
 .tab[aria-selected="true"]{color:var(--brand-ink);border-bottom-color:var(--accent);background:var(--bg)}
 .panel{padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+[hidden]{display:none !important}
 
 /* Accordion */
 details.acc{border:1px solid var(--line);border-radius:10px;background:var(--bg)}
@@ -196,22 +197,22 @@ const LESSONS = [
     {t:"gate"},
     {t:"h", text:"Part 1. You work in the app, and the model writes"},
     {t:"p", html:`<b>Generative AI</b> writes new text, images or code from your request. Claude, ChatGPT and Microsoft 365 Copilot are all generative AI.`},
-    {t:"p", html:`Each of those tools is an <b>app</b>: the window you sign in to and type in. A <b>model</b> inside the app writes the reply. One app can offer several models. In Claude, you can choose Claude Opus or Claude Sonnet without leaving the app.`},
+    {t:"p", html:`Each of those tools is an <b>app</b>: the window you sign in to and type in. A <b>model</b> inside the app writes the reply. One app can offer several models. In ChatGPT, you can choose GPT-6 or another GPT model from a menu. In Claude, you can choose Claude Opus or Claude Sonnet. Either way, you stay in the same app.`},
     {t:"mock"},
     {t:"p", html:`The models behind these apps are <b>large language models (LLMs)</b>. An LLM learned patterns from a very large amount of text. It writes a reply one piece at a time, choosing the words most likely to come next.`},
     {t:"statement", text:"You work in the app, and the model writes."},
     {t:"table", head:["What you see","App or model"], rows:[
       ["Claude, open in a browser tab","App"],["Claude Sonnet, chosen from a menu inside Claude","Model"],
-      ["Copilot, open in Word or Teams","App"],["ChatGPT, open on your phone","App"]]},
-    {t:"note", html:`<b>Easy to mix up.</b> The word “Claude” appears in the app’s name and in the models’ names. The app is Claude. The models are Claude Opus and Claude Sonnet.`},
+      ["Copilot, open in Word or Teams","App"],["ChatGPT, open on your phone","App"],["GPT-6, chosen from the model menu in ChatGPT","Model"]]},
+    {t:"note", html:`<b>Easy to mix up.</b> An app and its models often share a name. The app is Claude, and the models are Claude Opus and Claude Sonnet. The app is ChatGPT, and GPT-6 is one of its models.`},
     {t:"p", html:`<b>Your answer from the start.</b> Copilot runs on models from other companies, including OpenAI, the company that makes ChatGPT. So the model did not cause the difference. The app did. Copilot is signed in to your Microsoft 365 account, so it can open your OneDrive files. ChatGPT is a different app, with different settings and access to different files.`},
     {t:"sort", prompt:"Drag each name to App or Model, or select a pile.", piles:["App","Model"],
-      cards:[["ChatGPT",0],["Claude Opus",1],["Microsoft 365 Copilot",0],["Claude Sonnet",1]]},
+      cards:[["ChatGPT",0],["Claude Opus",1],["Microsoft 365 Copilot",0],["GPT-6",1]]},
     {t:"acc", title:"Why each name goes where it goes", html:`<ul class="list">
       <li>ChatGPT is an app. You sign in to it.</li>
       <li>Claude Opus is a model. You choose it inside the Claude app.</li>
       <li>Microsoft 365 Copilot is an app. You open it in Word, Outlook or Teams.</li>
-      <li>Claude Sonnet is a model. It is another choice inside the Claude app.</li></ul>`},
+      <li>GPT-6 is a model. You choose it inside the ChatGPT app.</li></ul>`},
     {t:"gate"},
     {t:"h", text:"Part 2. A wrong answer is made up or out of date"},
     {t:"p", html:`An AI answer can be wrong in two ways, and each has a name.`},
