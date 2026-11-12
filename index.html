@@ -204,7 +204,7 @@ const LESSONS = [
   order: "first",
   why: "The course starts with the apps you use and what is inside them. Every later lesson uses one idea from this lesson: the app you type in and the model that writes the reply are two different things.",
   matters: "You use these apps for client work, and each one can give a wrong answer that looks as sure as a right one. When you know what to change when a reply fails, what each app can read and where AI goes wrong, you know which answers to check before a client sees them.",
-  goal: "When you finish, you can choose whether to change the prompt, the files, the search setting or the model when a reply fails. You can say how Copilot, ChatGPT, Claude and Gemini differ. You can also name six kinds of answers to check before you send them.",
+  goal: "When you finish, you can choose whether to change the prompt, the files, the search setting or the model when a reply fails. You can say how Copilot, ChatGPT, Claude and Gemini differ. You can also name what you can set up once to prevent wrong answers, and what you still check each time.",
   blocks: [
     {t:"h", text:"Part 1. The app and the model do different jobs"},
     {t:"p", html:`Copilot, ChatGPT, Claude and Gemini are each an <b>app</b>: the window you sign in to, type in and upload files to. A <b>model</b> inside the app writes the reply. Most apps let you choose from several models in a menu.`},
@@ -240,27 +240,32 @@ const LESSONS = [
     {t:"note", html:`<b>Easy to mix up.</b> Copilot reads your email, meetings and files only with a Microsoft 365 Copilot license. Without one, Copilot Chat reads the web and the files you add, like the other apps.`},
     {t:"statement", text:"Choose the app that can already read what the task needs. If none can, upload the file or link the app."},
     {t:"gate"},
-    {t:"h", text:"Part 3. AI is most often wrong in six kinds of answers"},
+    {t:"h", text:"Part 3. Where AI goes wrong, and what you can set up once"},
     {t:"p", html:`A model learned patterns from a very large amount of text, and it writes the words most likely to come next. Nothing in that step checks whether a fact is true. So AI is wrong most often in the same six kinds of answers, and a wrong reply reads just as sure as a right one.`},
-    {t:"table", head:["Where AI goes wrong","What to do"], rows:[
-      [`<b>Sources and quotes.</b> It cites a study, article or quote that does not exist. This is a <b>hallucination</b>: a false statement given as fact that was never true.`,"Open each source and find the sentence."],
-      [`<b>Recent events and today’s date.</b> It gives a fact that was true before its <b>knowledge cutoff</b>, the date its learning stops. It does not know later events unless it searches the web or you tell it.`,"Tell it today’s date, or ask it to search current sources."],
-      [`<b>Exact numbers.</b> It counts words, adds a column or works out a percent by writing likely digits, unless the app runs a calculation.`,"Check totals in Excel, or ask the app to calculate and show the steps."],
-      [`<b>Small or private facts.</b> It learned little or nothing about a client’s staff, a small local company or Fredrickson’s own process, so it writes something likely instead.`,"Give it the source, such as the client’s web page or your notes."],
-      [`<b>Long files and files it cannot read.</b> In a long file, it can skip sections. If you paste only part of a file, it can reply as if it read the whole file.`,"Ask where in the file each point comes from, and ask what it could not read."],
-      [`<b>Questions that suggest an answer.</b> Ask “Isn’t this the best option?” and the reply usually says yes.`,"Ask a neutral question, or ask for the case against."]]},
-    {t:"note", html:`<b>Easy to mix up.</b> A hallucination and an out-of-date answer need different fixes. Ask: was this ever true? If never, check the source. If it was true before the cutoff, give the date or ask for a search. ${a(L.date,"Get AI to Use Today’s Date")} shows how.`},
-    {t:"statement", text:"A sure tone is not a sign of a right answer. Check these six kinds of answers before a client sees them."},
-    {t:"sort", prompt:"Drag each request to Check closely or Lower risk, or select a pile.", piles:["Check closely","Lower risk"],
-      cards:[["Summarize a 60-page RFP you uploaded.",0],["Make your own paragraph shorter.",1],["Add up the hours in a 40-row timesheet.",0],
-        ["Name the current head of HR at a regional client.",0],["Turn your own meeting notes into a short email.",1],["“Isn’t our proposal stronger than theirs?”",0]]},
+    {t:"p", html:`You can guard against most of them once, so the guard applies to every chat. Custom instructions and projects (Lesson 2) and connectors, plugins and skills (Lesson 4) hold these settings. What is left for each prompt is short: your judgment about which facts matter.`},
+    {t:"table", plain:true, head:["Where AI goes wrong","Set up once","Still up to you"], rows:[
+      [`<b>Sources and quotes.</b> It cites a study, article or quote that does not exist. This is a <b>hallucination</b>: a false statement given as fact that was never true.`,"Turn on web search. Add a custom instruction: link a source for every fact, and say when no source was found.","Open the sources behind the facts a client will rely on."],
+      [`<b>Recent events and today’s date.</b> It gives a fact that was true before its <b>knowledge cutoff</b>, the date its learning stops.`,`Add a custom instruction or skill: check today’s date, and search for anything that may have changed. ${a(L.date,"Get AI to Use Today’s Date")} shows how.`,"Little. Glance at the dates in the reply when timing matters."],
+      [`<b>Exact numbers.</b> It counts words, adds a column or works out a percent by writing likely digits.`,"Turn on the app’s code or data analysis feature, so the app calculates. Add a custom instruction: calculate, do not estimate.","Check totals that go to a client in Excel."],
+      [`<b>Small or private facts.</b> It learned little or nothing about a client’s staff, a small company or Fredrickson’s own process, so it writes something likely instead.`,"Link OneDrive, SharePoint or Notion with a connector, or keep the client’s files in a project.","Add the source for anything outside those files."],
+      [`<b>Long files and files it cannot read.</b> In a long file, it can skip sections. If you paste part of a file, it can reply as if it read all of it.`,"Add a custom instruction: give the page or section for each point, and say what you could not read.","Compare a few points with the file."],
+      [`<b>Questions that suggest an answer.</b> Ask “Isn’t this the best option?” and the reply usually says yes.`,"Add a custom instruction: name weaknesses, and disagree when the evidence does.","Ask a neutral question. No setting can rewrite your question for you."]]},
+    {t:"note", html:`<b>Easy to mix up.</b> A hallucination and an out-of-date answer need different guards. Ask: was this ever true? If never, the guard is a source for every fact. If it was true before the cutoff, the guard is the date and a web search.`},
+    {t:"statement", text:"Set up once what you can. Then check the facts a client will rely on."},
+    {t:"sort", prompt:"Drag each want to Set up once or Put in this prompt, or select a pile.", piles:["Set up once","Put in this prompt"],
+      cards:[["Every chat checks today’s date before it answers.",0],
+        ["This summary is for the client’s CFO, so it leads with cost.",1],
+        ["Replies link a source for every fact.",0],
+        ["You want the case against your own proposal.",1],
+        ["Chats about one client use that client’s files.",0],
+        ["The total of these 40 rows is calculated, not estimated.",0]]},
     {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
-      <li>The 60-page RFP: check closely. In a long file, the AI can skip a requirement. Ask which page each point comes from.</li>
-      <li>Your own paragraph: lower risk. You know what it should say, so read the new version for meaning.</li>
-      <li>The timesheet total: check closely. Exact numbers need a calculation.</li>
-      <li>The head of HR: check closely. The fact is small, private and may be out of date.</li>
-      <li>Your own meeting notes: lower risk. Every fact came from you, so check that none changed.</li>
-      <li>“Isn’t our proposal stronger?”: check closely. The question suggests the answer.</li></ul>`},
+      <li>Today’s date: set up once. You want it in every chat, so put it in custom instructions.</li>
+      <li>The CFO summary: put in this prompt. The reader and what to lead with change with each task.</li>
+      <li>A source for every fact: set up once. It is a rule for every chat.</li>
+      <li>The case against your proposal: put in this prompt. You want it for this proposal, not for every reply.</li>
+      <li>One client’s files: set up once. Keep them in a project for that client.</li>
+      <li>The calculated total: set up once. Turn on the app’s code or data analysis feature, and add “calculate, do not estimate” to custom instructions. It applies to every total after that.</li></ul>`},
     {t:"gate"},
     {t:"h", text:"Check: apply what you learned"},
     {t:"p", html:`Answer all six. Your score appears after the last question.`},
@@ -270,18 +275,18 @@ const LESSONS = [
       right:"Correct. The app could not read the file, and a different model cannot read it either.", wrong:"Not quite. The app could not read the file, and a different model cannot read it either. Upload it or link Microsoft 365."},
     {t:"kc", check:true, q:"You open Copilot Chat, with no Copilot license, and ask it to summarize yesterday’s Teams meeting. What happens?", choices:["It reads the meeting through your work sign-in.","It cannot read the meeting until you add the transcript."], correct:1,
       right:"Correct. Without the license, Copilot Chat reads only the web and the files you add.", wrong:"Not quite. Copilot reads your meetings only with a Copilot license. Without one, add the transcript."},
-    {t:"kc", check:true, q:"ChatGPT answers your question and lists three web sources. What do you still check?", choices:["Nothing. The sources show it searched.","That each source says what the reply says."], correct:1,
-      right:"Correct. The app found real pages, but the model wrote the summary, and it can be wrong.", wrong:"Not quite. The app found real pages, but the model wrote the summary. Open the sources and find the sentences."},
+    {t:"kc", check:true, q:"ChatGPT answers with three web sources, and two of the facts will go into a client proposal. What do you check?", choices:["Nothing. The sources show it searched.","Open the sources behind those two facts."], correct:1,
+      right:"Correct. The model wrote the summary and can misstate a source. Check the facts the client will rely on.", wrong:"Not quite. The model wrote the summary and can misstate a source. Open the sources behind the two facts going to the client."},
     {t:"kc", check:true, q:"Claude summarizes a 60-page RFP you uploaded. What is the best check?", choices:["Ask Claude whether its summary is complete.","Ask Claude for the page of each requirement, and check a few against the RFP."], correct:1,
       right:"Correct. Page numbers let you find a skipped or made-up requirement.", wrong:"Not quite. Claude’s own answer about completeness is not a check. Ask for page numbers and compare a few with the RFP."},
-    {t:"kc", check:true, q:"Claude gives you the total of a 40-row budget table you pasted in. What is the best check?", choices:["Ask Claude again and compare the two totals.","Check the total in Excel."], correct:1,
-      right:"Correct. A model can write likely digits instead of calculating. Excel calculates.", wrong:"Not quite. Asking again gets another set of likely digits. Check the total in Excel."},
+    {t:"kc", check:true, q:"You want every chat to check today’s date before it answers. What do you do?", choices:["Type today’s date at the start of every prompt.","Add it to your custom instructions once."], correct:1,
+      right:"Correct. Custom instructions apply to every chat, so you set it up once.", wrong:"Not quite. Typing the date works, but you would do it every time. Add it to your custom instructions once."},
     {t:"score", pass:5},
     {t:"cards", cards:[
       ["Model","The part inside an AI app that writes the reply. One app can offer several models."],
       ["Hallucination","A false statement the AI gives as fact. It was never true."],
       ["Knowledge cutoff","The date the model’s learning stops. The model does not know later events unless it searches or you tell it."]]},
-    {t:"end", html:`You can now choose what to change when a reply fails, choose the app that can read what a task needs, and spot the six kinds of answers to check. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 2 shows what the AI reads in a conversation.`}
+    {t:"end", html:`You can now choose what to change when a reply fails, choose the app that can read what a task needs, and set up once what you can to prevent wrong answers. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 2 shows what the AI reads in a conversation.`}
   ]
 },
 {
@@ -655,7 +660,7 @@ function renderBlock(b, ctx, seg, n){
     case "note": return el("div","note",b.html);
     case "table": {
       const w = el("div","tbl");
-      w.innerHTML = `<table><thead><tr>${b.head.map(h=>`<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>${b.rows.map(r=>`<tr>${r.map((c,i)=>i===0?`<td>${c}</td>`:`<td><b>${c}</b></td>`).join("")}</tr>`).join("")}</tbody></table>`;
+      w.innerHTML = `<table><thead><tr>${b.head.map(h=>`<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>${b.rows.map(r=>`<tr>${r.map((c,i)=>(i===0||b.plain)?`<td>${c}</td>`:`<td><b>${c}</b></td>`).join("")}</tr>`).join("")}</tbody></table>`;
       return w;
     }
     case "compare": {
