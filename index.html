@@ -423,7 +423,7 @@ const LESSONS = [
   ]
 },
 {
-  title: "Give the AI what it needs", min: 14,
+  title: "Give the AI what it needs", min: 16,
   terms: "",
   builds: "Choose where to put directions and files. Learn why the AI seems to forget, and configure it to make sure it follows your instructions.",
   intro: "Most weak replies come from what the AI was given, not from the model. Learn where to put your directions and files so the AI follows them every time.",
@@ -452,8 +452,8 @@ const LESSONS = [
           why:"The reader changes with each task, so the rule goes in the prompt."},
         {rule:"Check today’s date before you answer.", asks:["How many weeks until our March 3 launch?","Draft an invite to next Friday’s planning meeting."], best:1,
           replies:[
-            [[`<p>Today is Friday, November 13, so the March 3 launch is about 16 weeks away.</p>`, `<p>Please join us for planning next Friday, [date], at 10 a.m. in the main conference room.</p>`], "The first reply counts from today. The new chat didn’t check the date, so it left a blank.", "poor"],
-            [[`<p>Today is Friday, November 13, so the March 3 launch is about 16 weeks away.</p>`, `<p>Please join us for planning next Friday, November 20, at 10 a.m. in the main conference room.</p>`], "Both chats checked the date, so the invite is ready to send.", "good"]],
+            [[`<p>I checked today’s date. The March 3 launch is about 16 weeks away.</p>`, `<p>Please join us for planning next Friday, [date], at 10 a.m. in the main conference room.</p>`], "The first reply counts from today. The new chat didn’t check the date, so it left a blank.", "poor"],
+            [[`<p>I checked today’s date. The March 3 launch is about 16 weeks away.</p>`, `<p>Please join us for planning next Friday, the 20th, at 10 a.m. in the main conference room.</p>`], "Both chats checked the date, so the invite is ready to send.", "good"]],
           why:"You want every chat to know the date, so the rule goes in custom instructions."},
         {rule:"Make the case against my proposal.", asks:["Here’s my proposal for a mentoring program.","Write a note congratulating Priya on her promotion."], file:"Mentoring proposal.docx", best:0,
           replies:[
