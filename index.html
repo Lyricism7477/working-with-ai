@@ -100,7 +100,12 @@ p{margin:0}
 .note{border-left:3px solid var(--accent);padding:4px 0 4px 18px}
 .note.skip{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
 .tbl{overflow-x:auto}
-.howto{margin-top:14px;border:1px solid var(--line);border-radius:8px;background:var(--bg);box-shadow:var(--shadow)}
+/* Fredrickson callouts share the brand stripe: "At Fredrickson" facts, "Job aid" pointers and "Set up" steps. */
+.frd,.howto{border-top:5px solid;border-image:linear-gradient(90deg,#FF9C01 0 20%,#FDCF0A 20% 40%,#81BD00 40% 60%,#1B92A5 60% 80%,#54B7CA 80% 100%) 1;background:var(--surface)}
+.frd{padding:14px 18px}
+.frd-label{margin:0 0 4px;font-size:12px;letter-spacing:.8px;text-transform:uppercase;font-weight:800;color:var(--eyebrow)}
+.howto{margin-top:14px;border-radius:0}
+.howto .copybox{background:var(--bg)}
 .howto>summary{cursor:pointer;padding:10px 14px;font-weight:700;color:var(--brand-ink)}
 .howto>.body{padding:0 14px 12px}
 .copybox{background:var(--accent-soft);border-radius:8px;padding:12px 14px;margin:10px 0}
@@ -403,8 +408,8 @@ const LESSONS = [
   intro: "Many weak replies start before you type anything, because you chose the wrong app or the wrong model for the task. This lesson shows you how to choose the app, the model and where in the app to work.",
   blocks: [
     {t:"h", text:"Part 1. Choose the right app for your task", why:""},
-    {t:"p", html:`Copilot, ChatGPT, Claude and Gemini are each an <b>app</b>: the window you sign in to, type in and upload files to. A <b>prompt</b> is everything you send to the app in one message. All four can write, summarize and answer questions, so most tasks can start in any of them. They differ in three ways: what each app can read with no setup, what each one does well, and how each company handles your chats.`},
-    {t:"p", html:`Fredrickson has paid licenses for Copilot, ChatGPT and Claude. Fredrickson does not have a paid license for Gemini, so keep Fredrickson and client information out of Gemini. This course still covers Gemini, so you can talk with clients about it. Lesson 5 covers the rules for the three paid apps.`},
+    {t:"p", html:`Copilot, ChatGPT, Claude and Gemini are each an <b>app</b>: the window you sign in to, type in and upload files to. All four can write, summarize and answer questions, so most tasks can start in any of them. They differ in three ways: what each app can read with no setup, what each one does well, and how each company handles your chats.`},
+    {t:"frd", html:`Fredrickson has paid licenses for Copilot, ChatGPT and Claude. Fredrickson does not have a paid license for Gemini, so keep Fredrickson and client information out of Gemini. This course still covers Gemini, so you can talk with clients about it. Lesson 5 covers the rules for the three paid apps.`},
     {t:"compare", cols:["Copilot","ChatGPT","Claude","Gemini"], rows:[
       ["Made by","Microsoft","OpenAI","Anthropic","Google"],
       ["Approved for Fredrickson work","Yes","Yes","Yes","Not yet. Keep client and Fredrickson content out of Gemini."],
@@ -413,14 +418,13 @@ const LESSONS = [
       ["Often chosen for","Work already in Microsoft 365, such as a missed meeting or a long email thread","The most features in one app, including images, voice and web search","Long documents, careful writing, and tasks that use files on your computer","Work already in Google, such as a Google Doc a client shares, and Google search"],
       ["Uses your chats to train its AI","Not when you sign in with your Fredrickson account","On personal plans, yes, until you turn it off in Data controls","Only if you allow it in Privacy settings. If you allow it, Anthropic keeps those chats up to five years.","On personal accounts, yes, while Keep Activity is on, which is the default. People at Google read a sample of chats."]]},
     {t:"p", html:`Copilot reads your email, meetings and files only with a <b>paid Microsoft 365 Copilot license</b>. Without one, Copilot Chat reads the web and the files you add, like the other apps.`},
-    {t:"statement", text:"Start in the app that can already read what the task needs. When more than one can, choose by what the app does well and how the company handles your chats."},
     {t:"gate"},
     {t:"h", text:"Part 2. Choose the model", why:""},
     {t:"p", html:`Inside each app, a <b>model</b> writes the reply. The model reads what you send and writes the words that come back. One app can offer several models.`},
     {t:"p", html:`Models differ in two ways that matter at work: size and thinking time.`},
     {t:"tabs", tabs:[
-      {title:"Size", html:`<p>A larger model handles harder work. A smaller model answers faster and uses less of your <b>usage limit</b>: the amount of AI use your plan allows before you must wait or switch to a smaller model.</p><ul class="list"><li>Larger: a plan with many steps, analysis of long data, writing that must follow many rules at once.</li><li>Smaller: a short email, a quick rewrite, a definition.</li></ul><p>Each company names its models differently, and the names change every few months. The menu usually says which model is the most capable and which is the fastest.</p>`},
-      {title:"Thinking time", html:`<p>Many apps let a model <b>think</b> before it answers. The model works through the problem step by step and checks its own work, then writes the reply.</p><ul class="list"><li>The reply takes longer, from several seconds to a few minutes.</li><li>On hard tasks, the reply is right more often.</li><li>On easy tasks, you wait longer for the same answer.</li></ul><p>Apps give this setting different names: Thinking in ChatGPT, Think deeper in Copilot, and effort in Claude.</p>`}]},
+      {title:"Size", html:`<p>A larger model handles harder work. A smaller model answers faster and uses less of your <b>usage limit</b>: the amount of AI use your plan allows before you must wait or switch to a smaller model.</p><ul class="list"><li>Larger: a plan with many steps, analysis of long data, writing that must follow many rules at once.</li><li>Smaller: a short email, a quick rewrite, a definition.<br><br></li></ul><p>Each company names its models differently, and the names change every few months. The menu usually says which model is the most capable and which is the fastest.</p>`},
+      {title:"Thinking time", html:`<p>Many apps let a model <b>think</b> before it answers. The model works through the problem step by step and checks its own work, then writes the reply.</p><ul class="list"><li>The reply takes longer, from several seconds to a few minutes.</li><li>On hard tasks, the reply is right more often.</li><li>On easy tasks, you wait longer for the same answer.<br><br></li></ul><p>Apps give this setting different names: Thinking in ChatGPT, Think deeper in Copilot, and effort in Claude.</p>`}]},
     {t:"table", head:["The task","What to choose"], rows:[
       ["A short email, a quick rewrite or a definition","Less thinking"],
       ["A summary of one file or a first draft","The app’s default"],
@@ -472,7 +476,7 @@ const LESSONS = [
     {t:"flow"},
     {t:"p", html:`Answer the questions from the top. The first question checks whether chat or a project can do the task. You need an agent only when the answer is yes.`},
     {t:"practice"},
-    {t:"note", html:`${a(L.tool,"Choose the Right AI Tool for a Task")} has a table for Claude, ChatGPT and Copilot, and a checklist to follow before you start an agent.`},
+    {t:"frd", kind:"job", html:`${a(L.tool,"Choose the Right AI Tool for a Task")} has a table for Claude, ChatGPT and Copilot, and a checklist to follow before you start an agent.`},
     {t:"gate"},
     {t:"h", text:"Knowledge Check: apply what you learned"},
     {t:"p", html:`Answer all five. Your score appears after the last question.`},
@@ -542,7 +546,7 @@ const LESSONS = [
             [[`<ul class="list"><li>Mentors give up two hours a month, and the proposal doesn’t say what they stop doing.</li><li>There’s no way to measure success after the first year.</li><li>Pairing by department limits what new hires learn.</li></ul>`, `<p>Congratulations, Priya! The promotion is well earned, and your team is lucky to have you.</p>`], "You got the case against your proposal, and the congratulations stayed warm.", "good"],
             [[`<ul class="list"><li>Mentors give up two hours a month, and the proposal doesn’t say what they stop doing.</li><li>There’s no way to measure success after the first year.</li><li>Pairing by department limits what new hires learn.</li></ul>`, `<p>Congratulations, Priya. Before you celebrate, here are three risks in your new role: a larger team, less time for your own work and higher expectations.</p>`], "The note to Priya became a list of risks.", "poor"]],
           why:"You want criticism of this proposal only, so the rule goes in the prompt."}]},
-    {t:"p", html:`${a(L.directions,"Get AI to Follow Your Directions")} shows how to set up custom instructions in Claude, ChatGPT and Copilot.`},
+    {t:"frd", kind:"job", html:`${a(L.directions,"Get AI to Follow Your Directions")} shows how to set up custom instructions in Claude, ChatGPT and Copilot.`},
     {t:"gate"},
     {t:"h", text:"Part 2. Put files where the AI can read them", why:"Directions tell the AI what to do. Files give it what to work from, and the AI reads only the files it can open."},
     {t:"p", html:`The AI reads only what you give it and what the app can open. You have four ways to give it files: upload them to a chat, save them in a project, link another app, or point an agent at a folder on your computer.`},
@@ -569,7 +573,7 @@ const LESSONS = [
       <li>The Outlook calendar: connector. It is kept in another app and changes every day.</li>
       <li>The newsletter instructions: project. Only newsletter chats need them.</li>
       <li>The SharePoint folder: connector. The files change each week, so the connector reads the current version.</li></ul>`},
-    {t:"p", html:`${a(L.directions,"Get AI to Follow Your Directions")} shows how to set up projects in Claude, ChatGPT and Copilot.`},
+    {t:"frd", kind:"job", html:`${a(L.directions,"Get AI to Follow Your Directions")} shows how to set up projects in Claude, ChatGPT and Copilot.`},
     {t:"gate"},
     {t:"h", text:"Part 3. Find out why the AI seems to forget", why:"With your directions and files in place, the AI can still seem to forget them. Learn the two reasons, so you choose the fix that works."},
     {t:"p", html:`The <b>context window</b> is the most text a model can read at one time: the whole chat, any files and the model’s own replies. Each message adds to it. When a chat gets longer than the context window, the app drops or shortens early messages, and answers get worse.`},
@@ -759,7 +763,7 @@ const LESSONS = [
       <li>The instruction files: GitHub. They are text files an agent will change.</li>
       <li>The Excel budget: OneDrive. It is an Office document a person edits in Excel.</li>
       <li>The script: GitHub. GitHub shows exactly which lines the agent changed.</li></ul>`},
-    {t:"p", html:`${a(L.versions,"Choose Version Control for Your Work")} shows how to go back to an earlier version in each option. If you choose GitHub, ${a(L.github,"Save and Restore Versions with GitHub")} shows how to set it up.`},
+    {t:"frd", kind:"job", html:`${a(L.versions,"Choose Version Control for Your Work")} shows how to go back to an earlier version in each option. If you choose GitHub, ${a(L.github,"Save and Restore Versions with GitHub")} shows how to set it up.`},
     {t:"gate"},
     {t:"h", text:"Knowledge Check: apply what you learned"},
     {t:"p", html:`Answer five questions and write one brief. Your score appears after the last question. The brief is not scored. You check it against a model brief.`},
@@ -829,7 +833,7 @@ const LESSONS = [
       [`<b>How many jobs does it do?</b>`,"One job, such as proofreading a proposal","Several skills that belong together, such as a set of Fredrickson design skills"],
       [`<b>What does it hold?</b>`,"Text and reference files only. Nothing in it runs or connects to another app.","A part that runs, such as a script, or a connector to another app, along with its skills"],
       [`<b>Who gets it?</b>`,"You, or colleagues who add it one at a time","A team, in one install. Luke, the Technology Manager, can install it for everyone."]]},
-    {t:"p", html:`At Fredrickson, most staff write skills. A few owners put approved skills into one plugin for each team or topic. To share a plugin, the owner proposes it on the Git site, and a reviewer approves it. Luke also reviews any part that runs or connects to another app before anyone installs the plugin.`},
+    {t:"frd", html:`At Fredrickson, most staff write skills. A few owners put approved skills into one plugin for each team or topic. To share a plugin, the owner proposes it on the Git site, and a reviewer approves it. Luke also reviews any part that runs or connects to another app before anyone installs the plugin.`},
     {t:"note", html:`[unconfirmed: Fredrickson has not decided on this review process yet. The Git site has no name or link yet.]`},
     {t:"p", html:`A <b>connector</b> links the AI to one other app. A plugin can contain connectors, along with skills and commands.`},
     {t:"statement", text:"A connector links the AI to one app. A plugin is a package you install, and it can contain connectors, skills and commands."},
@@ -1259,6 +1263,8 @@ function renderBlock(b, ctx, seg, n){
     case "p": return el("p",null,b.html);
     case "statement": return el("p","statement",b.text);
     case "note": return el("div","note",b.html);
+    // Fredrickson callout: Fredrickson's own facts, or a pointer to a Fredrickson job aid. The label sits outside the text, so the editor can still edit the text.
+    case "frd": { const d = el("div","frd"); d.append(el("p","frd-label", b.kind === "job" ? "Job aid" : "At Fredrickson"), el("div","frd-body",b.html)); return d; }
     case "table": {
       const w = el("div","tbl");
       w.innerHTML = `<table><thead><tr>${b.head.map(h=>`<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>${b.rows.map(r=>`<tr>${r.map((c,i)=>(i===0||b.plain)?`<td>${c}</td>`:`<td><b>${c}</b></td>`).join("")}</tr>`).join("")}</tbody></table>`;
