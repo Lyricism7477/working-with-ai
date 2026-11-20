@@ -75,7 +75,8 @@ p{margin:0}
 
 /* Title band, as in Rise: a light teal band behind the page title that runs to the edges of the page. */
 .hero{background:var(--surface);padding:8px 0 36px;box-shadow:0 0 0 100vmax var(--surface);clip-path:inset(-100vmax -100vmax 0 -100vmax);margin-bottom:12px}
-.where:not(.on){background:transparent}
+/* Over the title band, the top bar takes the band's color, so the title scrolls under it instead of showing through. */
+.where:not(.on){background:var(--surface)}
 /* Interactive blocks: a shaded band edge to edge, with the white card on it. Bands next to each other join into one. */
 .ishade{background:var(--surface);padding:32px 0;box-shadow:0 0 0 100vmax var(--surface);clip-path:inset(0 -100vmax)}
 .ishade + .ishade{margin-top:-32px;padding-top:0}
@@ -1068,7 +1069,12 @@ function renderHome(){
   wrap.append(el("p","cap",`Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Only this browser saves your progress.`));
   app.replaceChildren(where, wrap);
   syncBurger();
+  // Once the title band scrolls away, the top bar turns white to match the page.
+  const hero = wrap.querySelector(".hero");
+  const showWhere = () => where.classList.toggle("on", hero.getBoundingClientRect().bottom < where.offsetHeight);
+  window.onscroll = () => requestAnimationFrame(showWhere);
   window.scrollTo(0,0);
+  showWhere();
 }
 
 /* ---------- lesson ---------- */
@@ -1156,7 +1162,7 @@ function renderLesson(n){
       if(b.dataset.h === curK) b.setAttribute("aria-current","location"); else b.removeAttribute("aria-current");
     });
     // Until the title scrolls away, the title already names the lesson, so the bar shows only the burger button.
-    if(!cur){ wlabel.textContent = h1.getBoundingClientRect().bottom < 60 ? lessonLabel : ""; where.classList.remove("on"); return; }
+    if(!cur){ const past = h1.getBoundingClientRect().bottom < 60; wlabel.textContent = past ? lessonLabel : ""; where.classList.toggle("on", past); return; }
     const m = cur.textContent.match(/^Part (\d+)\. (.*)$/);
     wlabel.textContent = m ? `${lessonLabel}, Part ${m[1]} of ${nParts}: ${m[2]}` : `${lessonLabel}: ${cur.textContent}`;
     where.classList.add("on");
