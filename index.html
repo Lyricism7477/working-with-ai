@@ -3,7 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
-<title>Working with AI</title>
+<title>AI Basics Course</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
 /* Layout: Ocean Teal masthead with a Fredrickson brand stripe (extended palette) from the Fredrickson job aids, then one reading column of lesson blocks. */
@@ -373,7 +373,7 @@ section.seg h2:focus{outline:none}
 </style>
 
 <header class="top"><div class="top-in">
-  <a class="wordmark" href="#home">Working with AI</a>
+  <a class="wordmark" href="#home">AI Basics Course</a>
 </div></header>
 <div class="shell">
   <aside class="outline" id="outline" aria-label="Course outline"></aside>
@@ -1041,7 +1041,7 @@ wideMQ.addEventListener("change", () => { if(wideMQ.matches && drawer.open) draw
 function renderHome(){
   window.onscroll = null;
   const {where} = mountOutline(-1, [], () => {});
-  document.title = "Working with AI";
+  document.title = "AI Basics Course";
   const done = getDone();
   const wrap = el("div","home");
   wrap.append(el("div","stack hero",`<h1>Learn the AI terms and choose the right AI tool</h1>
@@ -1210,8 +1210,8 @@ function buildOutline(n, heads, jump){
   const done = getDone();
   const nav = el("nav","onav"); nav.setAttribute("aria-label","Course outline");
   // The course title is the link to the course home, as in Rise.
-  const home = el("a","otitle","Working with AI");
-  home.href = "#home"; home.setAttribute("aria-label","Working with AI home");
+  const home = el("a","otitle","AI Basics Course");
+  home.href = "#home"; home.setAttribute("aria-label","AI Basics Course home");
   if(n < 0) home.setAttribute("aria-current","page");
   nav.append(home);
   const pct = Math.round(LESSONS.filter((_, i) => done.includes(i)).length / LESSONS.length * 100);
