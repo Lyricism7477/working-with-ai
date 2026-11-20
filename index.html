@@ -510,8 +510,8 @@ const LESSONS = [
   title: "Give the AI what it needs", min: 16,
   terms: "",
   builds: "Choose where to put directions and files. Find out why the AI seems to forget, and set it up to follow your directions.",
-  fits: "Lesson 1 put you in the right app with the right model. Lesson 2 covers what you give the AI there, because most weak replies come from what it was given.",
-  intro: "Most weak replies come from what the AI was given, not from the model. Learn where to put your directions and files so the AI follows them every time.",
+  fits: "",
+  intro: "Most weak replies come from what the AI was given, not from the model. Learn where to put your directions and files so the AI uses them every time.",
   blocks: [
     {t:"h", text:"Part 1. Put directions in a prompt or in custom instructions", why:"Start with your directions. A missing direction is the most common reason a reply misses."},
     {t:"p", html:`A <b>prompt</b> is everything you send in one message: your request, your instructions, any examples and any attached files. A rule in a prompt applies to that message only.`},
@@ -1093,7 +1093,7 @@ function renderLesson(n){
   const h1 = el("h1",null,ls.title); hero.append(h1); head.append(hero);
   const frame = el("div","frame");
   frame.append(el("p",null,ls.intro));
-  if(ls.fits) frame.append(el("p","fits",`<b>${n === 0 ? "" : "Why this lesson comes next."}</b> ${ls.fits}`));
+  if(ls.fits) frame.append(el("p","fits",`<b>${n === 0 ? "" : ""}</b> ${ls.fits}`));
   const parts = ls.blocks.filter(b => b.t === "h" && /^Part \d/.test(b.text)).map(b => `<li>${b.text.replace(/^Part \d+\. /,"")}</li>`).join("");
   frame.append(el("div",null,`<p><b>In this lesson</b></p><ol class="list">${parts}</ol>`));
   head.append(frame);
