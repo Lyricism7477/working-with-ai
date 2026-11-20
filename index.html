@@ -1320,7 +1320,7 @@ const LEAVES = {
 const PRACTICE = [
   {app:"chatgpt", others:["You would upload the RFP and your notes again in every chat.", null, "You copy each answer out yourself, so ChatGPT does not need to do steps itself.", "Answers are something people read, not a tool people use."], q:"Over the next six weeks, you will answer questions about one client’s request for proposal (RFP), using the RFP and your notes each time.", choices:["Chat","Projects","Work","Codex"], correct:1,
     right:"Correct. You copy each answer out yourself, and every chat needs the same two files.", wrong:"Not quite. Every chat needs the same RFP and notes, so a project saves you uploading them each time."},
-  {app:"claude", others:["You would paste in eight files and copy parts of the answer back out.", "A project keeps the same files ready for a task you repeat. These notes are new, and you need one report built from them.", null, "A report is something people read, not a tool people use."], q:"Eight sets of interview notes are in one folder. You need one findings report in Word.", choices:["Chat","Projects","Cowork","Claude Code"], correct:2,
+  {app:"claude", others:["You would paste in eight files and copy parts of the answer back out.", "A project keeps your files ready, but Claude still works only inside the chat. You would upload the eight files yourself, then copy the report into Word.", null, "A report is something people read, not a tool people use."], q:"Eight sets of interview notes are in one folder. You need one findings report in Word.", choices:["Chat","Projects","Cowork","Claude Code"], correct:2,
     right:"Correct. Claude has to open eight files and build a document people read.", wrong:"Not quite. In a chat, you would paste in eight files and copy parts of the answer back out. Claude has to open the files and build a document, so use Cowork."},
   {app:"copilot", others:[null, "Researcher builds a researched report. You need a few decisions from one thread.", "Copilot does not need to open several files or do steps itself.", "Analyst finds trends in spreadsheet data. An email thread is text."], q:"You need the decisions from a long email thread, to paste into your notes.", choices:["Copilot Chat","Researcher","Copilot Cowork","Analyst"], correct:0,
     right:"Correct. You paste in the thread and copy the decisions out.", wrong:"Not quite. You paste in the thread and copy the decisions out, so Copilot Chat can do it."},
@@ -1364,14 +1364,23 @@ function practiceBlock(ctx, seg){
 }
 
 // After a question is answered: one reason for each choice that is not the right answer.
-function appendOthers(fb, b){
+// A wrong pick: say first why that pick does not fit, then why the right answer does. Without reasons, use the question's own wrong text.
+function feedbackLead(b, pick){
+  if(pick === b.correct || !b.others || !b.others[pick]) return [el("p",null, pick === b.correct ? b.right : b.wrong)];
+  const ans = optLabel(b.choices[b.correct]);
+  const why = b.right.replace(/^Correct\.\s*/,"");
+  return [el("p",null,"Not quite. "+b.others[pick]), el("p",null, ans.length <= 40 ? `The answer is <b>${ans}</b>. ${why}` : why)];
+}
+// Label a choice with its answer only: no reason after "because", no final period.
+const optLabel = c => c.split(/, because /)[0].replace(/[.]$/,"");
+
+function appendOthers(fb, b, pick){
   if(!b.others) return;
-  const n = b.others.filter(Boolean).length;
+  const n = b.others.filter((o,i) => o && i !== pick).length;
+  if(!n) return;
   fb.append(el("p","why-head", n > 1 ? "Why not the others:" : "Why not the other choice:"));
   const ul = el("ul","list");
-  // Label each reason with the choice's answer only: no reason after "because", no final period.
-  const label = c => c.split(/, because /)[0].replace(/[.]$/,"");
-  b.choices.forEach((c,i)=>{ if(b.others[i]){ const li = el("li"); li.append(el("b",null,label(c)+": "), b.others[i]); ul.append(li); } });
+  b.choices.forEach((c,i)=>{ if(b.others[i] && i !== pick){ const li = el("li"); li.append(el("b",null,optLabel(c)+": "), b.others[i]); ul.append(li); } });
   fb.append(ul);
 }
 
@@ -1394,8 +1403,8 @@ function practiceQ(b, parent, onDone){
     const pick = labels.findIndex(x=>x.inp.checked); if(pick<0) return;
     const ok = pick === b.correct;
     labels.forEach((x,i)=>{ x.inp.disabled = true; if(i===b.correct) x.lab.classList.add("right"); else if(i===pick) x.lab.classList.add("wrong"); });
-    fb.hidden = false; fb.className = "fb "+(ok?"ok":"no"); fb.replaceChildren(el("p",null, ok ? b.right : b.wrong));
-    appendOthers(fb, b);
+    fb.hidden = false; fb.className = "fb "+(ok?"ok":"no"); fb.replaceChildren(...feedbackLead(b, pick));
+    appendOthers(fb, b, pick);
     submit.remove(); st.done = true; onDone();
   });
   w.append(fs, submit, fb); parent.append(w); return st;
@@ -1533,8 +1542,8 @@ function kcBlock(b, ctx, seg){
     const pick = labels.findIndex(x=>x.inp.checked); if(pick<0) return;
     const ok = pick === b.correct;
     labels.forEach((x,i)=>{ x.inp.disabled = true; if(i===b.correct) x.lab.classList.add("right"); else if(i===pick) x.lab.classList.add("wrong"); });
-    fb.hidden = false; fb.className = "fb "+(ok?"ok":"no"); fb.replaceChildren(el("p",null, ok ? b.right : b.wrong));
-    appendOthers(fb, b);
+    fb.hidden = false; fb.className = "fb "+(ok?"ok":"no"); fb.replaceChildren(...feedbackLead(b, pick));
+    appendOthers(fb, b, pick);
     submit.remove(); state.done = true; state.ok = ok; ctx.update(); updateScore(ctx);
   });
   w.append(fs, submit, fb); return w;
