@@ -230,7 +230,9 @@ textarea.write{font:inherit;color:var(--ink);background:var(--bg);border:1.5px s
 .simnext{margin:0;font-size:15.5px;padding:10px 14px;border-radius:8px;border-left:4px solid var(--brand);background:var(--accent-soft);animation:simin .3s ease-out}
 .simset label.nudge span{box-shadow:inset 0 0 0 3px var(--accent);animation:simnudge 1.4s ease-in-out infinite}
 @keyframes simnudge{50%{box-shadow:inset 0 0 0 3px transparent}}
-@media (prefers-reduced-motion:reduce){.simset label.nudge span,.simnext{animation:none}}
+.simnav .btn.point{box-shadow:0 0 0 3px var(--accent);animation:simpoint 1.4s ease-in-out infinite}
+@keyframes simpoint{50%{box-shadow:0 0 0 3px transparent}}
+@media (prefers-reduced-motion:reduce){.simset label.nudge span,.simnext,.simnav .btn.point{animation:none}}
 .simkey{margin:0;font-size:15px;padding:8px 12px;border-radius:8px;border-left:4px solid var(--accent);background:var(--accent-soft)}
 @media (max-width:520px){.simset span{padding:8px 9px;font-size:14px}.simyou{max-width:100%}}
 
@@ -240,6 +242,29 @@ textarea.write{font:inherit;color:var(--ink);background:var(--bg);border:1.5px s
 .tab{flex:1 1 auto;padding:12px 16px;border:0;background:transparent;color:var(--muted);font-weight:700;cursor:pointer;border-bottom:3px solid transparent}
 .tab[aria-selected="true"]{color:var(--brand-ink);border-bottom-color:var(--brand-ink)}
 .panel{padding:18px 0 0;display:flex;flex-direction:column;gap:12px}
+/* Left-aligned tabs: hint, tab labels and content share one left edge. */
+.tabhint{margin:14px 0 4px;font-size:15px;color:var(--muted)}
+.ltabs .tab{flex:0 0 auto;padding:12px 14px}
+.ltabs .tab:first-child{padding-left:0}
+.ltabs .panel>p:first-child{margin-top:0}
+/* Quiet list: a label on the left, the text on the right, thin lines between rows. Stacks on a phone. */
+.qlist{margin:0;padding:0}
+.qrow{display:grid;grid-template-columns:150px minmax(0,1fr);gap:4px 20px;align-items:baseline;padding:14px 0;border-top:1px solid var(--line)}
+.qrow:first-child{border-top:0;padding-top:4px}
+.qrow dt{margin:0}
+.qrow dt b{display:block;font-size:17px;color:var(--brand-ink)}
+.qrow dt span{display:block;font-size:14px;color:var(--muted)}
+.qrow dt .nolic{color:var(--bad);font-weight:700}
+.qrow dd{margin:0;font-size:16px;line-height:1.5}
+.qrow dd .watch{display:block;margin-top:4px;font-size:15px;color:var(--muted)}
+.qrow.hi dd{font-weight:700;color:var(--brand-ink)}
+.qlist.sm .qrow dt b{font-size:15px}
+@media (max-width:520px){.ltabs .tablist{display:grid;grid-template-columns:1fr 1fr;column-gap:16px}.ltabs .tab{padding:10px 0;text-align:left}.qrow{grid-template-columns:1fr}.qrow dt b,.qrow dt span{display:inline}.qrow dt span::before{content:" · "}}
+/* Accordion group: one box, thin lines between items. */
+.accg{border:1px solid var(--line);border-radius:12px;background:var(--bg);box-shadow:var(--shadow)}
+.accg details.acc{border:0;border-radius:0;background:transparent;border-top:1px solid var(--line)}
+.accg details.acc:first-child{border-top:0}
+.accg details.acc .body{display:flex;flex-direction:column;gap:10px}
 [hidden]{display:none !important}
 
 /* Accordion */
@@ -410,108 +435,133 @@ const LESSONS = [
     {t:"h", text:"Part 1. Choose the right app for your task", why:""},
     {t:"p", html:`Copilot, ChatGPT, Claude and Gemini are each an <b>app</b>: the window you sign in to, type in and upload files to. All four can write, summarize and answer questions, so most tasks can start in any of them. They differ in three ways: what each app can read with no setup, what each one does well, and how each company handles your chats.`},
     {t:"frd", html:`Fredrickson has paid licenses for Copilot, ChatGPT and Claude. Fredrickson does not have a paid license for Gemini, so keep Fredrickson and client information out of Gemini. This course still covers Gemini, so you can talk with clients about it. Lesson 5 covers the rules for the three paid apps.`},
-    {t:"compare", cols:["Copilot","ChatGPT","Claude","Gemini"], rows:[
-      ["Made by","Microsoft","OpenAI","Anthropic","Google"],
-      ["Approved for Fredrickson work","Yes","Yes","Yes","Not yet. Keep client and Fredrickson content out of Gemini."],
-      ["Built into","+Microsoft 365: Word, Excel, PowerPoint, Outlook and Teams","Nothing. It is its own app and website.","Nothing. It is its own app and website.","Google’s apps: Gmail, Google Docs and Google Drive"],
-      ["Reads your Fredrickson email, meetings and files","+Yes, with a Copilot license","Only after you upload a file or link Microsoft 365","Only after you upload a file or link Microsoft 365","Only after you upload a file or link Microsoft 365"],
-      ["Often chosen for","Work already in Microsoft 365, such as a missed meeting or a long email thread","The most features in one app, including images, voice and web search","Long documents, careful writing, and tasks that use files on your computer","Work already in Google, such as a Google Doc a client shares, and Google search"],
-      ["Uses your chats to train its AI","Not when you sign in with your Fredrickson account","On personal plans, yes, until you turn it off in Data controls","Only if you allow it in Privacy settings. If you allow it, Anthropic keeps those chats up to five years.","On personal accounts, yes, while Keep Activity is on, which is the default. People at Google read a sample of chats."]]},
+    {t:"appq", apps:[["Copilot","Microsoft",true],["ChatGPT","OpenAI",true],["Claude","Anthropic",true],["Gemini","Google",false]], tabs:[
+      {title:"Often chosen for", cells:["Work already in Microsoft 365, such as a missed meeting or a long email thread","The most features in one app, such as images, voice and web search","Long documents, careful writing and tasks that use files on your computer","Work already in Google, such as a Google Doc a client shares"]},
+      {title:"Built into", hi:[0], cells:["Word, Excel, PowerPoint, Outlook and Teams","Nothing. It’s its own app and website.","Nothing. It’s its own app and website.","Gmail, Google Docs and Google Drive"]},
+      {title:"Reads work files", hi:[0], cells:["Your email, meetings and files, with a Copilot license","Only files you upload, or Microsoft 365 if you link it","Only files you upload, or Microsoft 365 if you link it","Only files you upload, or Microsoft 365 if you link it"]},
+      {title:"Trains on chats", cells:["No, when you sign in with your Fredrickson account","Yes on personal plans, until you turn it off in Data controls","Only if you allow it in Privacy settings. Anthropic then keeps those chats up to five years.","Yes on personal accounts while Keep Activity is on, which is the default. People at Google read a sample of chats."]}]},
     {t:"p", html:`Copilot reads your email, meetings and files only with a <b>paid Microsoft 365 Copilot license</b>. Without one, Copilot Chat reads the web and the files you add, like the other apps.`},
+    {t:"pq", title:"Practice: choose the app", intro:"Choose the app that fits each task best. These questions do not count toward your score.", items:[
+      {q:"You missed a Teams meeting with your project team. You want the decisions and your action items. You have a Copilot license.", choices:["Copilot","ChatGPT","Gemini"], correct:0,
+        others:[null, "ChatGPT reads only the files you upload, unless you link Microsoft 365. You would find and upload the transcript first.", "Fredrickson has no paid license for Gemini, so keep Fredrickson information out of it. Your team’s meeting is Fredrickson information."],
+        right:"Correct. With a Copilot license, Copilot already reads your Teams meetings, so you upload nothing.", wrong:"Not quite. With a Copilot license, Copilot already reads your Teams meetings, so you upload nothing."},
+      {q:"A client shares eight interview transcripts in a Google Drive folder. You need the themes for a findings report. The client gave permission to use AI.", choices:["Gemini","Claude","Copilot"], correct:1,
+        others:["The files are in Google Drive, but Fredrickson has no paid license for Gemini. On a personal account, Google can train on the chat, and people at Google read a sample of chats. The client’s interviews could reach those people.", null, "Copilot is often chosen for work already in Microsoft 365. These files are in Google Drive, so Copilot has no advantage here."],
+        right:"Correct. Claude is often chosen for long documents and careful writing. Download the transcripts, then upload them to Claude in your work account.", wrong:"Not quite. Claude is often chosen for long documents and careful writing."},
+      {q:"You’re drafting a proposal. You want the AI to search the web for the client’s recent news, then make a cover image.", choices:["Claude","ChatGPT","Gemini"], correct:1,
+        others:["Claude can search the web and make images, but images are not one of its strengths. ChatGPT is often chosen for images.", null, "Gemini can search and make images, but Fredrickson has no paid license for it. Keep Fredrickson and client information, such as this proposal, out of Gemini."],
+        right:"Correct. ChatGPT is often chosen for the most features in one app, such as web search and images.", wrong:"Not quite. ChatGPT is often chosen for the most features in one app, such as web search and images."},
+      {q:"You’re turning your rough draft in Word into an internal process document. You want the AI to edit the file you have open.", choices:["Copilot","Claude","ChatGPT"], correct:0,
+        others:[null, "Claude is its own app, so you would copy the text out of Word and paste the edits back.", "ChatGPT is its own app, so you would copy the text out of Word and paste the edits back."],
+        right:"Correct. Copilot is built into Word, so it edits the file you have open.", wrong:"Not quite. Copilot is built into Word, so it edits the file you have open."}]},
     {t:"gate"},
     {t:"h", text:"Part 2. Choose the model", why:""},
-    {t:"p", html:`Inside each app, a <b>model</b> writes the reply. The model reads what you send and writes the words that come back. One app can offer several models.`},
-    {t:"p", html:`Most apps offer models in several sizes. A larger model handles harder work and judges tone and wording better. A smaller model answers faster and uses less of your <b>usage limit</b>: the amount of AI use your plan allows before you must wait or switch to a smaller model.`},
+    {t:"p", html:`The app is the window you type in. The <b>model</b> is the AI behind the app that reads your request and answers it. One app can offer several models, and you can choose which one answers. For example, ChatGPT is the app, and GPT-6 and GPT-6 Pro are two of its models.`},
+    {t:"p", html:`Most apps offer models in several sizes. A larger model often does better on hard work, such as a long document or many rules at once. A smaller model answers faster and uses less of your <b>usage limit</b>: the amount of AI use your plan allows before you must wait or switch to a smaller model.`},
     {t:"p", html:`Each company names its models differently, and the names change every few months. The menu usually says which model is the most capable and which is the fastest.`},
     {t:"table", head:["The task","What to choose"], rows:[
       ["A quick fix, such as the grammar in one sentence or a list turned into a table","A smaller model"],
       ["Everyday work, such as an email reply or a summary of one file","The everyday model, usually the app’s default"],
       ["A long document, a plan with many steps, or writing that must follow many rules at once","A larger model"]]},
     {t:"p", html:`Select an app to see the models in its menu, as of November 2026. Companies rename and replace models every few months, so check the menu in your app.`},
-    {t:"acc", title:"Microsoft 365 Copilot: models and settings", html:`<p>Copilot has a model menu in Chat, Word, Excel, PowerPoint and Copilot Cowork. Cowork does whole tasks for you, and Part 4 covers it. Your admin decides which models appear, and the list can differ by license and region.</p><div class="tbl models"><table><thead><tr><th scope="col">Model</th><th scope="col">Good for</th><th scope="col">Watch out for</th></tr></thead><tbody><tr><td data-l="Model"><b>Auto (the default)</b></td><td data-l="Good for">Everyday questions, such as “What did I miss in this email thread?” Copilot chooses a model for each message.</td><td data-l="Watch out for">You don’t see which model wrote the reply.</td></tr><tr><td data-l="Model"><b>Claude Opus 5.5</b></td><td data-l="Good for">Complex, high-stakes work, such as comparing two versions of a document or turning a long report into a plan with dates. Microsoft recommends it for this work.</td><td data-l="Watch out for">Slower than Sonnet. Anthropic runs it outside Microsoft’s own data centers.</td></tr><tr><td data-l="Model"><b>Claude Sonnet 5.5</b></td><td data-l="Good for">Everyday work, such as drafting a reply to an email or turning meeting notes into a to-do list. It’s fast.</td><td data-l="Watch out for">Less capable than Opus on the hardest work.</td></tr><tr><td data-l="Model"><b>GPT-6.1 Sol</b></td><td data-l="Good for">The same everyday work as Sonnet. It’s there when your admin turns off the Claude models.</td><td data-l="Watch out for">Like every model you choose by name, it has a usage limit. At the limit, Copilot switches you to Auto.</td></tr></tbody></table></div><p>Copilot Cowork lists more models, such as GPT-6 Astra and Grok 4.7.</p>`},
-    {t:"acc", title:"ChatGPT: models and settings", html:`<p>On paid plans, the menu shows GPT-6 and GPT-6 Pro.</p><div class="tbl models"><table><thead><tr><th scope="col">Model</th><th scope="col">Good for</th><th scope="col">Watch out for</th></tr></thead><tbody><tr><td data-l="Model"><b>GPT-6 (the default)</b></td><td data-l="Good for">Most work, such as a reply to a client email or a summary of one file.</td><td data-l="Watch out for">Less careful than GPT-6 Pro on work that must be right the first time.</td></tr><tr><td data-l="Model"><b>GPT-6 Pro</b></td><td data-l="Good for">Work that must be right the first time, such as checking a long spreadsheet for errors before it goes to a client.</td><td data-l="Watch out for">Only on the Pro, Business and Enterprise plans. Enterprise admins can turn it off.</td></tr><tr><td data-l="Model"><b>Older models, such as GPT-5.6</b></td><td data-l="Good for">A prompt you already rely on, such as your weekly status report.</td><td data-l="Watch out for">Less capable than GPT-6.</td></tr></tbody></table></div><p>Free and Go plans get a lighter, faster model called Luna.</p>`},
-    {t:"acc", title:"Claude: models and settings", html:`<p><b>Tip:</b> For most work, switch between Sonnet and Opus. Start with Sonnet, and switch to Opus when the task is long or hard. Save Fable for work that Opus does poorly.</p><p>Select the model name next to the send button. Older models are under <b>More models</b>.</p><div class="tbl models"><table><thead><tr><th scope="col">Model</th><th scope="col">Good for</th><th scope="col">Watch out for</th></tr></thead><tbody><tr><td data-l="Model"><b>Claude Fable 5.2</b></td><td data-l="Good for">The hardest, longest jobs, such as checking a 100-page proposal against every requirement in the request.</td><td data-l="Watch out for">The slowest model, and it uses your usage limit the fastest.</td></tr><tr><td data-l="Model"><b>Claude Opus 5.5</b></td><td data-l="Good for">Long documents, plans and agent tasks, such as a one-page summary of a long report or a project plan with steps, owners and dates.</td><td data-l="Watch out for">Slower than Sonnet.</td></tr><tr><td data-l="Model"><b>Claude Sonnet 5.5</b></td><td data-l="Good for">Everyday work, such as drafting an email, rewriting a paragraph in plainer words or summarizing a meeting. It’s fast.</td><td data-l="Watch out for">Less capable than Opus and Fable on the hardest tasks.</td></tr><tr><td data-l="Model"><b>Claude Haiku 5.5</b></td><td data-l="Good for">Short, simple tasks, such as fixing the grammar in a sentence or turning a list into a table. It’s the fastest.</td><td data-l="Watch out for">The smallest model. Choose a larger one for hard work.</td></tr></tbody></table></div><details class="howto"><summary>Set up: have Claude tell you when to switch models</summary><div class="body"><p>Add this text to your <b>custom instructions</b>: saved directions Claude follows in every chat you start. Lesson 2 covers them in full. Claude then tells you when a task needs Opus, and when Sonnet would do.</p><div class="copybox"><p class="copytext">Model choice: If a task is long or hard, such as a long document, a plan with many steps or a detailed analysis, and you are not Opus, say so in one line at the start of your reply and suggest I switch to Opus. If a task is short and routine and you are Opus or Fable, suggest Sonnet in one line. Suggest each switch once per chat.</p><button type="button" class="copybtn">Copy</button></div><ol class="list"><li>Select <b>Copy</b> to copy the text in the box.</li><li>In Claude, select your name in the lower left &gt; <b>Settings</b> &gt; <b>Your Claude</b>, then select the <b>Instructions</b> box.</li><li>Paste the text at the end of anything already in the box.</li><li>Start a new chat. Claude follows custom instructions in every chat you start.</li></ol></div></details>`},
-    {t:"acc", title:"Gemini: models and settings", html:`<p><b>Fredrickson does not have a paid license for Gemini.</b> Keep Fredrickson and client information out of Gemini.</p><p>Which models you see depends on your Google plan. With <b>Auto</b> on, Gemini chooses the model for each prompt.</p><div class="tbl models"><table><thead><tr><th scope="col">Model</th><th scope="col">Good for</th><th scope="col">Watch out for</th></tr></thead><tbody><tr><td data-l="Model"><b>Flash-Lite</b></td><td data-l="Good for">A quick fact or a one-line rewrite. It’s fast, and it’s on every plan.</td><td data-l="Watch out for">The least capable model in the menu. Gemini switches you to it when you reach your limit.</td></tr><tr><td data-l="Model"><b>Gemini 4 Hydrogen</b></td><td data-l="Good for">Everyday tasks, such as drafting a reply in Gmail or summarizing a Google Doc. It follows tone and format rules.</td><td data-l="Watch out for">Brand new, and not built for long, deep reasoning.</td></tr><tr><td data-l="Model"><b>Gemini Pro</b></td><td data-l="Good for">A question with several steps, such as comparing three vendor quotes.</td><td data-l="Watch out for">Older than the Gemini 4 models.</td></tr><tr><td data-l="Model"><b>Gemini 4 Argon</b></td><td data-l="Good for">Most work, such as a first draft of a report from several files in Drive. It’s Google’s top model for writing, analysis and coding.</td><td data-l="Watch out for">Only on the AI Pro and AI Ultra plans.</td></tr><tr><td data-l="Model"><b>Gemini 4 Carbon</b></td><td data-l="Good for">The hardest reasoning and math, such as a budget forecast with several scenarios.</td><td data-l="Watch out for">Only on AI Ultra. It uses more of your limit than Argon, and Google says Argon suits most work better.</td></tr></tbody></table></div>`},
-    {t:"sim", label:"Model", bestLabel:"Best model for this task", prompt:"Try each task in the practice app. The thinking setting stays the same. Change the model, and the app answers again.",
+    {t:"tabs", tabs:[
+      {title:"Copilot", html:`<p>Copilot has a model menu in Chat, Word, Excel, PowerPoint and Copilot Cowork. Cowork does whole tasks for you, and Part 4 covers it. Your admin decides which models appear, and the list can differ by license and region.</p>${qrows([
+        ["Auto (the default)","Everyday questions, such as “What did I miss in this email thread?” Copilot chooses a model for each message.","You don’t see which model wrote the reply."],
+        ["Claude Opus 5.5","Complex, high-stakes work, such as comparing two versions of a document or turning a long report into a plan with dates. Microsoft recommends it for this work.","Slower than Sonnet. Anthropic runs it outside Microsoft’s own data centers."],
+        ["Claude Sonnet 5.5","Everyday work, such as drafting a reply to an email or turning meeting notes into a to-do list. It’s fast.","Less capable than Opus on the hardest work."],
+        ["GPT-6.1 Sol","The same everyday work as Sonnet. It’s there when your admin turns off the Claude models.","Like every model you choose by name, it has a usage limit. At the limit, Copilot switches you to Auto."]])}<p>Copilot Cowork lists more models, such as GPT-6 Astra and Grok 4.7.</p>`},
+      {title:"ChatGPT", html:`<p>On paid plans, the menu shows GPT-6 and GPT-6 Pro.</p>${qrows([
+        ["GPT-6 (the default)","Most work, such as a reply to a client email or a summary of one file.","Less careful than GPT-6 Pro on work that must be right the first time."],
+        ["GPT-6 Pro","Work that must be right the first time, such as checking a long spreadsheet for errors before it goes to a client.","Only on the Pro, Business and Enterprise plans. Enterprise admins can turn it off."],
+        ["Older models, such as GPT-5.6","A prompt you already rely on, such as your weekly status report.","Less capable than GPT-6."]])}<p>Free and Go plans get a lighter, faster model called Luna.</p>`},
+      {title:"Claude", html:`<p><b>Tip:</b> For most work, switch between Sonnet and Opus. Start with Sonnet, and switch to Opus when the task is long or hard. Save Fable for work that Opus does poorly.</p><p>Select the model name next to the send button. Older models are under <b>More models</b>.</p>${qrows([
+        ["Claude Fable 5.2","The hardest, longest jobs, such as checking a 100-page proposal against every requirement in the request.","The slowest model, and it uses your usage limit the fastest."],
+        ["Claude Opus 5.5","Long documents, plans and agent tasks, such as a one-page summary of a long report or a project plan with steps, owners and dates.","Slower than Sonnet."],
+        ["Claude Sonnet 5.5","Everyday work, such as drafting an email, rewriting a paragraph in plainer words or summarizing a meeting. It’s fast.","Less capable than Opus and Fable on the hardest tasks."],
+        ["Claude Haiku 5.5","Short, simple tasks, such as fixing the grammar in a sentence or turning a list into a table. It’s the fastest.","The smallest model. Choose a larger one for hard work."]])}`},
+      {title:"Gemini", html:`<p><b>Fredrickson does not have a paid license for Gemini.</b> Keep Fredrickson and client information out of Gemini.</p><p>Which models you see depends on your Google plan. With <b>Auto</b> on, Gemini chooses the model for each prompt.</p>${qrows([
+        ["Flash-Lite","A quick fact or a one-line rewrite. It’s fast, and it’s on every plan.","The least capable model in the menu. Gemini switches you to it when you reach your limit."],
+        ["Gemini 4 Hydrogen","Everyday tasks, such as drafting a reply in Gmail or summarizing a Google Doc. It follows tone and format rules.","Brand new, and not built for long, deep reasoning."],
+        ["Gemini Pro","A question with several steps, such as comparing three vendor quotes.","Older than the Gemini 4 models."],
+        ["Gemini 4 Argon","Most work, such as a first draft of a report from several files in Drive. It’s Google’s top model for writing, analysis and coding.","Only on the AI Pro and AI Ultra plans."],
+        ["Gemini 4 Carbon","The hardest reasoning and math, such as a budget forecast with several scenarios.","Only on AI Ultra. It uses more of your limit than Argon, and Google says Argon suits most work better."]])}`}]},
+    {t:"howto", title:"Set up: have Claude tell you when to switch models", html:`<p>Add this text to your <b>custom instructions</b>: saved directions Claude follows in every chat you start. Lesson 2 covers them in full. Claude then tells you when a task needs Opus, and when Sonnet would do.</p><div class="copybox"><p class="copytext">Model choice: If a task is long or hard, such as a long document, a plan with many steps or a detailed analysis, and you are not Opus, say so in one line at the start of your reply and suggest I switch to Opus. If a task is short and routine and you are Opus or Fable, suggest Sonnet in one line. Suggest each switch once per chat.</p><button type="button" class="copybtn">Copy</button></div><ol class="list"><li>Select <b>Copy</b> to copy the text in the box.</li><li>In Claude, select your name in the lower left &gt; <b>Settings</b> &gt; <b>Your Claude</b>, then select the <b>Instructions</b> box.</li><li>Paste the text at the end of anything already in the box.</li><li>Start a new chat. Claude follows custom instructions in every chat you start.</li></ol>`},
+    {t:"sim", label:"Model", bestLabel:"Best model for this task", prompt:"Try each task in the practice app. Every reply is real: we sent each task to Claude’s Haiku, Sonnet and Opus, and the thinking setting stayed on Low for all three. Change the model, and the app answers again.",
       key:"In Claude, these are Haiku, Sonnet and Opus. In ChatGPT, GPT-6 is the everyday model and GPT-6 Pro is the larger one. In Copilot, choose Claude Sonnet for everyday work and Claude Opus for larger work.",
       settings:[["Smaller model","Low"],["Everyday model","Medium"],["Larger model","High"]], start:1,
       tasks:[
         {ask:"Fix the grammar: “Each of the managers have their own login, and they needs to reset it by Friday.”", best:0,
           replies:[
-            ["Answered in 2 seconds", `<p>Each of the managers has their own login, and they need to reset it by Friday.</p>`, "Right, and the fastest answer.", "good"],
-            ["Answered in 4 seconds", `<p>Each of the managers has their own login, and they need to reset it by Friday.</p>`, "Right. A smaller model gives the same sentence sooner.", "ok"],
-            ["Answered in 12 seconds", `<p>Each of the managers has their own login, and they need to reset it by Friday.</p>`, "The same sentence again. The larger model added only waiting, and used more of your limit.", "ok"]],
-          why:"Every model can fix one sentence. A smaller model gives the same answer sooner."},
-        {ask:"Write a note to our client Dana: the pilot launch moves from March 3 to March 17. Keep it under 100 words. Apologize once. Don’t blame her IT team. End with one question about the new date.", best:2,
+            ["Answered without thinking", `<p>Each of the managers has their own login, and they need to reset it by Friday.</p><p>The subject “each” is singular, so the verb becomes “has,” and “they” pairs with the plural verb “need.”</p>`, "Right, with a one-line reason. The smallest model used the least of your limit.", "good"],
+            ["Answered without thinking", `<p>Corrected: “Each of the managers has their own login, and they need to reset it by Friday.”</p><p>Two fixes:</p><ul class="list"><li>“have” → “has”: “Each” is singular, so it takes a singular verb.</li><li>“needs” → “need”: “they” is plural, so the verb shouldn’t take an -s.</li></ul><p>If you’d like it to be consistently singular, you could also write: “Each of the managers has their own login, and each needs to reset it by Friday.” Or, to sidestep the issue entirely: “The managers each have their own logins and need to reset them by Friday.”</p>`, "Right. It also offers two other versions you didn’t ask for.", "ok"],
+            ["Answered without thinking", `<p>“Each of the managers has their own login, and they need to reset it by Friday.”</p><p>Two fixes: “Each” is singular, so it takes “has,” and “they” takes “need,” not “needs.”</p>`, "Right, the same fix. The larger model used more of your limit for the same answer.", "ok"]],
+          why:"Haiku, Sonnet and Opus all fixed the sentence without thinking. For a quick fix, the smallest model gives the same answer and uses the least of your limit."},
+        {ask:"Write the catalog description for this course in our LMS. The description field holds exactly 150 characters, including spaces, and cuts off anything longer. Use as much of the 150 as you can. Give me only the description. Course: Giving Feedback That Lands. A 45-minute e-learning course for new managers. It covers the SBI model (situation, behavior, impact), how to give feedback in a one-on-one, and how to follow up. Learners practice with three scenarios.", best:1,
           replies:[
-            ["Answered in 3 seconds", `<p>Hi Dana,</p><p>Sorry, but the pilot launch has to move to March 17, because your IT team did not finish the sign-in setup in time. We are very sorry for the delay, and sorry for any trouble it causes.</p><p>Thanks!</p>`, "It blames her IT team, apologizes twice and ends with no question.", "poor"],
-            ["Answered in 6 seconds", `<p>Hi Dana,</p><p>I’m sorry to tell you that the pilot launch is moving to March 17. The sign-in setup needs two more weeks, and we’ll use that time to test every learner login.</p><p>Let me know if you have any questions.</p>`, "Closer. It apologizes once and blames no one, but it ends with a general offer, not a question about the date.", "ok"],
-            ["Answered in 15 seconds", `<p>Hi Dana,</p><p>I’m sorry to tell you that the pilot launch is moving from March 3 to March 17. The sign-in setup needs two more weeks, and we’ll use that time to test every learner login.</p><p>Does March 17 still work for your managers’ calendars?</p>`, "Every rule met: under 100 words, one apology, no blame, and a question about the new date.", "good"]],
-          why:"The note has to follow five rules at once and sound right to a client. A larger model keeps more rules in play and judges tone better."},
-        {ask:"We expect 18% of our 2,350 learners to sign up. Will they fit in the 400 seats we booked?", best:2,
-          replies:[
-            ["Answered in 2 seconds", `<p>Yes. 18% of 2,350 is about 400, so the seats you booked should be enough.</p>`, "Wrong. The model guessed at the math instead of working it out.", "poor"],
-            ["Answered in 6 seconds", `<p>18% of 2,350 is roughly 420, so you may be slightly over 400. Consider booking a few extra seats.</p>`, "Closer, but still an estimate. “A few extra seats” is not a number you can book.", "poor"],
-            ["Answered in 12 seconds", `<p>18% of 2,350 is a little over 420, so you’ll likely be about 20 seats short. Book 20 to 25 more seats to be safe.</p>`, "Closer again, but still an estimate. The larger model did not work out the math either.", "ok"]],
-          why:"The larger model came closest, but every model estimated. Exact math needs the model to work it out step by step. Thinking time does that, and Part 3 shows it on this same question."}]},
-    {t:"p", html:`Choose a larger model when the work needs judgment: the right tone, many rules at once or a long document. A larger model alone does not make math exact.`},
+            ["Answered without thinking", `<p>Learn to give feedback that lands using the SBI model (situation, behavior, impact). Practice one-on-one delivery and follow-up across three realistic scenarios in 45 minutes.</p>`, "It reads well, but it’s 175 characters. The LMS cuts it off after “across three realistic.”", "poor"],
+            ["Thought for 3 seconds", `<p>Learn the SBI model to give clear feedback in one-on-ones and follow up well. Practice with three scenarios in this 45-minute course for new managers.</p>`, "Exactly 150 characters, and it keeps every main point.", "good"],
+            ["Thought for 4 seconds", `<p>New managers learn the SBI model to give clear feedback in one-on-ones and follow up well, then practice with three realistic scenarios. 45 minutes.</p>`, "148 characters, so it fits. The everyday model did the same job with less of your limit.", "ok"]],
+          why:"Haiku answered without thinking and wrote 175 characters. Sonnet and Opus each thought for a few seconds, counted the characters and fit the limit. Part 3 shows a second fix on this same task: more thinking time for Haiku."}]},
+    {t:"p", html:`For a short, simple task, the smallest model often gives the same answer as the largest. When a reply misses, try a larger model. Part 3 shows the other fix: more thinking time.`},
     {t:"gate"},
     {t:"h", text:"Part 3. Choose how long the model thinks", why:""},
-    {t:"p", html:`Many apps also let a model <b>think</b> before it answers. The model works through the problem step by step and checks its own work, then writes the reply. Thinking time is a separate setting from the model, so you can give the same model more time or less.`},
-    {t:"p", html:`<ul class="list"><li>The reply takes longer, from several seconds to a few minutes.</li><li>On hard tasks, the reply is right more often.</li><li>On easy tasks, you wait longer for the same answer.</li></ul>`},
-    {t:"table", head:["App","Where to set thinking time"], rows:[
-      ["Microsoft 365 Copilot","In Chat, choose Auto, Quick response or Think deeper. In Copilot Cowork, <b>reasoning effort</b> offers Light, Medium, High, Extra High or Max."],
-      ["ChatGPT","On paid plans, the thinking levels are Instant, Medium, High and Extra High. Extra High is not on the Plus plan. Free and Go plans have no thinking levels."],
-      ["Claude","All four models think before they answer. <b>Effort</b> sets how long: Low, Medium, High, Extra high or Max."],
-      ["Gemini","<b>Thinking</b> offers Low, Medium or High. Low is the default. With Auto on, Gemini chooses the thinking level for you."]]},
+    {t:"p", html:`Many apps also let a model <b>think</b> before it answers. The model works through the problem step by step and checks its own work, then answers. Thinking time is a separate setting from the model, so you can give the same model more time or less.`},
+    {t:"p", html:`<ul class="list"><li>The reply takes longer, from several seconds to a few minutes.</li><li>On hard tasks, the reply is right more often.</li><li>On easy tasks, the reply stays the same. The model often skips thinking.</li></ul>`},
+    {t:"tabs", hint:"Select an app to see where to set thinking time.", tabs:[
+      {title:"Copilot", html:`<p>In Chat, choose Auto, Quick response or Think deeper.</p><p>In Copilot Cowork, <b>reasoning effort</b> offers Light, Medium, High, Extra High or Max.</p>`},
+      {title:"ChatGPT", html:`<p>On paid plans, the thinking levels are Instant, Medium, High and Extra High. Extra High is not on the Plus plan.</p><p>Free and Go plans have no thinking levels.</p>`},
+      {title:"Claude", html:`<p>All four models think before they answer. <b>Effort</b> sets how long: Low, Medium, High, Extra or Max.</p><p>Claude recommends Medium.</p>`},
+      {title:"Gemini", html:`<p><b>Thinking</b> offers Low, Medium or High. Low is the default.</p><p>With Auto on, Gemini chooses the thinking level for you.</p>`}]},
     {t:"table", head:["The task","What to choose"], rows:[
       ["A short email, a quick rewrite, or one simple step repeated many times","Less thinking"],
       ["A summary of one file or a first draft","The app’s default"],
-      ["Exact math, a schedule with many limits, or checking a draft against a contract","More thinking"]]},
-    {t:"sim", prompt:"Try each task in the practice app. The model stays the same. Change how long it thinks, and the app answers again.",
+      ["An exact length or count, exact math, or checking a draft against a contract","More thinking"]]},
+    {t:"sim", prompt:"Try each task in the practice app. Every reply is real: we sent each task to Claude’s Haiku, the smallest model, on Low, Medium and High effort. The model stays the same. Change how long it thinks, and the app answers again.",
       key:"Less thinking is Quick response in Copilot, Instant in ChatGPT, and Low in Claude and Gemini. More thinking is Think deeper in Copilot, and High in the others.",
       settings:[["Less thinking","Low"],["Default","Medium"],["More thinking","High"]], start:1,
       tasks:[
-        {ask:"Split this list into a First name column and a Last name column.", file:"Names list, 60 names", best:0,
+        {ask:"Split this list into a First name column and a Last name column: Ana Ruiz, Ben Okafor, Chloe Park, Dev Patel, Mia Chen, Raj Singh, Sam Lee, Lena Torres", best:0,
           replies:[
-            ["Answered in 3 seconds", `<table><tr><th>First name</th><th>Last name</th></tr><tr><td>Ana</td><td>Ruiz</td></tr><tr><td>Ben</td><td>Okafor</td></tr><tr><td>Chloe</td><td>Park</td></tr></table><p>…and 57 more rows.</p>`, "The full table, and the fastest answer.", "good"],
-            ["Answered in 8 seconds", `<table><tr><th>First name</th><th>Last name</th></tr><tr><td>Ana</td><td>Ruiz</td></tr><tr><td>Ben</td><td>Okafor</td></tr><tr><td>Chloe</td><td>Park</td></tr></table><p>…and 57 more rows.</p>`, "The full table. Less thinking gives the same table sooner.", "ok"],
-            ["Thought for 45 seconds", `<table><tr><th>First name</th><th>Last name</th></tr><tr><td>Ana</td><td>Ruiz</td></tr><tr><td>Ben</td><td>Okafor</td></tr><tr><td>Chloe</td><td>Park</td></tr></table><p>…and 57 more rows.</p>`, "The same table again. The thinking time added only waiting, and used more of your limit.", "ok"]],
-          why:"The list is long, but the AI repeats one simple step 60 times. Thinking time adds nothing."},
-        {ask:"We expect 18% of our 2,350 learners to sign up. Will they fit in the 400 seats we booked?", best:2,
+            ["Answered without thinking", `<table><tr><th>First name</th><th>Last name</th></tr><tr><td>Ana</td><td>Ruiz</td></tr><tr><td>Ben</td><td>Okafor</td></tr><tr><td>Chloe</td><td>Park</td></tr><tr><td>Dev</td><td>Patel</td></tr><tr><td>Mia</td><td>Chen</td></tr><tr><td>Raj</td><td>Singh</td></tr><tr><td>Sam</td><td>Lee</td></tr><tr><td>Lena</td><td>Torres</td></tr></table>`, "The full table, right the first time.", "good"],
+            ["Answered without thinking", `<table><tr><th>First name</th><th>Last name</th></tr><tr><td>Ana</td><td>Ruiz</td></tr><tr><td>Ben</td><td>Okafor</td></tr><tr><td>Chloe</td><td>Park</td></tr><tr><td>Dev</td><td>Patel</td></tr><tr><td>Mia</td><td>Chen</td></tr><tr><td>Raj</td><td>Singh</td></tr><tr><td>Sam</td><td>Lee</td></tr><tr><td>Lena</td><td>Torres</td></tr></table>`, "The same table. The model chose not to think, because the task is simple.", "ok"],
+            ["Answered without thinking", `<table><tr><th>First name</th><th>Last name</th></tr><tr><td>Ana</td><td>Ruiz</td></tr><tr><td>Ben</td><td>Okafor</td></tr><tr><td>Chloe</td><td>Park</td></tr><tr><td>Dev</td><td>Patel</td></tr><tr><td>Mia</td><td>Chen</td></tr><tr><td>Raj</td><td>Singh</td></tr><tr><td>Sam</td><td>Lee</td></tr><tr><td>Lena</td><td>Torres</td></tr></table>`, "The same table again. Even on the highest setting, the model skipped thinking.", "ok"]],
+          why:"Haiku gave the same table on every setting and never thought, even on High. The AI repeats one simple step for each name, so more thinking time adds nothing."},
+        {ask:"Write the catalog description for this course in our LMS. The description field holds exactly 150 characters, including spaces, and cuts off anything longer. Use as much of the 150 as you can. Give me only the description. Course: Giving Feedback That Lands. A 45-minute e-learning course for new managers. It covers the SBI model (situation, behavior, impact), how to give feedback in a one-on-one, and how to follow up. Learners practice with three scenarios.", best:1,
           replies:[
-            ["Answered in 2 seconds", `<p>Yes. 18% of 2,350 is about 400, so the seats you booked should be enough.</p>`, "Wrong. The model guessed at the math instead of working it out.", "poor"],
-            ["Answered in 6 seconds", `<p>18% of 2,350 is roughly 420, so you may be slightly over 400. Consider booking a few extra seats.</p>`, "Closer, but still an estimate. “A few extra seats” is not a number you can book.", "poor"],
-            ["Thought for 20 seconds", `<p>No. 2,350 × 0.18 = 423. That is 23 more people than the 400 seats you booked. Book at least 23 more seats, or plan a second session.</p>`, "Right, with the math shown so you can check it.", "good"]],
-          why:"The question is short, but it needs exact math. In Part 2, even the larger model only estimated. Thinking time lets the same model work out the numbers and check them."},
-        {ask:"Summarize this report in five bullets for my manager.", file:"Vendor report.pdf, 30 pages", best:1,
-          replies:[
-            ["Answered in 4 seconds", `<ul class="list"><li>The vendor offers a learning platform.</li><li>It has many features.</li><li>Pricing depends on the plan.</li><li>Support is available.</li><li>The vendor recommends a pilot.</li></ul>`, "Five bullets, but vague. It skipped the numbers your manager needs.", "poor"],
-            ["Answered in 12 seconds", `<ul class="list"><li>Price: $42 per learner per year, with a three-year minimum.</li><li>Setup takes 10 to 12 weeks.</li><li>It works with our LMS through SCORM.</li><li>Reports show completions only, unless we buy the analytics add-on.</li><li>The vendor recommends a 90-day pilot with 200 learners.</li></ul>`, "Specific and ready to send.", "good"],
-            ["Thought for 50 seconds", `<ul class="list"><li>Price: $42 per learner per year, with a three-year minimum.</li><li>Setup takes 10 to 12 weeks.</li><li>It works with our LMS through SCORM.</li><li>Reports show completions only, unless we buy the analytics add-on.</li><li>The vendor recommends a 90-day pilot with 200 learners.</li></ul>`, "About the same as Default, after a much longer wait.", "ok"]],
-          why:"The default setting is built for one file and one summary."},
-        {ask:"Find a 90-minute slot next week for a workshop with these 12 people.", file:"Availability notes, 12 people", best:2,
-          replies:[
-            ["Answered in 3 seconds", `<p>Tuesday at 10 a.m. works for everyone.</p>`, "It sounds sure, but three people said they are out Tuesday morning.", "poor"],
-            ["Answered in 9 seconds", `<p>Tuesday at 2 p.m. works for 11 of the 12 people. Dana is out Tuesday afternoon.</p>`, "Better, but it stopped at the first slot that almost worked.", "poor"],
-            ["Thought for 35 seconds", `<p>Thursday from 1 to 2:30 p.m. works for all 12 people. I checked each person’s notes: Dana is out Tuesday, and Raj and Mia have client sessions all day Wednesday.</p>`, "All 12 people fit, and it shows what it checked.", "good"]],
-          why:"The request is short, but the AI has to weigh 12 sets of limits at once."}]},
+            ["Answered without thinking", `<p>Learn to give feedback that lands using the SBI model (situation, behavior, impact). Practice one-on-one delivery and follow-up across three realistic scenarios in 45 minutes.</p>`, "It reads well, but it’s 175 characters. The LMS cuts it off after “across three realistic.”", "poor"],
+            ["Thought for 7 seconds", `<p>Learn the SBI model for giving feedback that lands. Practice in a one-on-one, work through three scenarios, and plan your follow-up. For new managers.</p>`, "Exactly 150 characters. The model counted, then trimmed until the description fit.", "good"],
+            ["Thought for 7 seconds", `<p>Give feedback that lands. In 45 minutes, learn the SBI model, how to deliver feedback in a one-on-one, and how to follow up. Practice three scenarios.</p>`, "Also exactly 150 characters. More thinking gave the same result as the default here.", "ok"]],
+          why:"On Low, Haiku answered without thinking and ran over the limit. On Medium and High, Haiku thought for 7 seconds, counted and trimmed, and hit 150 exactly. Fitting an exact limit means counting, and thinking time gives the model time to count. In Part 2, a larger model fixed the same task."}]},
     {t:"p", html:`Judge a task by how many things the AI has to weigh at once, not by how long it is.`},
     {t:"p", html:`<b>Change the model or add thinking?</b> When a reply misses, look at what went wrong.`},
     {t:"table", head:["What went wrong","What to change"], rows:[
       ["The reply has the wrong tone, skips one of several rules or loses detail from a long document","Choose a larger model"],
-      ["The reply gets math, a schedule or a step-by-step check wrong","Add thinking time"],
+      ["The reply gets a count, math or a step-by-step check wrong","Add thinking time"],
       ["The reply is right, but slow, or you keep reaching your usage limit","Choose a smaller model or less thinking"]]},
-    {t:"statement", text:"A larger model brings better judgment. More thinking gives the same model time to work a problem through, step by step."},
+    {t:"pq", title:"Practice: change the model or the thinking", intro:"Each reply below missed in a different way. Choose what to change first. These questions do not count toward your score.", items:[
+      {q:"You ask Sonnet to make a client email sound warmer. The reply keeps your facts, but the tone still sounds stiff.", choices:["Choose a larger model","Add thinking time","Choose a smaller model or less thinking"], correct:0,
+        others:[null, "Thinking time helps with counts, math and step-by-step checks. Tone is none of those, so try a larger model first.", "The reply already missed, so a smaller model would likely miss by more."],
+        right:"Correct. Tone is not a count or a math problem, so thinking time helps little. A larger model is the better first try.", wrong:"Not quite. Tone is not a count or a math problem, so try a larger model first."},
+      {q:"You ask the AI to total the hours in a 40-row timesheet table. The total is six hours off.", choices:["Choose a larger model","Add thinking time","Choose a smaller model or less thinking"], correct:1,
+        others:["The reply got the math wrong, and math needs step-by-step work. Thinking time gives the same model time to add and check.", null, "The reply is wrong, not slow. Less thinking makes a math mistake more likely."],
+        right:"Correct. Math needs step-by-step work, and thinking time gives the model time to add and check.", wrong:"Not quite. Math needs step-by-step work, so add thinking time."},
+      {q:"All day, you use Opus on High to fix typos in short Teams posts. The replies are right, but each one is slow, and you reach your usage limit by noon.", choices:["Choose a larger model","Add thinking time","Choose a smaller model or less thinking"], correct:2,
+        others:["The replies are already right. A larger model would be slower and use your limit faster.", "The replies are already right. More thinking would be slower and use your limit faster.", null],
+        right:"Correct. The replies are right, so a smaller model or less thinking gives the same fixes faster and saves your limit.", wrong:"Not quite. The replies are right, so choose a smaller model or less thinking."},
+      {q:"You ask the AI to pull themes from 12 interview transcripts. The themes are right, but the report skips two of your five rules and leaves out quotes from the last transcripts.", choices:["Choose a larger model","Add thinking time","Choose a smaller model or less thinking"], correct:0,
+        others:[null, "Thinking time helps with counts, math and step-by-step checks. A larger model often does better with many rules and long documents.", "The reply already missed, so a smaller model would likely miss by more."],
+        right:"Correct. The reply skipped rules and lost detail from long documents, so choose a larger model.", wrong:"Not quite. The reply skipped rules and lost detail from long documents, so choose a larger model."}]},
+    {t:"statement", text:"A larger model often handles harder work better, such as many rules at once or a long document. More thinking gives the same model time to work a problem through, step by step."},
     {t:"p", html:`<b>Let the AI help you choose.</b>`},
-    {t:"process", intro:"Four ways to get help choosing the model and the thinking setting.", steps:[
-      ["Use Auto","In Copilot, leave the setting on Auto. Copilot chooses quick or deeper thinking for each message."],
+    {t:"p", html:`Use any of these four ways to choose the model and the thinking setting. The first three work in every app.`},
+    {t:"table", head:["Way","What to do"], rows:[
       ["Ask about the task","Ask: “Before you answer, tell me whether this task needs careful step-by-step reasoning or a quick answer.” Ask about the task, not about model names. A model knows little about models released after it was trained."],
       ["Save an instruction","Add a saved instruction: “If a task needs more thinking time than this setting gives, say so before you answer.”"],
-      ["Test once","For a task you repeat, send the same prompt with two settings. Compare the replies, and keep the better setting for that task."]]},
+      ["Test once","For a task you repeat, send the same prompt with two settings. Compare the replies, and keep the better setting for that task."],
+      ["Use Auto","In Copilot and Gemini, leave the setting on Auto. The app then chooses the setting for each message."]]},
     {t:"gate"},
     {t:"h", text:"Part 4. Choose chat, a project or an agent", why:""},
-    {t:"p", html:`You have the app, the model and the thinking setting. Last, choose where in the app to work. A chat, a project and an agent each take on a different share of the work. Each app offers more than one place to work.<ul class="list"><li>In a <b>chat</b>, you type a request, the AI replies, and you do the rest. </li><li>A <b>project</b> is a workspace that keeps the same files and instructions ready for every chat inside it. Claude and ChatGPT call it a project. In Copilot, look for Projects, Notebooks or Workspaces.</li><li>An <b>agent</b> does the steps of a task itself, such as opening files, searching the web and building a document.</li></ul>`},
+    {t:"p", html:`You have the app, the model and the thinking setting. Last, choose where in the app to work. A chat, a project and an agent each take on a different share of the work. Each app offers more than one place to work.<ul class="list"><li>In a <b>chat</b>, you type a request, the AI replies, and you do the rest. </li><li>A <b>project</b> is a workspace that keeps the same files and instructions ready for every chat inside it. Claude and ChatGPT call it a project. In Copilot, look for Projects, Notebooks or Workspaces.</li><li>An <b>agent</b> does the steps of a task itself, such as opening files, searching the web and building a document. Some agents also have projects. For example, a project in Claude Cowork keeps the same files and instructions ready for every Cowork task inside it. Lesson 3 covers agents in full: how they work, and how to brief them, keep them safe and check their work.</li></ul>`},
     {t:"p", html:`Choose the simplest option that can do the task. Check the options in this order: chat, then a project, then an agent.`},
     {t:"flow"},
     {t:"p", html:`Answer the questions from the top. The first question checks whether chat or a project can do the task. You need an agent only when the answer is yes.`},
@@ -520,7 +570,7 @@ const LESSONS = [
     {t:"gate"},
     {t:"h", text:"Knowledge Check: apply what you learned"},
     {t:"p", html:`Answer all five. Your score appears after the last question.`},
-    {t:"kc", check:true, others:["Copilot reads your meetings only with a Copilot license. Your work sign-in alone is not enough.", null, "The model writes the reply, but the app decides what the AI can read. A different model cannot see the meeting either.", "Your Teams meeting is not on the web, so a web search cannot find it."], q:"You open Copilot Chat, with no Copilot license, and ask it to summarize yesterday’s Teams meeting. What happens?",
+    {t:"kc", check:true, others:["Copilot reads your meetings only with a Copilot license. Your work sign-in alone is not enough.", null, "The model answers you, but the app decides what the AI can read. A different model cannot see the meeting either.", "Your Teams meeting is not on the web, so a web search cannot find it."], q:"You open Copilot Chat, with no Copilot license, and ask it to summarize yesterday’s Teams meeting. What happens?",
       choices:["It reads the meeting through your work sign-in.", "It cannot read the meeting until you add the transcript.", "It reads the meeting if you choose a more capable model.", "It finds the meeting with a web search."], correct:1,
       right:"Correct. Without the license, Copilot Chat reads only the web and the files you add.", wrong:"Not quite. Copilot reads your meetings only with a Copilot license. Without one, add the transcript."},
     {t:"kc", check:true, others:["Copilot is often chosen for work already in Microsoft 365. This PDF is on your computer, not in Microsoft 365, so Copilot has no head start.", "ChatGPT is often chosen for the most features in one app, such as images and voice. This task needs careful reading of a long document.", null, "Gemini is often chosen for work already in Google. This PDF is not in Google. Fredrickson also does not have a paid license for Gemini, so keep client files out of Gemini."], q:"A client’s 90-page request for proposal is saved as a PDF on your computer. You need a careful list of every requirement in it. All four apps can read a PDF you add. Which app do you start in?",
@@ -538,11 +588,24 @@ const LESSONS = [
     {t:"score", pass:4},
     {t:"cards", cards:[
       ["App","The window you sign in to, type in and upload files to, such as Copilot or Claude."],
-      ["Model","The part inside an AI app that writes the reply. One app can offer several models."],
+      ["Model","The AI behind an app that reads your request and answers it. One app can offer several models."],
       ["Usage limit","The amount of AI use your plan allows before you must wait or switch to a smaller model."],
       ["Thinking","A setting in which the model works through a problem step by step before it replies. Slower, and right more often on hard tasks."],
       ["Chat","A conversation in which you type a request, the AI replies, and you do the rest."],
       ["Project","A workspace that keeps the same files and instructions ready for every chat inside it."]]},
+    {t:"pq", title:"Practice: answer a client’s question", intro:"Clients ask about AI too. Choose the answer that is right and plain enough for a client. These questions do not count toward your score.", items:[
+      {q:"A client asks: “Is ChatGPT the AI, or is GPT-6 the AI?”", choices:["“ChatGPT is the app you type in. GPT-6 is the model: the AI behind the app that answers you. One app can offer several models.”", "“They’re two names for the same thing. ChatGPT is the product name, GPT-6 is the technical name, and the two always go together.”", "“GPT-6 is the paid version of ChatGPT. The free plan runs an older AI, and a paid plan upgrades you to GPT-6.”"], correct:0,
+        others:[null, "ChatGPT and GPT-6 don’t always go together. ChatGPT is the app, and it offers several models, such as GPT-6 and GPT-6 Pro.", "Your plan decides which models you can choose, but GPT-6 is a model, not a plan. ChatGPT is the app on every plan."],
+        right:"Correct. The answer names the app and the model, and it says one app can offer several models.", wrong:"Not quite. ChatGPT is the app, and GPT-6 is one of its models."},
+      {q:"A client asks: “Why did your AI take a minute to answer, when ours answers right away?”", choices:["“Our app is bigger than yours, so it has more to load. A bigger app takes longer to answer, but it knows more.”", "“We let the model think first. It works through the problem step by step, so it’s slower and right more often on hard tasks.”", "“We chose the largest model for this task. The largest models always take a minute, but they don’t make mistakes.”"], correct:1,
+        others:["Speed depends on the model and the thinking setting, not on the size of the app.", null, "A larger model can be a little slower, but a minute-long wait usually means the model was thinking. Every model makes mistakes, so a client still needs to check the reply."],
+        right:"Correct. The answer names the thinking setting and says what the client gets for the wait.", wrong:"Not quite. The model was thinking, so say what the thinking setting does."},
+      {q:"A client asks: “What’s the difference between a chat and a project?”", choices:["“A project is one long chat that never resets. You keep adding to the same conversation, so the AI has everything you’ve said.”", "“In a project, the AI does the work for you. It opens your files, makes the changes and saves them, while a chat only answers.”", "“In a chat, you ask, the AI replies and you do the rest. A project keeps the same files and instructions ready for every chat inside it.”"], correct:2,
+        others:["A project holds many chats, not one long chat. It keeps the same files and instructions ready for each chat inside it.", "That describes an agent. A project keeps files and instructions ready, and you still do the rest.", null],
+        right:"Correct. The answer says what each one does, in words the client already uses.", wrong:"Not quite. A project keeps files and instructions ready for every chat inside it."},
+      {q:"A client asks: “Why does your team switch between models?”", choices:["“We switch whenever a newer model comes out. The newest model is always the best, so we move to it right away for every task.”", "“Larger models often do better on hard work, such as long documents. Smaller models answer faster and use less of our plan. We match the model to the task.”", "“We use the smallest model we can, to keep costs down. When a reply misses, we fix it by hand instead of using a larger model.”"], correct:1,
+        others:["A newer model isn’t always the right choice. The right model depends on the task.", null, "A smaller model saves usage, but it can miss on hard work. Match the model to the task, and choose a larger model when the work is hard."],
+        right:"Correct. The answer gives both sides: larger models for harder work, smaller models for speed and usage.", wrong:"Not quite. Match the model to the task: larger for harder work, smaller for speed and usage."}]},
     {t:"end", html:`You can now choose an app for a task and say why, choose a model and how long it thinks, and choose chat, a project or an agent. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 2 shows how to give the AI what it needs.`}
   ]
 },
@@ -624,14 +687,14 @@ const LESSONS = [
       {title:"Context window", html:`<p>The AI misses something you gave it in this chat.</p><ul class="list"><li>Claude stops following a rule from your first message, after hours in the same chat.</li><li>You paste three long reports, and the answers about the first report get worse.</li></ul><p><b>To fix it,</b> start a new chat for each task. Before you leave a long chat, ask for a handoff note: a short summary of the work so far to paste into the new chat. ${a(L.limits,"Make Your AI Usage Limits Last Longer")} shows how.</p>`},
       {title:"Knowledge cutoff", html:`<p>The AI misses something that happened after its knowledge cutoff.</p><ul class="list"><li>ChatGPT does not know about a law passed last month.</li><li>Copilot names a client’s CEO who retired last year.</li></ul><p><b>To fix it,</b> tell the AI the current facts or ask it to search current sources.</p>`}]},
     {t:"p", html:`People often say the AI forgot something. A chat that got longer than the context window is one cause. Six other causes look the same in the chat, and each one needs a different fix.`},
-    {t:"table", plain:true, head:["What happened","What you see","The fix"], rows:[
-      [`<b>The chat got longer than the context window.</b> The app dropped or shortened early messages.`,"The AI misses a rule or a file from the start of a long chat.","Start a new chat. Paste a handoff note into it."],
-      [`<b>The rule is in the middle of a long chat.</b> Even when the whole chat fits in the context window, models follow the start and the end of a chat more closely than the middle.`,"The AI follows some of your earlier rules and skips others.","Repeat the rule at the end of your prompt."],
-      [`<b>A newer message disagrees with an older rule.</b> The AI usually follows what it read most recently.`,"You asked for 100 words, then pasted a long example. The reply is as long as the example.","Repeat the rule in the same prompt as the example."],
-      [`<b>Memory did not save it.</b> <b>Memory</b> is a feature that saves a few facts about you between chats. The app chooses what to save, and it saves a short note, not the whole chat.`,"The AI uses some facts from past chats, but not the one you need.",`Check what memory saved in the app’s settings. ${a(L.directions,"Get AI to Follow Your Directions")} shows where. Put rules you need every time in custom instructions, not memory.`],
-      [`<b>It is a new chat.</b> Each chat starts empty. The AI does not read your other chats, except for what memory saved.`,"The AI does not know what you told it yesterday.","Put rules you use often in custom instructions or a project."],
-      [`<b>It never read the whole file.</b> The file was too long, a scanned image, or a type the app cannot open.`,"The AI knows nothing about part of a file you attached.","Ask which pages it could read, and ask for the page of each point."],
-      [`<b>Two sets of instructions disagree.</b> Your custom instructions, a project’s instructions and your prompt say different things, so the AI follows one of them.`,"The AI follows one rule and ignores a rule you wrote somewhere else.","Delete the rule from the place where it does not belong."]]},
+    {t:"process", label:"Cause", intro:"Select Start to see each cause, what it looks like in the chat and its fix.", steps:[
+      ["The chat got longer than the context window","The app dropped or shortened early messages.", qrows([["What you see","The AI misses a rule or a file from the start of a long chat."],["The fix","Start a new chat. Paste a handoff note into it."]], true)],
+      ["The rule is in the middle of a long chat","Even when the whole chat fits in the context window, models follow the start and the end of a chat more closely than the middle.", qrows([["What you see","The AI follows some of your earlier rules and skips others."],["The fix","Repeat the rule at the end of your prompt."]], true)],
+      ["A newer message disagrees with an older rule","The AI usually follows what it read most recently.", qrows([["What you see","You asked for 100 words, then pasted a long example. The reply is as long as the example."],["The fix","Repeat the rule in the same prompt as the example."]], true)],
+      ["Memory did not save it",`<b>Memory</b> is a feature that saves a few facts about you between chats. The app chooses what to save, and it saves a short note, not the whole chat.`, qrows([["What you see","The AI uses some facts from past chats, but not the one you need."],["The fix",`Check what memory saved in the app’s settings. ${a(L.directions,"Get AI to Follow Your Directions")} shows where. Put rules you need every time in custom instructions, not memory.`]], true)],
+      ["It is a new chat","Each chat starts empty. The AI does not read your other chats, except for what memory saved.", qrows([["What you see","The AI does not know what you told it yesterday."],["The fix","Put rules you use often in custom instructions or a project."]], true)],
+      ["It never read the whole file","The file was too long, a scanned image, or a type the app cannot open.", qrows([["What you see","The AI knows nothing about part of a file you attached."],["The fix","Ask which pages it could read, and ask for the page of each point."]], true)],
+      ["Two sets of instructions disagree","Your custom instructions, a project’s instructions and your prompt say different things, so the AI follows one of them.", qrows([["What you see","The AI follows one rule and ignores a rule you wrote somewhere else."],["The fix","Delete the rule from the place where it does not belong."]], true)]]},
     {t:"statement", text:"When the AI seems to forget, ask where the information was: early in this chat, in another chat, in a file, or in another set of instructions. The fix depends on where it was."},
     {t:"sort", goal:"At work, you see what went wrong, not why. Practice choosing the first fix to try for six problems.", prompt:"Drag each problem to the fix that works, or select a pile.", piles:["Start a new chat","Repeat the rule in your prompt","Change your saved instructions","Ask what it could read"],
       cards:[["After three hours in one chat, Claude no longer uses the client name you gave it at the start.",0,"The chat got longer than the context window. Paste a handoff note with the client name into the new chat."],
@@ -653,15 +716,15 @@ const LESSONS = [
     {t:"note", html:`<b>Prompt or model?</b> Imagine giving the same prompt and files to a capable new hire. If the new hire would need to ask questions or guess, the prompt is missing something, so rewrite the prompt. If the new hire would get it right and the AI does not, choose a more capable model or more thinking time.`},
     {t:"p", html:`Some apps search the web when a question needs current facts. The app runs the search and lists the sources, and the model still writes the summary. Check the summary against the sources.`},
     {t:"p", html:`A model learned patterns from a very large amount of text, and it writes the words most likely to come next. Nothing in that step checks whether a fact is true. So AI is wrong most often in the same six kinds of answers, and a wrong reply reads just as sure as a right one. You can guard against most of them once, with custom instructions, a project or a connector.`},
-    {t:"table", plain:true, head:["Where AI goes wrong","Set up once","Still up to you"], rows:[
-      [`<b>Sources and quotes.</b> It cites a study, article or quote that does not exist. This is a <b>hallucination</b>: a false statement given as fact that was never true.`,"Turn on web search. Add a custom instruction: link a source for every fact, and say when no source was found.","Open the sources behind the facts a client will rely on."],
-      [`<b>Recent events and today’s date.</b> It gives a fact that was true before its knowledge cutoff.`,`Add a custom instruction: check today’s date, and search for anything that may have changed. ${a(L.date,"Get AI to Use Today’s Date")} shows how.`,"Little. Glance at the dates in the reply when timing matters."],
-      [`<b>Exact numbers.</b> It counts words, adds a column or works out a percent by writing likely digits.`,"Turn on the app’s code or data analysis feature, so the app calculates. Add a custom instruction: calculate, do not estimate.","Check totals that go to a client in Excel."],
-      [`<b>Small or private facts.</b> It learned little or nothing about a client’s staff, a small company or Fredrickson’s own process, so it writes something likely instead.`,"Link OneDrive, SharePoint or Notion with a connector, or keep the client’s files in a project.","Add the source for anything outside those files."],
-      [`<b>Long files and files it cannot read.</b> In a long file, it can skip sections. If you paste part of a file, it can reply as if it read all of it.`,"Add a custom instruction: give the page or section for each point, and say what you could not read.","Compare a few points with the file."],
-      [`<b>Questions that suggest an answer.</b> Ask “Isn’t this the best option?” and the reply usually says yes.`,"Add a custom instruction: name weaknesses, and disagree when the evidence does.","Ask a neutral question. No setting can rewrite your question for you."]]},
+    {t:"accs", hint:"Select each kind of answer to see how to guard against it.", items:[
+      ["Sources and quotes", `<p>It cites a study, article or quote that does not exist. This is a <b>hallucination</b>: a false statement given as fact that was never true.</p>${qrows([["Set up once","Turn on web search. Add a custom instruction: link a source for every fact, and say when no source was found."],["Still up to you","Open the sources behind the facts a client will rely on."]], true)}`],
+      ["Recent events and today’s date", `<p>It gives a fact that was true before its knowledge cutoff.</p>${qrows([["Set up once",`Add a custom instruction: check today’s date, and search for anything that may have changed. ${a(L.date,"Get AI to Use Today’s Date")} shows how.`],["Still up to you","Little. Glance at the dates in the reply when timing matters."]], true)}`],
+      ["Exact numbers", `<p>It counts words, adds a column or works out a percent by writing likely digits.</p>${qrows([["Set up once","Turn on the app’s code or data analysis feature, so the app calculates. Add a custom instruction: calculate, do not estimate."],["Still up to you","Check totals that go to a client in Excel."]], true)}`],
+      ["Small or private facts", `<p>It learned little or nothing about a client’s staff, a small company or Fredrickson’s own process, so it writes something likely instead.</p>${qrows([["Set up once","Link OneDrive, SharePoint or Notion with a connector, or keep the client’s files in a project."],["Still up to you","Add the source for anything outside those files."]], true)}`],
+      ["Long files and files it cannot read", `<p>In a long file, it can skip sections. If you paste part of a file, it can reply as if it read all of it.</p>${qrows([["Set up once","Add a custom instruction: give the page or section for each point, and say what you could not read."],["Still up to you","Compare a few points with the file."]], true)}`],
+      ["Questions that suggest an answer", `<p>Ask “Isn’t this the best option?” and the reply usually says yes.</p>${qrows([["Set up once","Add a custom instruction: name weaknesses, and disagree when the evidence does."],["Still up to you","Ask a neutral question. No setting can rewrite your question for you."]], true)}`]]},
     {t:"note", html:`<b>Easy to mix up.</b> A hallucination and an out-of-date answer need different guards. Ask: was this ever true? If never, the guard is a source for every fact. If it was true before the cutoff, the guard is the date and a web search.`},
-    {t:"howto", title:"Set up: add the fact-check instructions", html:`<p>These instructions guard against the wrong answers in the table. Add them once, and the app follows them in every chat.</p><div class="copybox"><p class="copytext">Fact checks:<br>- Link a source for every fact. If you found no source, say so.<br>- Check today’s date, and search the web for anything that may have changed since your knowledge cutoff.<br>- Calculate numbers with your code or data analysis tool. Do not estimate.<br>- For each point you take from a file, give the page or section. Say what you could not read.<br>- Name the weaknesses in my ideas, and disagree with me when the evidence does.</p><button type="button" class="copybtn">Copy</button></div><ol class="list"><li>Select <b>Copy</b> to copy the text in the box.</li><li>Open the custom instructions box for your app:<ul class="list"><li><b>Copilot:</b> In Copilot Chat, select <b>... Settings and more</b> &gt; <b>Chat settings</b> &gt; <b>Personalization</b> &gt; <b>Custom instructions</b> &gt; <b>Edit instructions</b>.</li><li><b>ChatGPT:</b> Select your name in the lower left &gt; <b>Personalization</b>. Under <b>Custom instructions</b>, select <b>ChatGPT</b>, then select the box. If <b>Enable customization</b> is off, turn it on.</li><li><b>Claude:</b> Select your name in the lower left &gt; <b>Settings</b> &gt; <b>Your Claude</b>, then select the <b>Instructions</b> box.</li></ul></li><li>Paste the text at the end of anything already in the box.</li><li>Save the instructions. In Copilot, select <b>Save instructions</b>. In ChatGPT, select <b>Save</b> in the upper right.</li><li>Start a new chat. The app follows custom instructions in every chat you start.</li></ol><p class="fine">The Copilot steps come from Microsoft’s help page and still need a check in the app. Gemini steps are not in this guide yet.</p>`},
+    {t:"howto", title:"Set up: add the fact-check instructions", html:`<p>These instructions guard against the six kinds of wrong answers above. Add them once, and the app follows them in every chat.</p><div class="copybox"><p class="copytext">Fact checks:<br>- Link a source for every fact. If you found no source, say so.<br>- Check today’s date, and search the web for anything that may have changed since your knowledge cutoff.<br>- Calculate numbers with your code or data analysis tool. Do not estimate.<br>- For each point you take from a file, give the page or section. Say what you could not read.<br>- Name the weaknesses in my ideas, and disagree with me when the evidence does.</p><button type="button" class="copybtn">Copy</button></div><ol class="list"><li>Select <b>Copy</b> to copy the text in the box.</li><li>Open the custom instructions box for your app:<ul class="list"><li><b>Copilot:</b> In Copilot Chat, select <b>... Settings and more</b> &gt; <b>Chat settings</b> &gt; <b>Personalization</b> &gt; <b>Custom instructions</b> &gt; <b>Edit instructions</b>.</li><li><b>ChatGPT:</b> Select your name in the lower left &gt; <b>Personalization</b>. Under <b>Custom instructions</b>, select <b>ChatGPT</b>, then select the box. If <b>Enable customization</b> is off, turn it on.</li><li><b>Claude:</b> Select your name in the lower left &gt; <b>Settings</b> &gt; <b>Your Claude</b>, then select the <b>Instructions</b> box.</li></ul></li><li>Paste the text at the end of anything already in the box.</li><li>Save the instructions. In Copilot, select <b>Save instructions</b>. In ChatGPT, select <b>Save</b> in the upper right.</li><li>Start a new chat. The app follows custom instructions in every chat you start.</li></ol><p class="fine">The Copilot steps come from Microsoft’s help page and still need a check in the app. Gemini steps are not in this guide yet.</p>`},
     {t:"howto", title:"Set up: turn on web search", html:`<p>Web search lets the app find facts newer than its knowledge cutoff and list its sources.</p><ul class="list"><li><b>Copilot:</b> Select <b>Chat settings</b> &gt; <b>Personalization</b> &gt; <b>Advanced</b>, then turn on <b>Web search</b>. If the setting is missing, Fredrickson has turned it off.</li><li><b>ChatGPT:</b> ChatGPT has no setting that keeps search on, and it may search on its own. To make it search, type <b>/</b> in the message box and choose <b>Search</b>. Or type “Search the web and cite current sources” in the prompt.</li><li><b>Claude:</b> In the message box, select <b>+</b> &gt; <b>Web search</b>. A check mark shows that web search is on.</li></ul><p class="fine">The Copilot steps come from Microsoft’s help page and still need a check in the app. Gemini steps are not in this guide yet.</p>`},
     {t:"sort", goal:"Practice finding the cause of a wrong reply, so you change the right thing first.", prompt:"Drag each problem to the change that fixes it, or select a pile.", piles:["Rewrite the prompt","Add or link the file","Turn on web search","Choose a different model"],
       cards:[["You ask, “Help me plan the workshop,” and the reply is generic.",0,"Add the goal, the audience, the length and what you want back."],
@@ -1008,12 +1071,12 @@ const LESSONS = [
     {t:"statement", text:"Tell each client how you used AI on their project."},
     {t:"gate"},
     {t:"h", text:"Part 4. Ask Luke before you use a new AI tool", why:"Parts 1 to 3 cover the three approved apps. This part covers any other AI tool you want to try."},
-    {t:"p", html:`The policy calls this process <b>AI License Management</b>. Luke, the Technology Manager, reviews and approves each AI tool. Follow these steps in order.`},
-    {t:"p", html:`<ol class="list">
-      <li>Spend 15 minutes or less on the tool’s website. Check that the tool is legitimate and safe, stores data in a secure place, does not use your data to train its model, and does not share your data outside that secure place.</li>
-      <li>If the tool passes, you may test it. Use only information that is unrelated to any confidential Fredrickson data or client data.</li>
-      <li>Ask Luke for a full review of the tool.</li>
-      <li>Use the tool only as Luke’s approval allows.</li></ol>`},
+    {t:"p", html:`The policy calls this process <b>AI License Management</b>. Luke, the Technology Manager, reviews and approves each AI tool.`},
+    {t:"process", intro:"Follow four steps, in order.", steps:[
+      ["Check the tool’s website","Spend 15 minutes or less. Check that the tool is legitimate and safe, stores data in a secure place, does not use your data to train its model, and does not share your data outside that secure place."],
+      ["Test the tool with safe information","If the tool passes, you may test it. Use only information that is unrelated to any confidential Fredrickson data or client data."],
+      ["Ask Luke for a full review","Luke reviews the tool and decides how you may use it."],
+      ["Use the tool as Luke approves","Use the tool only as Luke’s approval allows."]]},
     {t:"note", html:`[unconfirmed, needs content: how staff ask Luke for a review, such as an email, a Teams message or a form.]`},
     {t:"p", html:`Luke approves each tool at one of three levels.`},
     {t:"table", plain:true, head:["Approval level","What you may do with the tool"], rows:[
@@ -1061,6 +1124,8 @@ const drawer = document.getElementById("drawer");
 drawer.addEventListener("click", e => { if(e.target === drawer) drawer.close(); }); // select outside the drawer to close it
 const el = (tag, cls, html) => { const e = document.createElement(tag); if(cls) e.className = cls; if(html != null) e.innerHTML = html; return e; };
 let uid = 0;
+// The practice app points out its Next task button once in the whole course: the first time a learner finishes comparing on a task that has another task after it.
+let nextPointed = false;
 // The burger button opens and closes the course outline. Wide screens: the left column, open unless the learner closed it. Phones: a drawer.
 const OUTLINE_KEY = "wwai-outline-closed";
 const wideMQ = matchMedia("(min-width:1100px)");
@@ -1329,6 +1394,21 @@ function renderBlock(b, ctx, seg, n){
     case "practice": return shade(practiceBlock(ctx, seg));
     case "mock": return mockBlock();
     case "tabs": return shade(tabsBlock(b));
+    // App comparison: one question per tab, with the four apps side by side under each question.
+    case "appq": {
+      // Only the app with no paid license gets a marker; the Fredrickson callout above already names the paid apps.
+      const name = a => `<b>${a[0]}</b><span>${a[1]}</span>${a[2] ? "" : `<span class="nolic">No paid license</span>`}`;
+      const tabs = b.tabs.map(t => ({ title:t.title, html:`<dl class="qlist">${b.apps.map((a,i) => `<div class="qrow${(t.hi||[]).includes(i) ? " hi" : ""}"><dt>${name(a)}</dt><dd>${t.cells[i]}</dd></div>`).join("")}</dl>` }));
+      return shade(tabsBlock({tabs, left:true, hint:"Select a question to compare the four apps."}));
+    }
+    // Accordion group: several short items in one box. The first item starts open, so learners see the pattern.
+    case "accs": {
+      const g = el("div","accg");
+      b.items.forEach((it,i) => { const d = el("details","acc"); if(i===0) d.open = true; d.innerHTML = `<summary>${it[0]}</summary><div class="body">${it[1]}</div>`; g.append(d); });
+      if(!b.hint) return shade(g);
+      const w = el("div","stack"); w.append(el("p","tabhint",b.hint), g); return shade(w);
+    }
+    case "pq": return shade(pqBlock(b, ctx, seg));
     case "process": return shade(processBlock(b));
     case "cards": return shade(cardsBlock(b));
     case "kc": return shade(kcBlock(b, ctx, seg));
@@ -1360,7 +1440,7 @@ const LEAVES = {
 const PRACTICE = [
   {app:"chatgpt", others:["You would upload the RFP and your notes again in every chat.", null, "You copy each answer out yourself, so ChatGPT does not need to do steps itself.", "Answers are something people read, not a tool people use."], q:"Over the next six weeks, you will answer questions about one client’s request for proposal (RFP), using the RFP and your notes each time.", choices:["Chat","Projects","Work","Codex"], correct:1,
     right:"Correct. You copy each answer out yourself, and every chat needs the same two files.", wrong:"Not quite. Every chat needs the same RFP and notes, so a project saves you uploading them each time."},
-  {app:"claude", others:["You would paste in eight files and copy parts of the answer back out.", "A project keeps your files ready, but Claude still works only inside the chat. You would upload the eight files yourself, then copy the report into Word.", null, "A report is something people read, not a tool people use."], q:"Eight sets of interview notes are in one folder. You need one findings report in Word.", choices:["Chat","Projects","Cowork","Claude Code"], correct:2,
+  {app:"claude", others:["You would paste in eight files and copy parts of the answer back out.", "A project in Claude chat keeps your files ready, but Claude still works only inside the chat. You would upload the eight files yourself, then copy the report into Word. Cowork has its own projects, which help if you run this task again.", null, "A report is something people read, not a tool people use."], q:"Eight sets of interview notes are in one folder. You need one findings report in Word.", choices:["Chat","Projects","Cowork","Claude Code"], correct:2,
     right:"Correct. Claude has to open eight files and build a document people read.", wrong:"Not quite. In a chat, you would paste in eight files and copy parts of the answer back out. Claude has to open the files and build a document, so use Cowork."},
   {app:"copilot", others:[null, "Researcher builds a researched report. You need a few decisions from one thread.", "Copilot does not need to open several files or do steps itself.", "Analyst finds trends in spreadsheet data. An email thread is text."], q:"You need the decisions from a long email thread, to paste into your notes.", choices:["Copilot Chat","Researcher","Copilot Cowork","Analyst"], correct:0,
     right:"Correct. You paste in the thread and copy the decisions out.", wrong:"Not quite. You paste in the thread and copy the decisions out, so Copilot Chat can do it."},
@@ -1424,6 +1504,18 @@ function appendOthers(fb, b, pick){
   fb.append(ul);
 }
 
+// A set of practice questions that do not count toward the score. Each item uses practiceQ.
+function pqBlock(b, ctx, seg){
+  const state = { seg, done:false }; ctx.interactives.push(state);
+  const w = el("div","stack");
+  w.append(el("h3",null,b.title), el("p",null,b.intro));
+  const qs = [];
+  const check = () => { state.done = qs.every(q => q.done); if(ctx.update) ctx.update(); };
+  b.items.forEach(it => qs.push(practiceQ(it, w, check)));
+  check();
+  return w;
+}
+
 function practiceQ(b, parent, onDone){
   const name = "pq"+(++uid); const st = { done:false };
   const w = el("div","kc");
@@ -1482,7 +1574,15 @@ function tabsBlock(b){
     list.append(btn); panels.push(p);
   });
   function select(i){ [...list.children].forEach((x,j)=>{ x.setAttribute("aria-selected", j===i); x.tabIndex = j===i?0:-1; }); panels.forEach((p,j)=>p.hidden = j!==i); }
-  w.append(list, ...panels); return w;
+  w.append(list, ...panels);
+  w.classList.add("ltabs"); // Every tab block is left-aligned, so tabs never read as column headers.
+  if(b.hint) w.prepend(el("p","tabhint",b.hint));
+  return w;
+}
+
+// Quiet list rows: [label, text] or [label, text, watch-out line].
+function qrows(rows, sm){
+  return `<dl class="qlist${sm ? " sm" : ""}">${rows.map(r => `<div class="qrow"><dt><b>${r[0]}</b></dt><dd>${r[1]}${r[2] ? `<span class="watch">Watch out: ${r[2]}</span>` : ""}</dd></div>`).join("")}</dl>`;
 }
 
 function processBlock(b){
@@ -1494,7 +1594,7 @@ function processBlock(b){
   function draw(){
     [...dots.children].forEach((d,j)=>d.classList.toggle("on", j<=i));
     if(i<0) body.innerHTML = `<p class="stepname">${b.intro}</p>`;
-    else body.innerHTML = `<p class="eyebrow">Step ${i+1} of ${b.steps.length}</p><p class="stepname">${b.steps[i][0]}</p><p>${b.steps[i][1]}</p>`;
+    else body.innerHTML = `<p class="eyebrow">${b.label || "Step"} ${i+1} of ${b.steps.length}</p><p class="stepname">${b.steps[i][0]}</p><p>${b.steps[i][1]}</p>${b.steps[i][2] || ""}`;
     back.disabled = i<0; next.disabled = i>=b.steps.length-1; next.textContent = i<0 ? "Start" : "Next";
   }
   back.addEventListener("click",()=>{ i--; draw(); }); next.addEventListener("click",()=>{ i++; draw(); });
@@ -1736,7 +1836,9 @@ function simBlock(b, ctx, seg){
   const next = el("button","btn",`Next ${unit} →`); next.type = "button";
   nav.append(prev, next);
   prev.addEventListener("click", () => { if(k > 0){ k--; show(); } });
-  next.addEventListener("click", () => { if(k < b.tasks.length - 1){ k++; show(); } });
+  next.addEventListener("click", () => { pointing = false; next.classList.remove("point"); if(k < b.tasks.length - 1){ k++; show(); } });
+  let pointing = false;
+  const pointer = el("p","simnext"); pointer.setAttribute("aria-live","polite");
   count.hidden = hint.hidden = nav.hidden = true;
   const key = el("p","simkey",b.key || ""); key.hidden = !b.key;
   w.append(count, task, win, key, nav);
@@ -1884,6 +1986,13 @@ function simBlock(b, ctx, seg){
       thread.append(hint);
     }
     if(done){ best.innerHTML = `<b>${b.bestLabel || "Best setting for this task"}: ${b.settings[t.best][0]}.</b> ${t.why}`; thread.append(best); }
+    if(done && k < b.tasks.length - 1 && (!nextPointed || pointing)){
+      nextPointed = pointing = true;
+      const u = b.unit || "Task";
+      pointer.innerHTML = `<b>Next:</b> when you’re ready, select <b>Next ${u.toLowerCase()}</b> below the app to try ${u} ${k + 2}.`;
+      thread.append(pointer);
+      next.classList.add("point");
+    }
     state.done = tried.every(x => x.size > 1); ctx.update && ctx.update();
   }
   function choose(i){
