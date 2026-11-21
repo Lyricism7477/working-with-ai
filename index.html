@@ -420,7 +420,8 @@ const L = {
   limits: "https://app.notion.com/p/416417ee1e9b810f8e9fec4091545f55",
   tool: "https://app.notion.com/p/416417ee1e9b8127ba62cadeb37188e2",
   versions: "https://app.notion.com/p/416417ee1e9b81e08c27f1e86b3e21ef",
-  github: "https://app.notion.com/p/416417ee1e9b81d2a0adc629f2adbd1d"
+  github: "https://app.notion.com/p/416417ee1e9b81d2a0adc629f2adbd1d",
+  teams: "https://teams.cloud.microsoft/l/channel/19%3A5cdf03c2d3bf44e384af8531e758435c%40thread.tacv2/Learning%20and%20practicing%20with%20AI%20tools?groupId=2687cae3-e256-4ff6-9286-0e1845d7b0b8"
 };
 const a = (href, text) => `<a href="${href}" target="_blank" rel="noopener">${text}</a>`;
 
@@ -445,9 +446,6 @@ const LESSONS = [
       {q:"You missed a Teams meeting with your project team. You want the decisions and your action items. You have a Copilot license.", choices:["Copilot","ChatGPT","Gemini"], correct:0,
         others:[null, "ChatGPT reads only the files you upload, unless you link Microsoft 365. You would find and upload the transcript first.", "Fredrickson has no paid license for Gemini, so keep Fredrickson information out of it. Your team’s meeting is Fredrickson information."],
         right:"Correct. With a Copilot license, Copilot already reads your Teams meetings, so you upload nothing.", wrong:"Not quite. With a Copilot license, Copilot already reads your Teams meetings, so you upload nothing."},
-      {q:"A client shares eight interview transcripts in a Google Drive folder. You need the themes for a findings report. The client gave permission to use AI.", choices:["Gemini","Claude","Copilot"], correct:1,
-        others:["The files are in Google Drive, but Fredrickson has no paid license for Gemini. On a personal account, Google can train on the chat, and people at Google read a sample of chats. The client’s interviews could reach those people.", null, "Copilot is often chosen for work already in Microsoft 365. These files are in Google Drive, so Copilot has no advantage here."],
-        right:"Correct. Claude is often chosen for long documents and careful writing. Download the transcripts, then upload them to Claude in your work account.", wrong:"Not quite. Claude is often chosen for long documents and careful writing."},
       {q:"You’re drafting a proposal. You want the AI to search the web for the client’s recent news, then make a cover image.", choices:["Claude","ChatGPT","Gemini"], correct:1,
         others:["Claude can search the web and make images, but images are not one of its strengths. ChatGPT is often chosen for images.", null, "Gemini can search and make images, but Fredrickson has no paid license for it. Keep Fredrickson and client information, such as this proposal, out of Gemini."],
         right:"Correct. ChatGPT is often chosen for the most features in one app, such as web search and images.", wrong:"Not quite. ChatGPT is often chosen for the most features in one app, such as web search and images."},
@@ -569,13 +567,10 @@ const LESSONS = [
     {t:"frd", kind:"job", html:`${a(L.tool,"Choose the Right AI Tool for a Task")} has a table for Claude, ChatGPT and Copilot, and a checklist to follow before you start an agent.`},
     {t:"gate"},
     {t:"h", text:"Knowledge Check: apply what you learned"},
-    {t:"p", html:`Answer all five. Your score appears after the last question.`},
+    {t:"p", html:`Answer all four. Your score appears after the last question.`},
     {t:"kc", check:true, others:["Copilot reads your meetings only with a Copilot license. Your work sign-in alone is not enough.", null, "The model answers you, but the app decides what the AI can read. A different model cannot see the meeting either.", "Your Teams meeting is not on the web, so a web search cannot find it."], q:"You open Copilot Chat, with no Copilot license, and ask it to summarize yesterday’s Teams meeting. What happens?",
       choices:["It reads the meeting through your work sign-in.", "It cannot read the meeting until you add the transcript.", "It reads the meeting if you choose a more capable model.", "It finds the meeting with a web search."], correct:1,
       right:"Correct. Without the license, Copilot Chat reads only the web and the files you add.", wrong:"Not quite. Copilot reads your meetings only with a Copilot license. Without one, add the transcript."},
-    {t:"kc", check:true, others:["Copilot is often chosen for work already in Microsoft 365. This PDF is on your computer, not in Microsoft 365, so Copilot has no head start.", "ChatGPT is often chosen for the most features in one app, such as images and voice. This task needs careful reading of a long document.", null, "Gemini is often chosen for work already in Google. This PDF is not in Google. Fredrickson also does not have a paid license for Gemini, so keep client files out of Gemini."], q:"A client’s 90-page request for proposal is saved as a PDF on your computer. You need a careful list of every requirement in it. All four apps can read a PDF you add. Which app do you start in?",
-      choices:["Copilot", "ChatGPT", "Claude", "Gemini"], correct:2,
-      right:"Correct. Every app can read the PDF, so choose by what each does well. Claude is often chosen for long documents and careful writing.", wrong:"Not quite. Every app can read the PDF, so choose by what each does well. Claude is often chosen for long documents and careful writing."},
     {t:"kc", check:true, others:["A short answer can still need long work. The model has to compare three years of data and find a cause.", "The default suits a summary of one file. Finding a cause in three years of data is harder work.", "Reading the numbers is easy. Working out a cause across three years is hard, so the model needs more thinking, not less.", null], q:"You need to explain a drop in enrollment from three years of spreadsheet data. Which setting do you choose?",
       choices:["Less thinking, because the answer is one paragraph", "The app’s default, because the data is in one file", "A smaller model, because the AI only has to read numbers", "More thinking, because the model has to work through long data"], correct:3,
       right:"Correct. Long data and a cause to work out are where thinking time helps.", wrong:"Not quite. The answer may be short, but the work is not. Long data and a cause to work out need more thinking time."},
@@ -585,7 +580,7 @@ const LESSONS = [
     {t:"kc", check:true, others:["You would paste in 200 notes, then move each file yourself.", "More thinking helps the AI decide where each note goes, but in a chat you still move every file yourself.", "A project keeps files ready for your chats. It does not open or move files.", null], q:"You need 200 notes in one folder sorted into subfolders by client. What do you choose?",
       choices:["Chat, because you can paste the notes in.", "Chat with more thinking, because 200 notes take careful sorting.", "A project, because all the notes are in one folder.", "An agent, because the AI has to open and move many files itself."], correct:3,
       right:"Correct. An agent such as Claude Cowork can open and move the files.", wrong:"Not quite. The AI has to open and move 200 files, so you need an agent."},
-    {t:"score", pass:4},
+    {t:"score", pass:3},
     {t:"cards", cards:[
       ["App","The window you sign in to, type in and upload files to, such as Copilot or Claude."],
       ["Model","The AI behind an app that reads your request and answers it. One app can offer several models."],
@@ -606,7 +601,7 @@ const LESSONS = [
       {q:"A client asks: “Why does your team switch between models?”", choices:["“We switch whenever a newer model comes out. The newest model is always the best, so we move to it right away for every task.”", "“Larger models often do better on hard work, such as long documents. Smaller models answer faster and use less of our plan. We match the model to the task.”", "“We use the smallest model we can, to keep costs down. When a reply misses, we fix it by hand instead of using a larger model.”"], correct:1,
         others:["A newer model isn’t always the right choice. The right model depends on the task.", null, "A smaller model saves usage, but it can miss on hard work. Match the model to the task, and choose a larger model when the work is hard."],
         right:"Correct. The answer gives both sides: larger models for harder work, smaller models for speed and usage.", wrong:"Not quite. Match the model to the task: larger for harder work, smaller for speed and usage."}]},
-    {t:"end", html:`You can now choose an app for a task and say why, choose a model and how long it thinks, and choose chat, a project or an agent. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 2 shows how to give the AI what it needs.`}
+    {t:"end", html:`You can now choose an app for a task and say why, choose a model and how long it thinks, and choose chat, a project or an agent. Post a question or something you tried in the ${a(L.teams,"Learning and practicing with AI tools")} channel in Teams. Lesson 2 shows how to give the AI what it needs.`}
   ]
 },
 {
@@ -773,7 +768,7 @@ const LESSONS = [
       ["Memory","A feature that saves a few facts about you between chats. The app chooses what to save."],
       ["Knowledge cutoff","The date the model’s learning stops. The model does not know later events unless it searches or you tell it."],
       ["Hallucination","A false statement the AI gives as fact. It was never true."]]},
-    {t:"end", html:`You can now choose where to put a direction and a file, find the cause when the AI seems to forget, and set up once what you can to prevent wrong answers. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 3 shows how to let an agent do the work.`}
+    {t:"end", html:`You can now choose where to put a direction and a file, find the cause when the AI seems to forget, and set up once what you can to prevent wrong answers. Post a question or something you tried in the ${a(L.teams,"Learning and practicing with AI tools")} channel in Teams. Lesson 3 shows how to let an agent do the work.`}
   ]
 },
 {
@@ -901,7 +896,7 @@ const LESSONS = [
       ["Commit","One saved version of the files in a repository, with a short note about what changed."],
       ["GitHub","A website that stores repositories online and keeps their full history."],
       ["Restore","Return a file or folder to an earlier saved version."]]},
-    {t:"end", html:`You can now tell an agent from a chat, brief an agent, tell an approval prompt from a prompt injection, and check and undo what an agent changed. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 4 shows how to save a task so it runs the same way every time.`}
+    {t:"end", html:`You can now tell an agent from a chat, brief an agent, tell an approval prompt from a prompt injection, and check and undo what an agent changed. Post a question or something you tried in the ${a(L.teams,"Learning and practicing with AI tools")} channel in Teams. Lesson 4 shows how to save a task so it runs the same way every time.`}
   ]
 },
 {
@@ -1004,7 +999,7 @@ const LESSONS = [
       ["Skill","A saved set of instructions an agent loads for one kind of task, such as building a job aid."],
       ["Plugin","An add-on you install that gives an AI tool new commands, skills or connectors."],
       ["Scheduled task","A saved prompt that an app runs at the times you set, without you starting it."]]},
-    {t:"end", html:`You can now save a method as a skill, choose when a plugin is better than a skill, and choose when to schedule a task. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}. Lesson 5 shows the Fredrickson rules for using AI at work.`}
+    {t:"end", html:`You can now save a method as a skill, choose when a plugin is better than a skill, and choose when to schedule a task. Post a question or something you tried in the ${a(L.teams,"Learning and practicing with AI tools")} channel in Teams. Lesson 5 shows the Fredrickson rules for using AI at work.`}
   ]
 },
 /* Lesson 5: DRAFT, Nov 20, 2026. Holds no client names, client data or client samples.
@@ -1104,7 +1099,7 @@ const LESSONS = [
       ["Work account","An AI account the company set up, which a company contract covers."],
       ["Your own account","An AI account you pay for or sign up for yourself. It is not approved for client content."],
       ["Client content","Anything that comes from a client or describes the client’s business, such as documents, data, names and call notes."]]},
-    {t:"end", html:`You can now decide where you may add client content, tell a client how you used AI, and take the first step before you use a new AI tool. That finishes the course. Look up any term in the ${a(L.glossary,"Complete AI Glossary")}.`}
+    {t:"end", html:`You can now decide where you may add client content, tell a client how you used AI, and take the first step before you use a new AI tool. That finishes the course. Post a question or something you tried in the ${a(L.teams,"Learning and practicing with AI tools")} channel in Teams.`}
   ]
 }
 ];
@@ -1610,6 +1605,7 @@ function cardsBlock(b){
   const w = el("div","stack");
   w.append(el("h2",null,"Match each definition to its term"));
   w.append(el("p",null,"Read each definition. Choose the term it describes."));
+  w.append(el("p",null,`Every term here is also in the ${a(L.glossary,"Complete AI Glossary")} in Notion, so you can look up any term later.`));
   const card = el("div","kc"); w.append(card);
   const entry = (t, d) => `<dl class="termdef"><dt>${t}</dt><dd>${d}</dd></dl>`;
   let order, k, score;
