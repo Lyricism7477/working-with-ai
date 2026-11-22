@@ -251,22 +251,27 @@ textarea.write{font:inherit;color:var(--ink);background:var(--bg);border:1.5px s
 .ltabs .panel>p:first-child{margin-top:0}
 /* Quiet list: a label on the left, the text on the right, thin lines between rows. Stacks on a phone. */
 .qlist{margin:0;padding:0}
-/* App comparison: one table on a wide screen; on a phone, one block per app with its name once. */
-.appstack{display:none}
-.appstack section{padding:18px 0 0}
-.appstack section:first-child{padding-top:0}
-.appstack h3{margin:0;font-size:18px;color:var(--brand-ink)}
-.appof{margin:2px 0 4px;font-size:15px;color:var(--muted)}
-.appof .nolic{color:var(--bad);font-weight:700}
-table.appgrid{width:100%;border-collapse:collapse;font-size:16px;line-height:1.5;table-layout:fixed}
-table.appgrid th,table.appgrid td{text-align:left;vertical-align:top;padding:12px 12px 12px 0;border-top:1px solid var(--line);border-bottom:0;letter-spacing:0;text-transform:none;font-size:16px;color:var(--ink);font-weight:400}
-table.appgrid thead th,table.appgrid thead td{border-top:0;padding-top:0}
-table.appgrid thead th b{display:block;font-size:17px;color:var(--brand-ink)}
-table.appgrid thead th span{display:block;font-size:14px;font-weight:400;color:var(--muted)}
-table.appgrid thead th .nolic{color:var(--bad);font-weight:700}
-table.appgrid tbody th{width:130px;font-size:15px;font-weight:700;color:var(--brand-ink)}
-table.appgrid td.hi{font-weight:700;color:var(--brand-ink)}
-@media (max-width:600px){table.appgrid{display:none}.appstack{display:block}}
+/* App comparison: questions down the left, apps across the top, alternating row shading. */
+.appt{border:1px solid var(--line);border-radius:12px;background:var(--bg);box-shadow:var(--shadow);padding:8px;overflow:hidden}
+.appt table{table-layout:fixed;font-size:15px;line-height:1.5}
+.appt th,.appt td{padding:12px 10px;border:0;vertical-align:top;letter-spacing:0;text-transform:none;color:var(--ink)}
+.appt thead th{font-family:var(--font-head);font-size:17px;font-weight:700}
+.appt thead td{width:27%}
+.appt tbody th{font-size:15px;font-weight:700}
+.appt tbody tr.open>td:nth-child(even){background:var(--surface)}
+.appt tbody th,.appt tbody td{border-top:1px solid var(--line)}
+.appt tbody tr:not(.open) .ans{display:none}
+.appt tbody th button{all:unset;cursor:pointer;display:flex;gap:8px;align-items:flex-start;color:var(--link);font-weight:700}
+.appt tbody th button::before{content:"+";font-size:20px;line-height:1.1;width:14px;flex:none;color:var(--accent);font-weight:800}
+.appt tbody th button:focus-visible{outline:2px solid var(--link);outline-offset:3px;border-radius:4px}
+.appt tbody tr.open th button::before{content:"−"}
+.appt tbody tr:not(.open){cursor:pointer}
+@media (max-width:600px){.appt{padding:4px}.appt thead{display:none}.appt table,.appt tbody,.appt tr,.appt th,.appt td{display:block;width:auto}
+  .appt tbody tr{padding:6px 0;border-top:1px solid var(--line)}.appt tbody tr:first-child{border-top:0}
+  .appt tbody tr.open>td:nth-child(even){background:none}.appt tbody th,.appt tbody td{border-top:0}
+  .appt tbody th{padding:8px 12px 4px;font-size:16px}.appt td{padding:4px 12px}
+  .appt td::before{content:attr(data-app);display:block;font-weight:700;font-size:14px;color:var(--muted)}
+  .appt tbody tr:not(.open) td{display:none}}
 .qrow{display:grid;grid-template-columns:150px minmax(0,1fr);gap:4px 20px;align-items:baseline;padding:14px 0;border-top:1px solid var(--line)}
 .qrow:first-child{border-top:0;padding-top:4px}
 .qrow dt{margin:0}
@@ -486,11 +491,11 @@ const LESSONS = [
     {t:"p", html:`Copilot, ChatGPT, Claude and Gemini are each an <b>app</b>: the window you sign in to, type in and upload files to. All four can write, summarize and answer questions, so most tasks can start in any of them. They differ in three ways: what each app can read with no setup, what each one does well, and how each company handles your chats.`},
     {t:"frd", html:`Fredrickson has paid licenses for Copilot, ChatGPT and Claude. Fredrickson does not have a paid license for Gemini, so keep Fredrickson and client information out of Gemini. This course still covers Gemini, so you can talk with clients about it. Lesson 5 covers the rules for the three paid apps.`},
     {t:"appq", apps:[["Copilot","Microsoft",true],["ChatGPT","OpenAI",true],["Claude","Anthropic",true],["Gemini","Google",false]], tabs:[
-      {title:"Often chosen for", cells:["Work already in Microsoft 365, such as a missed meeting or a long email thread","The most features in one app, such as images, voice and web search","Long documents, careful writing and tasks that use files on your computer","Work already in Google, such as a Google Doc a client shares"]},
-      {title:"Built into", hi:[0], cells:["Word, Excel, PowerPoint, Outlook and Teams","Nothing. It’s its own app and website.","Nothing. It’s its own app and website.","Gmail, Google Docs and Google Drive"]},
-      {title:"Reads work files", hi:[0], cells:["Your email, meetings and files, with a Copilot license","Only files you upload, or Microsoft 365 if you link it","Only files you upload, or Microsoft 365 if you link it","Only files you upload, or Microsoft 365 if you link it"]},
-      {title:"Trains on chats", cells:["No, when you sign in with your Fredrickson account","Yes on personal plans, until you turn it off in Data controls","Only if you allow it in Privacy settings. Anthropic then keeps those chats up to five years.","Yes on personal accounts while Keep Activity is on, which is the default. People at Google read a sample of chats."]}]},
-    {t:"p", html:`Copilot reads your email, meetings and files only with a <b>paid Microsoft 365 Copilot license</b>. Without one, Copilot Chat reads the web and the files you add, like the other apps.`},
+      {title:"When should I use it?", cells:["Work already in Microsoft 365, such as a missed meeting or a long email thread","The most features in one app, such as images, voice and web search","Long documents, careful writing and tasks that use files on your computer","Work already in Google, such as a Google Doc a client shares"]},
+      {title:"What is it connected to?", cells:["Word, Excel, PowerPoint, Outlook and Teams*","Nothing. It’s its own app and website.","Nothing. It’s its own app and website.","Gmail, Google Docs and Google Drive"]},
+      {title:"How does it read files?", cells:["Your email, meetings and files*","Only files you upload, or Microsoft 365 if you link it","Only files you upload, or Microsoft 365 if you link it","Only files you upload, or Microsoft 365 if you link it"]},
+      {title:"Does it train on my chats?", cells:["No, when you sign in with your Fredrickson account","Yes on personal plans, until you turn it off in Data controls","Only if you allow it in Privacy settings. Anthropic then keeps those chats up to five years.","Yes on personal accounts while Keep Activity is on, which is the default. People at Google read a sample of chats."]}]},
+    {t:"p", html:`*Copilot reads your email, meetings and files only with a <b>paid Microsoft 365 Copilot license</b>. Without one, Copilot Chat reads the web and the files you add, like the other apps.`},
     {t:"pq", title:"Practice: choose the app", intro:"Choose the app that fits each task best. These questions do not count toward your score.", items:[
       {q:"You missed a Teams meeting with your project team. You want the decisions and your action items. You have a Copilot license.", choices:["Copilot","ChatGPT","Gemini"], correct:0,
         others:[null, "ChatGPT reads only the files you upload, unless you link Microsoft 365. You would find and upload the transcript first.", "Fredrickson has no paid license for Gemini, so keep Fredrickson information out of it. Your team’s meeting is Fredrickson information."],
@@ -1493,14 +1498,19 @@ function renderBlock(b, ctx, seg, n){
     case "practice": return shade(practiceBlock(ctx, seg));
     case "mock": return mockBlock();
     case "tabs": return shade(tabsBlock(b));
-    // App comparison: one table, each app named once at the top of its column. On a phone, one block per app.
+    // App comparison: questions down the left, apps across the top. On a phone, each answer shows its app name.
+    // Every row starts collapsed: a closed row keeps its question in the left column, with the answer cells empty and unshaded. Opening a row shows its four answers, every other column shaded.
     case "appq": {
-      const lic = a => a[2] ? "" : `<span class="nolic">No paid license</span>`;
-      const hi = (t,i) => (t.hi||[]).includes(i);
-      const w = el("div","stack");
-      w.innerHTML = `<table class="appgrid"><thead><tr><td></td>${b.apps.map(a => `<th scope="col"><b>${a[0]}</b><span>${a[1]}</span>${lic(a)}</th>`).join("")}</tr></thead><tbody>${b.tabs.map(t => `<tr><th scope="row">${t.title}</th>${b.apps.map((a,i) => `<td${hi(t,i) ? ' class="hi"' : ""}>${t.cells[i]}</td>`).join("")}</tr>`).join("")}</tbody></table>`
-        + `<div class="appstack">${b.apps.map((a,i) => `<section><h3>${a[0]}</h3><p class="appof">${a[1]}${a[2] ? "" : ` · ${lic(a)}`}</p><dl class="qlist sm">${b.tabs.map(t => `<div class="qrow${hi(t,i) ? " hi" : ""}"><dt><b>${t.title}</b></dt><dd>${t.cells[i]}</dd></div>`).join("")}</dl></section>`).join("")}</div>`;
-      return shade(w);
+      const w = el("div","appt");
+      w.innerHTML = `<table><thead><tr><td></td>${b.apps.map(a => `<th scope="col">${a[0]}</th>`).join("")}</tr></thead><tbody>${b.tabs.map(t => `<tr><th scope="row"><button type="button" aria-expanded="false">${t.title}</button></th>${b.apps.map((a,i) => `<td data-app="${a[0]}"><span class="ans">${t.cells[i]}</span></td>`).join("")}</tr>`).join("")}</tbody></table>`;
+      w.querySelectorAll("tbody tr").forEach(tr => {
+        const btn = tr.querySelector("button");
+        const toggle = () => { const open = !tr.classList.contains("open"); tr.classList.toggle("open", open); btn.setAttribute("aria-expanded", open); };
+        btn.addEventListener("click", e => { e.stopPropagation(); toggle(); });
+        tr.addEventListener("click", () => { if(!tr.classList.contains("open")) toggle(); });
+      });
+      const s = el("div","stack"); s.append(el("p","tabhint","Click a question to see each app’s answer."), w);
+      return shade(s);
     }
     // Accordion group: several short items in one box. The first item starts open, so learners see the pattern.
     case "accs": {
