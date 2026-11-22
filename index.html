@@ -63,6 +63,8 @@ p{margin:0}
 .lrow .t{font-weight:700;font-size:18px;color:var(--brand-ink)}
 .lrow .b{font-size:16px;margin-top:2px}
 .lrow .m{font-size:15px;color:var(--muted)}
+.lrow .pm{font-size:15px;color:var(--muted)}
+.lrow.pre:not(.done) .num{background:var(--bg);border:2px solid var(--brand)}
 .lrow.done .num{background:var(--good);color:var(--on-brand)}
 .chip{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:3px 10px;border-radius:20px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
 .chip.ok{border-color:var(--good);color:var(--good);background:var(--good-soft)}
@@ -109,7 +111,7 @@ p{margin:0}
 .howto>summary{cursor:pointer;padding:10px 14px;font-weight:700;color:var(--brand-ink)}
 .howto>.body{padding:0 14px 12px}
 .copybox{background:var(--accent-soft);border-radius:8px;padding:12px 14px;margin:10px 0}
-.howto .fine{font-size:14px;color:var(--muted)}
+.fine{font-size:14px;color:var(--muted)}
 .copybox .copytext{margin:0 0 8px;white-space:pre-wrap}
 .copybtn{font:inherit;font-size:14px;font-weight:700;padding:6px 14px;border-radius:6px;border:1px solid var(--accent);background:var(--bg);color:var(--brand-ink);cursor:pointer}
 .models table{table-layout:fixed}.models thead th:first-child{width:24%}
@@ -480,7 +482,7 @@ const LESSONS = [
         ["Gemini Pro","A question with several steps, such as comparing three vendor quotes.","Older than the Gemini 4 models."],
         ["Gemini 4 Argon","Most work, such as a first draft of a report from several files in Drive. It’s Google’s top model for writing, analysis and coding.","Only on the AI Pro and AI Ultra plans."],
         ["Gemini 4 Carbon","The hardest reasoning and math, such as a budget forecast with several scenarios.","Only on AI Ultra. It uses more of your limit than Argon, and Google says Argon suits most work better."]])}`}]},
-    {t:"howto", title:"Set up: have Claude tell you when to switch models", html:`<p>Add this text to your <b>custom instructions</b>: saved directions Claude follows in every chat you start. Lesson 2 covers them in full. Claude then tells you when a task needs Opus, and when Sonnet would do.</p><div class="copybox"><p class="copytext">Model choice: If a task is long or hard, such as a long document, a plan with many steps or a detailed analysis, and you are not Opus, say so in one line at the start of your reply and suggest I switch to Opus. If a task is short and routine and you are Opus or Fable, suggest Sonnet in one line. Suggest each switch once per chat.</p><button type="button" class="copybtn">Copy</button></div><ol class="list"><li>Select <b>Copy</b> to copy the text in the box.</li><li>In Claude, select your name in the lower left &gt; <b>Settings</b> &gt; <b>Your Claude</b>, then select the <b>Instructions</b> box.</li><li>Paste the text at the end of anything already in the box.</li><li>Start a new chat. Claude follows custom instructions in every chat you start.</li></ol>`},
+    {t:"p", html:`If you pasted the Claude model instructions in <a href="#setup">Before you start</a>, Claude tells you when a task needs Opus, and when Sonnet would do.`},
     {t:"sim", label:"Model", bestLabel:"Best model for this task", prompt:"Try each task in the practice app. Every reply is real: we sent each task to Claude’s Haiku, Sonnet and Opus, and the thinking setting stayed on Low for all three. Change the model, and the app answers again.",
       key:"In Claude, these are Haiku, Sonnet and Opus. In ChatGPT, GPT-6 is the everyday model and GPT-6 Pro is the larger one. In Copilot, choose Claude Sonnet for everyday work and Claude Opus for larger work.",
       settings:[["Smaller model","Low"],["Everyday model","Medium"],["Larger model","High"]], start:1,
@@ -603,7 +605,10 @@ const LESSONS = [
       {title:"Prompt", html:`<p>Applies to one message.</p><ul class="list"><li>“Summarize this email in three bullets,” with the email pasted below.</li><li>“This summary is for the client’s CFO, so lead with cost.”</li></ul>`},
       {title:"Custom instructions", html:`<p>Apply to every chat you start.</p><ul class="list"><li>“I am an instructional designer. My audience is usually HR leaders.”</li><li>“Check today’s date before you answer.”</li></ul>`}]},
     {t:"note", html:`<b>Easy to mix up.</b> Ask: do I want this in every chat, or only now? Every chat: custom instructions. Only now: the prompt. A rule for only one client goes in a project, which Part 2 covers.`},
-    {t:"howto", title:"Set up: write your first custom instructions", html:`<p>Start with who you are, who reads your work and how you want replies written.</p><div class="copybox"><p class="copytext">About me: I work at Fredrickson Learning. My job title is [job title]. My audience is usually [who reads my work].<br>- When I give a length, format or number of items, match it exactly.<br>- If two of my rules conflict, or a rule is unclear, ask me one question before you write anything.<br>- Write [how it should sound, for example: plainly and directly]. Use [how to lay it out, for example: short paragraphs, with bullets only for lists].</p><button type="button" class="copybtn">Copy</button></div><ol class="list"><li>Select <b>Copy</b> to copy the text in the box.</li><li>Open the custom instructions box for your app:<ul class="list"><li><b>Copilot:</b> In Copilot Chat, select <b>... Settings and more</b> &gt; <b>Chat settings</b> &gt; <b>Personalization</b> &gt; <b>Custom instructions</b> &gt; <b>Edit instructions</b>.</li><li><b>ChatGPT:</b> Select your name in the lower left &gt; <b>Personalization</b>. Under <b>Custom instructions</b>, select <b>ChatGPT</b>, then select the box. If <b>Enable customization</b> is off, turn it on.</li><li><b>Claude:</b> Select your name in the lower left &gt; <b>Settings</b> &gt; <b>Your Claude</b>, then select the <b>Instructions</b> box.</li></ul></li><li>Paste the text at the end of anything already in the box. Replace each part in brackets, such as [job title], with your own details.</li><li>Save the instructions. In Copilot, select <b>Save instructions</b>. In ChatGPT, select <b>Save</b> in the upper right.</li><li>Start a new chat. The app follows custom instructions in every chat you start.</li></ol><p class="fine">The Copilot steps come from Microsoft’s help page and still need a check in the app. Gemini steps are not in this guide yet.</p><p><b>Example of a finished first line:</b> “About me: I work at Fredrickson Learning. My job title is instructional designer. My audience is usually training managers at our client companies.”</p>`},
+    {t:"p", html:`A good prompt holds four parts: the <b>goal</b>, the <b>reader</b>, the <b>format</b> and an <b>example</b> when you have one. Your custom instructions already say who you are, so the prompt holds what changes with each task.`},
+    {t:"tabs", tabs:[
+      {title:"Prompt missing parts", html:`<p>“Help me plan the workshop.”</p><p>The AI has to guess the goal, the audience, the length and what you want back, so the reply is generic.</p>`},
+      {title:"Prompt with all four parts", html:`<p>“Plan a 90-minute workshop on giving feedback. <b>Goal:</b> new managers leave able to give one piece of feedback this week. <b>Reader:</b> the HR lead who approves the agenda. <b>Format:</b> a table with the time, the activity and the materials. <b>Example:</b> the attached agenda from last year’s workshop.”</p>`}]},
     {t:"sim", prompt:"Find the right place for each rule.", unit:"Rule", label:"Put the rule in",
       steps:["Select Start. The app runs two chats, with the rule typed into your first prompt.","Select Custom instructions at the top of the app. The app runs the same two chats with the rule saved instead.","Compare the replies in the new chat, then go to the next rule."], settings:[["Prompt"],["Custom instructions"]], start:0, ruleIn:1,
       bestLabel:"Best place for this rule",
@@ -697,8 +702,7 @@ const LESSONS = [
       ["Long files and files it cannot read", `<p>In a long file, it can skip sections. If you paste part of a file, it can reply as if it read all of it.</p>${qrows([["Set up once","Add a custom instruction: give the page or section for each point, and say what you could not read."],["Still up to you","Compare a few points with the file."]], true)}`],
       ["Questions that suggest an answer", `<p>Ask “Isn’t this the best option?” and the reply usually says yes.</p>${qrows([["Set up once","Add a custom instruction: name weaknesses, and disagree when the evidence does."],["Still up to you","Ask a neutral question. No setting can rewrite your question for you."]], true)}`]]},
     {t:"note", html:`<b>Easy to mix up.</b> A hallucination and an out-of-date answer need different guards. Ask: was this ever true? If never, the guard is a source for every fact. If it was true before the cutoff, the guard is the date and a web search.`},
-    {t:"howto", title:"Set up: add the fact-check instructions", html:`<p>These instructions guard against the six kinds of wrong answers above. Add them once, and the app follows them in every chat.</p><div class="copybox"><p class="copytext">Fact checks:<br>- Link a source for every fact. If you found no source, say so.<br>- Check today’s date, and search the web for anything that may have changed since your knowledge cutoff.<br>- Calculate numbers with your code or data analysis tool. Do not estimate.<br>- For each point you take from a file, give the page or section. Say what you could not read.<br>- Name the weaknesses in my ideas, and disagree with me when the evidence does.</p><button type="button" class="copybtn">Copy</button></div><ol class="list"><li>Select <b>Copy</b> to copy the text in the box.</li><li>Open the custom instructions box for your app:<ul class="list"><li><b>Copilot:</b> In Copilot Chat, select <b>... Settings and more</b> &gt; <b>Chat settings</b> &gt; <b>Personalization</b> &gt; <b>Custom instructions</b> &gt; <b>Edit instructions</b>.</li><li><b>ChatGPT:</b> Select your name in the lower left &gt; <b>Personalization</b>. Under <b>Custom instructions</b>, select <b>ChatGPT</b>, then select the box. If <b>Enable customization</b> is off, turn it on.</li><li><b>Claude:</b> Select your name in the lower left &gt; <b>Settings</b> &gt; <b>Your Claude</b>, then select the <b>Instructions</b> box.</li></ul></li><li>Paste the text at the end of anything already in the box.</li><li>Save the instructions. In Copilot, select <b>Save instructions</b>. In ChatGPT, select <b>Save</b> in the upper right.</li><li>Start a new chat. The app follows custom instructions in every chat you start.</li></ol><p class="fine">The Copilot steps come from Microsoft’s help page and still need a check in the app. Gemini steps are not in this guide yet.</p>`},
-    {t:"howto", title:"Set up: turn on web search", html:`<p>Web search lets the app find facts newer than its knowledge cutoff and list its sources.</p><ul class="list"><li><b>Copilot:</b> Select <b>Chat settings</b> &gt; <b>Personalization</b> &gt; <b>Advanced</b>, then turn on <b>Web search</b>. If the setting is missing, Fredrickson has turned it off.</li><li><b>ChatGPT:</b> ChatGPT has no setting that keeps search on, and it may search on its own. To make it search, type <b>/</b> in the message box and choose <b>Search</b>. Or type “Search the web and cite current sources” in the prompt.</li><li><b>Claude:</b> In the message box, select <b>+</b> &gt; <b>Web search</b>. A check mark shows that web search is on.</li></ul><p class="fine">The Copilot steps come from Microsoft’s help page and still need a check in the app. Gemini steps are not in this guide yet.</p>`},
+    {t:"p", html:`The custom instructions, web search and code settings from <a href="#setup">Before you start</a> set up most of these guards. The “Still up to you” row in each kind is what no setting does for you.`},
     {t:"sort", goal:"Practice finding the cause of a wrong reply, so you change the right thing first.", prompt:"Drag each problem to the change that fixes it, or select a pile.", piles:["Rewrite the prompt","Add or link the file","Turn on web search","Choose a different model"],
       cards:[["You ask, “Help me plan the workshop,” and the reply is generic.",0,"Add the goal, the audience, the length and what you want back."],
         ["Claude cannot see a client email in your Outlook inbox.",1,"Copilot reads Outlook, or you can link Microsoft 365 to Claude. A different model cannot read the email either."],
@@ -1077,10 +1081,45 @@ const LESSONS = [
       ["Work account","An AI account the company set up, which a company contract covers."],
       ["Your own account","An AI account you pay for or sign up for yourself. It is not approved for client content."],
       ["Client content","Anything that comes from a client or describes the client’s business, such as documents, data, names and call notes."]]},
+    {t:"note", html:`<p><b>Keep five habits that no setting does for you.</b></p><ul class="list"><li>Choose the app that fits the task. Lesson 1 shows how.</li><li>Start a new chat for each task. Lesson 2 Part 3 shows why.</li><li>Ask a neutral question, not one that suggests the answer.</li><li>Check the sources before anyone relies on a fact.</li><li>Get the client’s permission before you add client content.</li></ul>`},
     {t:"end", html:`You can now decide where you may add client content, tell a client how you used AI, and take the first step before you use a new AI tool. That finishes the course. Post a question or something you tried in the ${a(L.teams,"Learning and practicing with AI tools")} channel in Teams.`}
   ]
 }
 ];
+
+/* ---------- Before you start: the shared setup, done once before Lesson 1 ---------- */
+const OPEN_CI = `<ul class="list"><li><b>Copilot:</b> In Copilot Chat, select <b>... Settings and more</b> &gt; <b>Chat settings</b> &gt; <b>Personalization</b> &gt; <b>Custom instructions</b> &gt; <b>Edit instructions</b>.</li><li><b>ChatGPT:</b> Select your name in the lower left &gt; <b>Personalization</b>. Under <b>Custom instructions</b>, select <b>ChatGPT</b>, then select the box. If <b>Enable customization</b> is off, turn it on.</li><li><b>Claude:</b> Select your name in the lower left &gt; <b>Settings</b> &gt; <b>Your Claude</b>, then select the <b>Instructions</b> box.</li></ul>`;
+const SETUP = {
+  title: "Set up your AI apps once", min: 8,
+  builds: "Sign in to your work account, add one set of custom instructions, and turn on web search and code.",
+  intro: "Working well with AI takes some new habits and better judgment. Those are the hardest things to learn, and what the rest of the course will focus on.<br><br>Before getting started, make one-time adjustments to your AI set-up that make some best practices automatic. This will reduce the number of new habits you need to learn.",
+  blocks: [
+    {t:"h", text:"Step 1. Sign in to your work account"},
+    {t:"p", html:`Use Claude, ChatGPT or Microsoft 365 Copilot, and sign in to your Fredrickson <b>work account</b>: the account the company set up, which a company contract covers. An account you pay for or sign up for yourself is not a work account, even when you sign up with your work email.`},
+    {t:"p", html:`<b>Done when:</b> you’re signed in to an account Fredrickson set up for you. Lesson 5 covers the rules for work accounts.`},
+    {t:"h", text:"Step 2. Paste one set of custom instructions"},
+    {t:"p", html:`<b>Custom instructions</b> are saved directions the AI follows in every chat you start. You write them once in the app’s settings. Each box below says who you are and how you want replies written. Each box also adds fact checks that guard against the answers AI gets wrong most often.`},
+    {t:"p", html:`<b>ChatGPT or Copilot:</b> copy this box.`},
+    {t:"html", html:`<div class="copybox"><p class="copytext">About me: I work at Fredrickson Learning. My job title is [job title]. My audience is usually [who reads my work].<br>- When I give a length, format or number of items, match it exactly.<br>- If two of my rules conflict, or a rule is unclear, ask me one question before you write anything.<br>- Write [how it should sound, for example: plainly and directly]. Use [how to lay it out, for example: short paragraphs, with bullets only for lists].<br><br>Fact checks:<br>- Link a source for every fact. If you found no source, say so.<br>- Check today’s date, and search the web for anything that may have changed since your knowledge cutoff.<br>- Calculate numbers with your code or data analysis tool. Do not estimate.<br>- For each point you take from a file, give the page or section. Say what you could not read.<br>- Name the weaknesses in my ideas, and disagree with me when the evidence does.</p><button type="button" class="copybtn">Copy</button></div>`},
+    {t:"p", html:`<b>Claude:</b> copy this shorter box. Fredrickson plans a Starter Pack: shared instructions and skills turned on for every Claude account. The Starter Pack will cover sources, today’s date, clear writing and model choice, so your own box can stay short.`},
+    {t:"html", html:`<div class="copybox"><p class="copytext">About me: I work at Fredrickson Learning. My job title is [job title]. My audience is usually [who reads my work].<br>- When I give a length, format or number of items, match it exactly.<br>- If two of my rules conflict, or a rule is unclear, ask me one question before you write anything.<br><br>Fact checks:<br>- Search the web for anything that may have changed since your knowledge cutoff.<br>- Calculate numbers with your code tool. Do not estimate.<br>- For each point you take from a file, give the page or section. Say what you could not read.<br>- Name the weaknesses in my ideas, and disagree with me when the evidence does.</p><button type="button" class="copybtn">Copy</button></div>`},
+    {t:"p", html:`<b>Until Fredrickson tells you the Starter Pack is on,</b> paste the ChatGPT and Copilot box in Claude instead, and add this model choice box. Claude then tells you when a task needs a more capable model, and when a faster one would do. Lesson 1 Part 2 covers models.`},
+    {t:"html", html:`<div class="copybox"><p class="copytext">Model choice: If a task is long or hard, such as a long document, a plan with many steps or a detailed analysis, and you are not Opus, say so in one line at the start of your reply and suggest I switch to Opus. If a task is short and routine and you are Opus or Fable, suggest Sonnet in one line. Suggest each switch once per chat.</p><button type="button" class="copybtn">Copy</button></div>`},
+    {t:"html", html:`<p><b>To add your box:</b></p><ol class="list"><li>Select <b>Copy</b> to copy the text in the box.</li><li>Open the custom instructions box for your app:${OPEN_CI}</li><li>Paste the text at the end of anything already in the box. Replace each part in brackets, such as [job title], with your own details.</li><li>Save the instructions. In Copilot, select <b>Save instructions</b>. In ChatGPT, select <b>Save</b> in the upper right.</li></ol>
+      <p><b>Example of a finished first line:</b> “About me: I work at Fredrickson Learning. My job title is instructional designer. My audience is usually training managers at our client companies.”</p>`},
+    {t:"p", html:`<b>Done when:</b> you start a new chat and ask, “What do you know about how I want you to work?” The reply names your job title and at least one rule from your box.`},
+    {t:"html", html:`<p class="fine">The Copilot steps come from Microsoft’s help page and still need a check in the app. Gemini steps are not in this guide yet.</p>`},
+    {t:"h", text:"Step 3. Turn on web search"},
+    {t:"p", html:`Web search lets the app find facts newer than what the model learned, and list its sources.`},
+    {t:"html", html:`<ul class="list"><li><b>Copilot:</b> Select <b>Chat settings</b> &gt; <b>Personalization</b> &gt; <b>Advanced</b>, then turn on <b>Web search</b>. If the setting is missing, Fredrickson has turned it off.</li><li><b>ChatGPT:</b> ChatGPT has no setting that keeps search on, and it may search on its own. To make it search, type <b>/</b> in the message box and choose <b>Search</b>. Or type “Search the web and cite current sources” in the prompt.</li><li><b>Claude:</b> In the message box, select <b>+</b> &gt; <b>Web search</b>. A check mark shows that web search is on.</li></ul>`},
+    {t:"p", html:`<b>Done when:</b> you ask, “What changed in Microsoft 365 this week?” The reply lists sources with links.`},
+    {t:"h", text:"Step 4. Let the app run code to calculate"},
+    {t:"p", html:`A model writes likely digits instead of calculating. When the app runs code, the numbers come from a real calculation.`},
+    {t:"html", html:`<ul class="list"><li><b>Claude:</b> Select your name in the lower left &gt; <b>Settings</b> &gt; <b>Capabilities</b>, then turn on <b>Code execution and file creation</b>.</li><li><b>ChatGPT</b> and <b>Copilot:</b> No setting is needed. Type “Calculate this with code” in the prompt.</li></ul><p class="fine">The ChatGPT and Copilot steps still need a check in the app.</p>`},
+    {t:"p", html:`<b>Done when:</b> you ask, “How many days are there from January 15 to March 3, 2027? Calculate with code.” The reply shows the code it ran and the answer, 47 days.`},
+    {t:"setupend", html:`You’re set up. Lesson 1 shows you how to choose the app, the model and where in the app to work.`}
+  ]
+};
 
 /* ---------- storage (per-viewer convenience only) ---------- */
 const KEY = "wwai-done";
@@ -1089,6 +1128,9 @@ function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); 
 const PART_KEY = "wwai-part";
 function getParts(){ try { return JSON.parse(localStorage.getItem(PART_KEY) || "{}"); } catch(e){ return {}; } }
 function setPart(n, k){ try { const p = getParts(); if(!(p[n] >= k)){ p[n] = k; localStorage.setItem(PART_KEY, JSON.stringify(p)); } } catch(e){} }
+const SETUP_KEY = "wwai-setup";
+function setupDone(){ try { return localStorage.getItem(SETUP_KEY) === "1"; } catch(e){ return false; } }
+function setSetupDone(){ try { localStorage.setItem(SETUP_KEY, "1"); } catch(e){} }
 function setDone(i){ try { const d = getDone(); if(!d.includes(i)){ d.push(i); localStorage.setItem(KEY, JSON.stringify(d)); } } catch(e){} }
 
 const app = document.getElementById("app");
@@ -1130,8 +1172,15 @@ function renderHome(){
   wrap.append(el("div","stack hero",`<h1>Learn the AI terms and choose the right AI tool</h1>
     <p class="lede">This course takes about <b>an hour</b>. You learn to talk about AI with confidence, choose the right app and model, catch and fix wrong AI answers, and follow Fredrickson’s AI rules.</p>`));
   wrap.append(el("div","stack",`<h2>Each lesson uses what the lesson before it taught</h2>
-    <p>The lessons follow the order you work in.</p><ul class="list"><li><b>Lesson 1</b> shows you how to choose the app, the model and where in the app to work.</li><li><b>Lesson 2</b> shows you where to put your directions and files, and how to fix a wrong reply.</li><li><b>Lesson 3</b> shows you how an agent works, and how to brief it, keep it safe and check its work.</li><li><b>Lesson 4</b> shows you how to save a method as a skill, share it as a plugin and run a task on a schedule.</li><li><b>Lesson 5</b> shows you which AI apps Fredrickson approves, when you may add client content, what you tell a client and how to ask for a new tool.</li></ul>`));
+    <p>The lessons follow the order you work in. Before Lesson 1, set up your apps once.</p><ul class="list"><li><b>Lesson 1</b> shows you how to choose the app, the model and where in the app to work.</li><li><b>Lesson 2</b> shows you where to put your directions and files, and how to fix a wrong reply.</li><li><b>Lesson 3</b> shows you how an agent works, and how to brief it, keep it safe and check its work.</li><li><b>Lesson 4</b> shows you how to save a method as a skill, share it as a plugin and run a task on a schedule.</li><li><b>Lesson 5</b> shows you which AI apps Fredrickson approves, when you may add client content, what you tell a client and how to ask for a new tool.</li></ul>`));
+  const sDone = setupDone();
+  const pre = el("li","lrow pre"+(sDone?" done":""));
+  pre.append(el("span","num",sDone?"✓":""));
+  pre.append(el("div","txt",`<span class="t">Before you start: ${SETUP.title}</span><span class="b">${SETUP.builds}</span><span class="pm">${SETUP.min} minutes.</span>`));
+  const pgo = el("div","go"); const pb = el("a","btn"+(sDone?" ghost":""), sDone?"Review":"Start"); pb.href = "#setup";
+  pb.setAttribute("aria-label",(sDone?"Review":"Start")+" the setup"); pgo.append(pb); pre.append(pgo);
   const list = el("ol","lessons");
+  list.append(pre);
   LESSONS.forEach((ls,i)=>{
     const isDone = done.includes(i);
     const li = el("li","lrow"+(isDone?" done":""));
@@ -1259,6 +1308,34 @@ function renderLesson(n){
   window.scrollTo(0,0);
 }
 
+/* ---------- before you start ---------- */
+// One page, no parts or Continue buttons: four short setup steps, each with a "Done when" check.
+function renderSetup(){
+  window.onscroll = null;
+  document.title = "Before you start: " + SETUP.title;
+  const ctx = { interactives: [], checks: [], scoreEls: [] };
+  const root = el("div");
+  const head = el("div","lesson-head");
+  const hero = el("div","stack hero");
+  hero.append(el("p","eyebrow",`Before you start, ${SETUP.min} minutes`));
+  const h1 = el("h1",null,SETUP.title); hero.append(h1); head.append(hero);
+  const steps = SETUP.blocks.filter(b => b.t === "h").map(b => `<li>${b.text.replace(/^Step \d+\. /,"")}</li>`).join("");
+  const frame = el("div","frame");
+  frame.append(el("p",null,SETUP.intro), el("div",null,`<p><b>In this setup</b></p><ol class="list">${steps}</ol>`));
+  head.append(frame); root.append(head);
+  const s = el("section","seg");
+  SETUP.blocks.forEach(b => { const node = renderBlock(b, ctx, 0, -2); if(node) s.append(node); });
+  root.append(s);
+  const {where, wlabel} = mountOutline(-2, [], () => {});
+  const showWhere = () => { const past = h1.getBoundingClientRect().bottom < 60; wlabel.textContent = past ? "Before you start" : ""; where.classList.toggle("on", past); };
+  root.prepend(where);
+  app.replaceChildren(root);
+  syncBurger();
+  window.onscroll = () => requestAnimationFrame(showWhere);
+  window.scrollTo(0,0);
+  showWhere();
+}
+
 /* ---------- course outline ---------- */
 // Builds the side menu and the phone drawer, and returns the "you are here" bar that holds the burger button.
 // The course home uses it too (n = -1), so the menu shows on every page.
@@ -1300,11 +1377,17 @@ function buildOutline(n, heads, jump){
   // The course title is the link to the course home, as in Rise.
   const home = el("a","otitle","AI Basics Course");
   home.href = "#home"; home.setAttribute("aria-label","AI Basics Course home");
-  if(n < 0) home.setAttribute("aria-current","page");
+  if(n === -1) home.setAttribute("aria-current","page");
   nav.append(home);
   const pct = Math.round(LESSONS.filter((_, i) => done.includes(i)).length / LESSONS.length * 100);
   nav.append(el("div","oprog",`<span class="oprog-t">${pct}% complete</span><div class="oprog-bar" aria-hidden="true"><span style="width:${pct}%"></span></div>`));
   const list = el("ol","olessons");
+  const sDone = setupDone();
+  const sli = el("li","olesson pre" + (n === -2 ? " cur" : "") + (sDone ? " done" : ""));
+  const slink = el("a", null, `<span class="num" aria-hidden="true"></span><span>Before you start${sDone ? '<span class="vh">, finished</span>' : ""}</span><span class="oring" aria-hidden="true">${sDone ? CHECK_SVG : ""}</span>`);
+  slink.href = "#setup";
+  if(n === -2) slink.setAttribute("aria-current","page");
+  sli.append(slink); list.append(sli);
   LESSONS.forEach((ls, i) => {
     const isDone = done.includes(i);
     const li = el("li","olesson" + (i === n ? " cur" : "") + (isDone ? " done" : ""));
@@ -1390,6 +1473,15 @@ function renderBlock(b, ctx, seg, n){
     case "write": return shade(writeBlock(b, ctx, seg));
     case "score": { const s = el("div","score"); s.hidden = true; ctx.scoreEls.push({s, pass:b.pass}); return s; }
     case "end": return endBlock(b, n);
+    case "html": return el("div","stack",b.html);
+    case "setupend": {
+      const w = el("div","stack"); w.append(el("p",null,b.html));
+      const f = el("div","finish");
+      const btn = el("button","btn","Finish and start Lesson 1"); btn.type = "button";
+      btn.addEventListener("click",()=>{ setSetupDone(); location.hash = "#lesson-1"; });
+      const home = el("a","btn ghost","All lessons"); home.href = "#home";
+      f.append(btn, home); w.append(f); return w;
+    }
   }
 }
 
@@ -1996,6 +2088,7 @@ function endBlock(b, n){
 function route(){
   const m = /^#lesson-(\d+)$/.exec(location.hash);
   const i = m ? +m[1]-1 : -1;
+  if(location.hash === "#setup"){ renderSetup(); return; }
   if(i >= 0 && LESSONS[i] && !LESSONS[i].soon) renderLesson(i); else renderHome();
 }
 // After a new lesson or the home page loads, move focus to its title so screen readers announce the new page.
