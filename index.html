@@ -21,13 +21,13 @@
   --brand:#136977; --brand-ink:#8ECFDC; --band:#0B3D45; --band-ink:#ffffff; --on-brand:#ffffff;
   --focus:#54B7CA; --field-line:#5E8A93; --btn-edge:#54B7CA; --accent:#54B7CA; --accent-soft:#123F47; --on-accent:#0B3D45; --band-kicker:#8ECFDC; --callout:#3A3108; --callout-ink:#FFF8DD; --callout-label:#FEDF5D; --keypoint:#FFBE57; --rule:#FF9C01; --eyebrow:#8ECFDC;
   --good:#ACD357; --good-soft:#26380A; --bad:#FFBE57; --bad-soft:#3D2A08;
-  --shadow:0 1px 3px rgba(0,0,0,.4); color-scheme:dark}}
+  --shadow:0 1px 3px rgba(0,0,0,.4); --art-blend:normal; --art-radius:16px; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0F2427; --surface:#20383E; --ink:#EEF4F4; --muted:#ADD8DF; --line:#34525A;
   --brand:#136977; --brand-ink:#8ECFDC; --band:#0B3D45; --band-ink:#ffffff; --on-brand:#ffffff;
   --focus:#54B7CA; --field-line:#5E8A93; --btn-edge:#54B7CA; --accent:#54B7CA; --accent-soft:#123F47; --on-accent:#0B3D45; --band-kicker:#8ECFDC; --callout:#3A3108; --callout-ink:#FFF8DD; --callout-label:#FEDF5D; --keypoint:#FFBE57; --rule:#FF9C01; --eyebrow:#8ECFDC;
   --good:#ACD357; --good-soft:#26380A; --bad:#FFBE57; --bad-soft:#3D2A08;
-  --shadow:0 1px 3px rgba(0,0,0,.4); color-scheme:dark}
+  --shadow:0 1px 3px rgba(0,0,0,.4); --art-blend:normal; --art-radius:16px; color-scheme:dark}
 
 body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.6}
 h1,h2,h3,.wordmark,.lrow .t{font-family:var(--font-head)}
@@ -77,6 +77,11 @@ p{margin:0}
 
 /* Title band, as in Rise: a light teal band behind the page title that runs to the edges of the page. */
 .hero{background:var(--surface);padding:8px 0 36px;box-shadow:0 0 0 100vmax var(--surface);clip-path:inset(-100vmax -100vmax 0 -100vmax);margin-bottom:12px}
+/* Title art: one illustration beside the title on wide screens, under it on phones. Multiply drops the image's white background into the band. */
+.hero.has-art{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,300px);column-gap:32px;row-gap:14px;align-content:center}
+.hero.has-art>*{grid-column:1}
+.hero.has-art>.hero-art{grid-column:2;grid-row:1/span 4;align-self:center;width:100%;height:auto;mix-blend-mode:var(--art-blend,multiply);border-radius:var(--art-radius,0)}
+@media (max-width:700px){.hero.has-art{display:flex}.hero.has-art>.hero-art{width:min(100%,340px);align-self:center;margin-top:4px}}
 /* Over the title band, the top bar takes the band's color, so the title scrolls under it instead of showing through. */
 .where:not(.on){background:var(--surface)}
 /* Interactive blocks: a shaded band edge to edge, with the white card on it. Bands next to each other join into one. */
@@ -1237,6 +1242,11 @@ function addIcons(root){
     e.classList.add("ico"); e.insertAdjacentHTML("afterbegin", icon(k));
   }));
 }
+// One illustration in each title band. It only decorates, so screen readers skip it.
+function heroArt(hero, name){
+  const i = el("img","hero-art"); i.src = `img/${name}.webp`; i.alt = ""; i.width = 1200; i.height = 800; i.decoding = "async";
+  hero.classList.add("has-art"); hero.append(i);
+}
 function burgerButton(label){ const b = el("button","burger",BURGER_SVG); b.type = "button"; b.setAttribute("aria-label",label); return b; }
 function syncBurger(){
   const b = document.querySelector(".where .burger"); if(!b) return;
@@ -1292,6 +1302,7 @@ function renderHome(){
   syncBurger();
   // Once the title band scrolls away, the top bar turns white to match the page.
   const hero = wrap.querySelector(".hero");
+  heroArt(hero, "home");
   const showWhere = () => where.classList.toggle("on", hero.getBoundingClientRect().bottom < where.offsetHeight);
   window.onscroll = () => requestAnimationFrame(showWhere);
   window.scrollTo(0,0);
@@ -1307,7 +1318,7 @@ function renderLesson(n){
   const head = el("div","lesson-head");
   const hero = el("div","stack hero");
   hero.append(el("p","eyebrow",`Lesson ${n+1} of ${LESSONS.length}, ${ls.min} minutes`));
-  const h1 = el("h1",null,ls.title); hero.append(h1); head.append(hero);
+  const h1 = el("h1",null,ls.title); hero.append(h1); heroArt(hero, `lesson-${n+1}`); head.append(hero);
   const frame = el("div","frame");
   frame.append(el("p",null,ls.intro));
   if(ls.fits) frame.append(el("p","fits",`<b>${n === 0 ? "" : ""}</b> ${ls.fits}`));
@@ -1409,7 +1420,7 @@ function renderSetup(){
   const head = el("div","lesson-head");
   const hero = el("div","stack hero");
   hero.append(el("p","eyebrow",`Before you start, ${SETUP.min} minutes`));
-  const h1 = el("h1",null,SETUP.title); hero.append(h1); head.append(hero);
+  const h1 = el("h1",null,SETUP.title); hero.append(h1); heroArt(hero, "setup"); head.append(hero);
   const steps = SETUP.blocks.filter(b => b.t === "h").map(b => `<li>${b.text.replace(/^Step \d+\. /,"")}</li>`).join("");
   const frame = el("div","frame");
   frame.append(el("p",null,SETUP.intro), el("div",null,`<p><b>In this setup</b></p><ol class="list">${steps}</ol>`));
