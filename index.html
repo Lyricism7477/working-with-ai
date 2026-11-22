@@ -106,7 +106,9 @@ p{margin:0}
 .frd,.howto{border-top:5px solid;border-image:linear-gradient(90deg,#FF9C01 0 20%,#FDCF0A 20% 40%,#81BD00 40% 60%,#1B92A5 60% 80%,#54B7CA 80% 100%) 1;background:var(--surface)}
 .frd{padding:14px 18px}
 .frd-label{margin:0 0 4px;font-size:12px;letter-spacing:.8px;text-transform:uppercase;font-weight:800;color:var(--eyebrow)}
-.howto{margin-top:14px;border-radius:0}
+.ico{display:flex;align-items:center;gap:7px}
+.icon{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+h2.ico{gap:10px}h2 .icon{width:26px;height:26px}.howto{margin-top:14px;border-radius:0}
 .howto .copybox{background:var(--bg)}
 .howto>summary{cursor:pointer;padding:10px 14px;font-weight:700;color:var(--brand-ink)}
 .howto>.body{padding:0 14px 12px}
@@ -371,6 +373,23 @@ details.acc .body{padding:0 18px 16px 48px}
 .score .big{font-size:26px;font-weight:800;color:var(--brand-ink)}
 .finish{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 
+/* Memory match: every card holds both faces in one grid cell, so a card never changes size when it flips.
+   Teal = a card to click. Green = a found pair. Marigold = not a match. */
+.mmgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));grid-auto-rows:1fr;gap:10px}
+.mmcard{all:unset;box-sizing:border-box;display:grid;cursor:pointer;border:1.5px solid var(--link);border-radius:10px;background:var(--accent-soft);padding:12px;font-size:14.5px;line-height:1.45;color:var(--ink);text-align:left}
+.mmcard>span{grid-area:1/1}
+.mmcard .back{align-self:center;justify-self:center;font-weight:800;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--link)}
+.mmcard .front{visibility:hidden}
+.mmcard .front b{display:block;font-size:16px}
+.mmcard.up{background:var(--bg);border-width:2px}
+.mmcard.up .back{visibility:hidden}.mmcard.up .front{visibility:visible}
+.mmcard.found{border-color:var(--good);background:var(--good-soft);cursor:default}
+.mmcard.miss{border-color:var(--bad);background:var(--bad-soft)}
+.mmcard:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.mmstat{font-size:15px;color:var(--muted);margin:0}
+.mmfb:empty{display:none}
+@media (max-width:560px){.mmgrid{grid-template-columns:1fr 1fr;gap:8px}.mmcard{padding:10px;font-size:13.5px;line-height:1.4}.mmcard .front b{font-size:15px}.mmcard .back{font-size:12px;letter-spacing:.5px}}
+
 @media (prefers-reduced-motion:reduce){.card.shake{animation:none}}
 
 /* Course outline: a fixed left column on wide screens, a drawer from the Contents button on phones. */
@@ -601,8 +620,7 @@ const LESSONS = [
         others:[null, "Thinking time helps with counts, math and step-by-step checks. A larger model often does better with many rules and long documents.", "The reply already missed, so a smaller model would likely miss by more."],
         right:"Correct. The reply skipped rules and lost detail from long documents, so choose a larger model.", wrong:"Not quite. The reply skipped rules and lost detail from long documents, so choose a larger model."}]},
     {t:"statement", text:"A larger model often handles harder work better, such as many rules at once or a long document. More thinking gives the same model time to work a problem through, step by step."},
-    {t:"p", html:`<b>Let the AI help you choose.</b>`},
-    {t:"p", html:`Use any of these four ways to choose the model and the thinking setting. The first three work in every app.`},
+    {t:"p", html:`<b>Let the AI help you choose.</b> Use any of these four ways to choose the model and the thinking setting. The first three work in every app.`},
     {t:"table", head:["Way","What to do"], rows:[
       ["Ask about the task","Ask: “Before you answer, tell me whether this task needs careful step-by-step reasoning or a quick answer.” Ask about the task, not about model names. A model knows little about models released after it was trained."],
       ["Save an instruction","Add a saved instruction: “If a task needs more thinking time than this setting gives, say so before you answer.”"],
@@ -1195,6 +1213,30 @@ const wideMQ = matchMedia("(min-width:1100px)");
 try { if(localStorage.getItem(OUTLINE_KEY) === "1") document.body.classList.add("outline-closed"); } catch(e){}
 const BURGER_SVG = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>`;
 const CHECK_SVG = `<svg viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="M2.5 6.2l2.3 2.3 4.7-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`;
+// Six icons, one per kind of block. Each sits beside its label and never stands alone. Emily drew them (Nov 22, 2026).
+const ICONS = {
+  practice: '<path d="m5.1 18.9 1.1-4.2 9.2-9.2a2.1 2.1 0 0 1 3 3l-9.2 9.2-4.1 1.2Z"/><path d="m13.5 7.4 3.1 3.1"/><path d="M12.4 19.2h6.3"/>',
+  try: '<path d="M10 4.5H6.5A2.5 2.5 0 0 0 4 7v10.5A2.5 2.5 0 0 0 6.5 20h10.3a2.5 2.5 0 0 0 2.5-2.5V14"/><path d="M13.4 4.5H20v6.6"/><path d="M10.5 14 20 4.5"/>',
+  check: '<path d="M8.5 5H7a2.5 2.5 0 0 0-2.5 2.5V18A2.5 2.5 0 0 0 7 20.5h10a2.5 2.5 0 0 0 2.5-2.5V7.5A2.5 2.5 0 0 0 17 5h-1.5"/><rect x="8.5" y="3.5" width="7" height="3.6" rx="1.3"/><path d="m8.6 13.6 2.6 2.6 4.5-4.7"/>',
+  terms: '<path d="M12 7C9.7 5.3 6.8 4.9 3.5 5.5v13c3.2-.6 6.2-.2 8.5 1.6"/><path d="M12 7c2.3-1.7 5.2-2.1 8.5-1.5v13c-3.2-.6-6.2-.2-8.5 1.6"/><path d="M12 7v13.1"/>',
+  fred: '<path d="M12 3.5 19.5 6v5.4c0 4.7-2.6 7.5-7.5 9.1-4.9-1.6-7.5-4.4-7.5-9.1V6L12 3.5Z"/><path d="m8.8 12 2.1 2.1 4.4-4.4"/>',
+  job: '<path d="M6.5 3.5h7.2l5.8 5.8v9.2a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z"/><path d="M13.7 3.5v5.8h5.8"/><path d="M8.2 13.5h7.6M8.2 17h5.2"/>'
+};
+const icon = k => `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${ICONS[k]}</svg>`;
+const ICON_RULES = [
+  [".eyebrow", /^Practice/, "practice"],
+  [".eyebrow", /^Try it$/, "try"],
+  ["h2", /^Knowledge Check/, "check"],
+  ["h2", /^Match each term/, "terms"],
+  [".frd-label", /^At Fredrickson$/, "fred"],
+  [".frd-label", /^Job aid$/, "job"]
+];
+function addIcons(root){
+  ICON_RULES.forEach(([sel, re, k]) => root.querySelectorAll(sel).forEach(e => {
+    if(e.classList.contains("ico") || !re.test(e.textContent.trim())) return;
+    e.classList.add("ico"); e.insertAdjacentHTML("afterbegin", icon(k));
+  }));
+}
 function burgerButton(label){ const b = el("button","burger",BURGER_SVG); b.type = "button"; b.setAttribute("aria-label",label); return b; }
 function syncBurger(){
   const b = document.querySelector(".where .burger"); if(!b) return;
@@ -1346,6 +1388,7 @@ function renderLesson(n){
     wlabel.textContent = m ? `${lessonLabel}, Part ${m[1]} of ${nParts}: ${m[2]}` : `${lessonLabel}: ${cur.textContent}`;
     where.classList.add("on");
   };
+  addIcons(root);
   root.prepend(where);
   app.replaceChildren(root);
   syncBurger();
@@ -1720,64 +1763,82 @@ function processBlock(b){
   draw(); w.append(dots, body, nav); return w;
 }
 
-// Term review: one definition at a time; the learner chooses the term it describes from up to four choices.
-// Feedback explains every answer by showing what the other term means. A full list stays below for reference.
+// Term review as memory match: cards lie face down, half terms and half definitions. The learner flips two at a time.
+// A found pair stays face up. A miss stays up, with a note on what the term means, until the next click turns both back.
+// Lessons with more than six terms play in two short rounds. No timer and no score that counts. A full list stays below.
 function cardsBlock(b){
-  const name = "terms"+(++uid);
   const terms = b.cards;
   const shuffle = a => { const c = a.slice(); for(let i=c.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [c[i],c[j]]=[c[j],c[i]]; } return c; };
+  const words = ["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve"];
+  const num = n => words[n] || n;
+  const nRounds = Math.ceil(terms.length / 6);
   const w = el("div","stack");
-  w.append(el("h2",null,"Match each definition to its term"));
-  w.append(el("p",null,"Read each definition. Choose the term it describes."));
-  w.append(el("p",null,`Every term here is also in the ${a(L.glossary,"Complete AI Glossary")} in Notion, so you can look up any term later.`));
+  w.append(el("h2",null,"Match each term to its definition"));
+  w.append(el("p",null,`Flip two cards at a time: one term and one definition. Find all ${num(terms.length)} pairs from this lesson${nRounds > 1 ? `, in ${num(nRounds)} rounds` : ""}.`));
   const card = el("div","kc"); w.append(card);
   const entry = (t, d) => `<dl class="termdef"><dt>${t}</dt><dd>${d}</dd></dl>`;
-  let order, k, score;
-  function start(){ order = shuffle(terms.map((_,i)=>i)); k = 0; score = 0; ask(); }
-  function ask(){
-    const ti = order[k];
-    const others = shuffle(terms.map((_,i)=>i).filter(i => i !== ti)).slice(0, 3);
-    const choices = shuffle([ti, ...others]);
-    card.replaceChildren();
-    card.append(el("p","eyebrow",`Definition ${k+1} of ${terms.length}`));
-    const q = el("p","q",terms[ti][1]); q.id = `${name}-q${k}`; q.tabIndex = -1; card.append(q);
-    const fs = el("div","opts"); fs.setAttribute("role","radiogroup"); fs.setAttribute("aria-labelledby", q.id);
-    const labels = choices.map((c,i)=>{
-      const lab = el("label","opt"); const inp = document.createElement("input");
-      inp.type="radio"; inp.name=`${name}-${k}`; inp.value=c; inp.id=`${name}-${k}-${i}`;
-      lab.append(inp, el("span",null,terms[c][0])); fs.append(lab); return {lab, inp, c};
-    });
-    const submit = el("button","btn","Submit"); submit.type="button"; submit.disabled = true;
-    const fb = el("div","fb"); fb.hidden = true; fb.setAttribute("aria-live","polite");
-    fs.addEventListener("change",()=>{ submit.disabled = false; });
-    submit.addEventListener("click",()=>{
-      const pick = labels.find(x=>x.inp.checked); if(!pick) return;
-      const ok = pick.c === ti; if(ok) score++;
-      labels.forEach(x=>{ x.inp.disabled = true; if(x.c===ti) x.lab.classList.add("right"); else if(x===pick) x.lab.classList.add("wrong"); });
-      const other = ok ? others[0] : pick.c;
-      fb.hidden = false; fb.className = "fb "+(ok?"ok":"no");
-      fb.innerHTML = (ok ? `<p><b>Correct.</b> This definition describes ${terms[ti][0]}.</p><p class="why-head">Another choice means something else:</p>`
-                         : `<p><b>Not quite.</b> This definition describes ${terms[ti][0]}.</p><p class="why-head">The term you chose means something else:</p>`)
-                  + entry(terms[other][0], terms[other][1]);
-      const last = k === terms.length - 1;
-      const next = el("button","btn", last ? "See your result" : "Next definition"); next.type = "button";
-      next.addEventListener("click",()=>{ if(last) finish(); else { k++; ask(); card.querySelector(".q").focus(); } });
-      submit.replaceWith(next); next.focus({preventScroll:true});
-    });
-    card.append(fs, submit, fb);
+  let rounds, r, tries, totalTries;
+  function start(){
+    const order = shuffle(terms.map((_,i)=>i)), size = Math.ceil(terms.length / nRounds);
+    rounds = []; for(let i=0;i<order.length;i+=size) rounds.push(order.slice(i, i+size));
+    r = 0; totalTries = 0; play();
   }
-  function finish(){
+  function play(){
+    const set = rounds[r]; tries = 0;
+    let found = 0, first = null, miss = null;
     card.replaceChildren();
-    const msg = score === terms.length ? `You matched all ${terms.length} definitions.` : `You matched ${score} of ${terms.length} definitions.`;
-    const p = el("p","q",msg); p.tabIndex = -1; card.append(p);
-    if(score < terms.length) card.append(el("p",null,"Start again to practice the ones you missed. The order changes each time."));
-    const again = el("button","btn ghost","Start again"); again.type = "button";
-    again.addEventListener("click",()=>{ start(); card.querySelector(".q").focus(); });
-    card.append(again); p.focus();
+    if(nRounds > 1) card.append(el("p","eyebrow",`Round ${r+1} of ${nRounds}`));
+    const stat = el("p","mmstat"); card.append(stat);
+    const showStat = () => { stat.textContent = `Pairs found: ${found} of ${set.length}. Tries: ${tries}.`; };
+    const grid = el("div","mmgrid"); card.append(grid);
+    const fb = el("div","fb mmfb"); fb.setAttribute("aria-live","polite"); card.append(fb);
+    const say = (cls, html) => { fb.className = "fb mmfb " + cls; fb.innerHTML = html; };
+    const cards = shuffle(set.flatMap(ti => [{ti, kind:"term"}, {ti, kind:"def"}]));
+    const label = c => c.el.classList.contains("up") ? (c.kind === "term" ? `Term: ${terms[c.ti][0]}` : `Definition: ${terms[c.ti][1]}`) : `${c.kind === "term" ? "Term" : "Definition"} card, face down`;
+    const turn = (c, up) => { c.el.classList.toggle("up", up); c.el.setAttribute("aria-label", label(c)); };
+    cards.forEach(c => {
+      c.el = el("button","mmcard"); c.el.type = "button";
+      c.el.innerHTML = `<span class="back" aria-hidden="true">${c.kind === "term" ? "Term" : "Definition"}</span><span class="front" aria-hidden="true">${c.kind === "term" ? `<b>${terms[c.ti][0]}</b>` : terms[c.ti][1]}</span>`;
+      turn(c, false);
+      c.el.addEventListener("click", () => flip(c));
+      grid.append(c.el);
+    });
+    function flip(c){
+      if(c.found) return;
+      if(miss){ miss.forEach(m => { m.el.classList.remove("miss"); turn(m, false); }); miss = null; say("", ""); }
+      if(c === first || c.el.classList.contains("up")) return;
+      turn(c, true);
+      if(!first){ first = c; return; }
+      const a = first, z = c; first = null; tries++; totalTries++;
+      if(a.kind === z.kind){
+        [a,z].forEach(m => m.el.classList.add("miss")); miss = [a,z];
+        say("no", `<p><b>Not a match.</b> Both cards are ${a.kind === "term" ? "terms" : "definitions"}. Choose one term and one definition.</p>`);
+      } else if(a.ti === z.ti){
+        [a,z].forEach(m => { m.found = true; m.el.classList.add("found"); m.el.setAttribute("aria-disabled","true"); });
+        found++;
+        say("ok", `<p><b>Match.</b> That is the definition of ${terms[a.ti][0]}.</p>`);
+      } else {
+        [a,z].forEach(m => m.el.classList.add("miss")); miss = [a,z];
+        const t = a.kind === "term" ? a : z;
+        say("no", `<p><b>Not a match.</b> Here is what the term means:</p>` + entry(terms[t.ti][0], terms[t.ti][1]));
+      }
+      showStat();
+      if(found === set.length) done();
+    }
+    function done(){
+      const last = r === rounds.length - 1;
+      const all = last && nRounds > 1 ? ` That makes all ${num(terms.length)} terms in ${totalTries} tries.` : "";
+      say("ok", `<p><b>You found all ${num(set.length)} pairs in ${tries} tries.</b>${all}</p>`);
+      const btn = el("button", last ? "btn ghost" : "btn", last ? "Play again" : `Next round`); btn.type = "button";
+      btn.addEventListener("click", () => { if(last) start(); else { r++; play(); } card.querySelector(".mmcard").focus(); });
+      card.append(btn); btn.focus({preventScroll:true});
+    }
+    showStat();
   }
   const all = el("details","acc");
   all.innerHTML = `<summary>See all ${terms.length} terms and definitions</summary><div class="body">${terms.map(([t,d])=>entry(t,d)).join("")}</div>`;
   w.append(all);
+  w.append(el("p",null,`Look up more terms in the ${a(L.glossary,"Complete AI Glossary")} in Notion.`));
   start();
   return w;
 }
