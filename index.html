@@ -251,6 +251,22 @@ textarea.write{font:inherit;color:var(--ink);background:var(--bg);border:1.5px s
 .ltabs .panel>p:first-child{margin-top:0}
 /* Quiet list: a label on the left, the text on the right, thin lines between rows. Stacks on a phone. */
 .qlist{margin:0;padding:0}
+/* App comparison: one table on a wide screen; on a phone, one block per app with its name once. */
+.appstack{display:none}
+.appstack section{padding:18px 0 0}
+.appstack section:first-child{padding-top:0}
+.appstack h3{margin:0;font-size:18px;color:var(--brand-ink)}
+.appof{margin:2px 0 4px;font-size:15px;color:var(--muted)}
+.appof .nolic{color:var(--bad);font-weight:700}
+table.appgrid{width:100%;border-collapse:collapse;font-size:16px;line-height:1.5;table-layout:fixed}
+table.appgrid th,table.appgrid td{text-align:left;vertical-align:top;padding:12px 12px 12px 0;border-top:1px solid var(--line);border-bottom:0;letter-spacing:0;text-transform:none;font-size:16px;color:var(--ink);font-weight:400}
+table.appgrid thead th,table.appgrid thead td{border-top:0;padding-top:0}
+table.appgrid thead th b{display:block;font-size:17px;color:var(--brand-ink)}
+table.appgrid thead th span{display:block;font-size:14px;font-weight:400;color:var(--muted)}
+table.appgrid thead th .nolic{color:var(--bad);font-weight:700}
+table.appgrid tbody th{width:130px;font-size:15px;font-weight:700;color:var(--brand-ink)}
+table.appgrid td.hi{font-weight:700;color:var(--brand-ink)}
+@media (max-width:600px){table.appgrid{display:none}.appstack{display:block}}
 .qrow{display:grid;grid-template-columns:150px minmax(0,1fr);gap:4px 20px;align-items:baseline;padding:14px 0;border-top:1px solid var(--line)}
 .qrow:first-child{border-top:0;padding-top:4px}
 .qrow dt{margin:0}
@@ -403,6 +419,37 @@ dialog.drawer::backdrop{background:rgba(11,61,69,.5)}
 section.seg h2{scroll-margin-top:64px}
 section.seg h2:focus{outline:none}
 .fb .why-head{margin-top:8px;font-weight:600}
+/* Color jobs (Nov 22, 2026): each color has one job, everywhere. Teal = you can click it. Tangerine = your turn. Green = right or done. Marigold = not quite or a caution. Diagram colors = one per idea. */
+:root{--link:#136977;--turn:#FF9C01;--turn-ink:#6B4200;--brand-ink:#20383E;--eyebrow:#597075;--bad:#6A5704;--bad-soft:#FFF8DD;--note-line:#D6E0DF;
+  --c-chat:#8AA04A;--c-chat-soft:#F6FAEA;--c-proj:#E08109;--c-proj-soft:#FBEDDD;--c-agent:#B8AE3A;--c-agent-soft:#FFFDE7}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--link:#8ECFDC;--turn:#FFBE57;--turn-ink:#FFBE57;--brand-ink:#EEF4F4;--eyebrow:#ADD8DF;--bad:#FEDF5D;--bad-soft:#3A3108;--note-line:#34525A;
+  --c-chat-soft:#2A3214;--c-proj-soft:#3A2504;--c-agent-soft:#33300F}}
+:root[data-theme="dark"]{--link:#8ECFDC;--turn:#FFBE57;--turn-ink:#FFBE57;--brand-ink:#EEF4F4;--eyebrow:#ADD8DF;--bad:#FEDF5D;--bad-soft:#3A3108;--note-line:#34525A;
+  --c-chat-soft:#2A3214;--c-proj-soft:#3A2504;--c-agent-soft:#33300F}
+/* 1. Teal means "you can click this." Headings and labels go Deep Ink; only controls keep teal. */
+a,.otitle:hover,.howto>summary,details.acc>summary,.btn.ghost,.copybtn,.burger,.tab[aria-selected="true"],.oparts button[aria-current],.olesson.cur .num,.pile .pn{color:var(--link)}
+.tab[aria-selected="true"]{border-bottom-color:var(--link)}
+.scenario,.goal,.note{border-left-color:var(--note-line)}
+.statement,.statement::before{color:var(--ink)}
+.statement{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.statement::before{color:var(--muted)}
+.frd{border-top:0;border-image:none}
+.frd-label{color:var(--ink)}
+/* 2. Tangerine means "your turn": every activity gets a Tangerine top edge and label. */
+.kc,.sort,.sim{box-shadow:var(--shadow),inset 0 4px 0 var(--turn)}
+.kc>.eyebrow,.sort>.eyebrow,.sim>.eyebrow,.kc .eyebrow{color:var(--turn-ink)}
+/* 3. Green means right or done; Marigold means "not quite" or a caution. Always with a word. */
+.olesson.done .oring{border-color:var(--good);background:var(--good)}
+.oprog-bar span{background:var(--good)}
+/* 5. Concept colors live only inside diagrams: chat, project and agent keep one color each. */
+.flow .fq{background:#20383E;color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .flow .fq{background:#34525A}}
+:root[data-theme="dark"] .flow .fq{background:#34525A}
+.flow .leaf{border-width:0 0 0 0;border-top:5px solid}
+.flow .leaf[data-leaf="chat"]{border-top-color:var(--c-chat);background:var(--c-chat-soft)}
+.flow .leaf[data-leaf="project"]{border-top-color:var(--c-proj);background:var(--c-proj-soft)}
+.flow .leaf[data-leaf="docs"],.flow .leaf[data-leaf="code"]{border-top-color:var(--c-agent);background:var(--c-agent-soft)}
+.flow .leaf .ln{color:var(--ink)}
 </style>
 
 <header class="top"><div class="top-in">
@@ -1446,12 +1493,14 @@ function renderBlock(b, ctx, seg, n){
     case "practice": return shade(practiceBlock(ctx, seg));
     case "mock": return mockBlock();
     case "tabs": return shade(tabsBlock(b));
-    // App comparison: one question per tab, with the four apps side by side under each question.
+    // App comparison: one table, each app named once at the top of its column. On a phone, one block per app.
     case "appq": {
-      // Only the app with no paid license gets a marker; the Fredrickson callout above already names the paid apps.
-      const name = a => `<b>${a[0]}</b><span>${a[1]}</span>${a[2] ? "" : `<span class="nolic">No paid license</span>`}`;
-      const tabs = b.tabs.map(t => ({ title:t.title, html:`<dl class="qlist">${b.apps.map((a,i) => `<div class="qrow${(t.hi||[]).includes(i) ? " hi" : ""}"><dt>${name(a)}</dt><dd>${t.cells[i]}</dd></div>`).join("")}</dl>` }));
-      return shade(tabsBlock({tabs, left:true, hint:"Select a question to compare the four apps."}));
+      const lic = a => a[2] ? "" : `<span class="nolic">No paid license</span>`;
+      const hi = (t,i) => (t.hi||[]).includes(i);
+      const w = el("div","stack");
+      w.innerHTML = `<table class="appgrid"><thead><tr><td></td>${b.apps.map(a => `<th scope="col"><b>${a[0]}</b><span>${a[1]}</span>${lic(a)}</th>`).join("")}</tr></thead><tbody>${b.tabs.map(t => `<tr><th scope="row">${t.title}</th>${b.apps.map((a,i) => `<td${hi(t,i) ? ' class="hi"' : ""}>${t.cells[i]}</td>`).join("")}</tr>`).join("")}</tbody></table>`
+        + `<div class="appstack">${b.apps.map((a,i) => `<section><h3>${a[0]}</h3><p class="appof">${a[1]}${a[2] ? "" : ` · ${lic(a)}`}</p><dl class="qlist sm">${b.tabs.map(t => `<div class="qrow${hi(t,i) ? " hi" : ""}"><dt><b>${t.title}</b></dt><dd>${t.cells[i]}</dd></div>`).join("")}</dl></section>`).join("")}</div>`;
+      return shade(w);
     }
     // Accordion group: several short items in one box. The first item starts open, so learners see the pattern.
     case "accs": {
