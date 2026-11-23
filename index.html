@@ -1965,8 +1965,7 @@ function fallBlock(terms, upTo){
   const stat = el("p","omstat");
   const sky = el("div","ft-sky");
   const idle = el("div","ft-idle");
-  const idleMsg = el("p",null,still ? "Select Start. The first definition appears right away." : "Select Start. The first definition falls right away.");
-  idle.append(idleMsg, startBtn);
+  idle.append(startBtn);
   sky.append(idle);
   const sr = el("p","vh"); sr.setAttribute("aria-live","polite");
   const form = el("form","ft-form");
@@ -2044,7 +2043,7 @@ function fallBlock(terms, upTo){
     }
     msg += lastLesson ? " You know every term in the course." : ` The game in Lesson ${upTo + 2} adds new terms.`;
     say("ok", msg + "</p>"); showStat();
-    restartBtn.hidden = true; idleMsg.textContent = timed() ? "Play again to see if fewer definitions land." : "Play again to practice the terms."; startBtn.textContent = "Play again";
+    restartBtn.hidden = true; startBtn.textContent = "Play again";
     idle.hidden = false; startBtn.focus({preventScroll:true});
   }
   form.addEventListener("submit", e => {
