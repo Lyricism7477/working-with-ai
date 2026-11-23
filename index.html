@@ -481,6 +481,29 @@ a,.otitle:hover,.howto>summary,details.acc>summary,.btn.ghost,.copybtn,.burger,.
 .flow .leaf[data-leaf="project"]{border-top-color:var(--c-proj);background:var(--c-proj-soft)}
 .flow .leaf[data-leaf="docs"],.flow .leaf[data-leaf="code"]{border-top-color:var(--c-agent);background:var(--c-agent-soft)}
 .flow .leaf .ln{color:var(--ink)}
+/* File map (Lesson 2, Part 2): the four ways to give the AI a file, in two groups. Matches the ChatGPT mock Emily chose (Nov 23, 2026).
+   Warm = a copy; seafoam = the current file. Both boxes share one set of rows, so their dividers line up. */
+:root{--fm-copy:#E5B560;--fm-copy-soft:#FBF8EE;--fm-live:#3D9CA4;--fm-live-soft:#EEF8F7;--fm-label:#106D7A}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--fm-copy-soft:#3A2F14;--fm-live-soft:#163A3C;--fm-label:#8ECFDC}}
+:root[data-theme="dark"]{--fm-copy-soft:#3A2F14;--fm-live-soft:#163A3C;--fm-label:#8ECFDC}
+.fmap-label{margin:24px 0 12px;font-size:13px;line-height:1.4;letter-spacing:1.1px;font-weight:700;text-transform:uppercase;color:var(--fm-label)}
+.fmap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto auto auto;column-gap:20px;margin:0 0 20px}
+.fmap .fg{display:grid;grid-row:span 3;grid-template-rows:subgrid;border:1px solid var(--line);border-radius:7px;overflow:hidden;min-width:0;background:var(--bg)}
+.fmap .fg-copy{border-top:3px solid var(--fm-copy)}
+.fmap .fg-live{border-top:3px solid var(--fm-live)}
+.fmap .fg-head{padding:16px 20px 14px}
+.fmap .fg-copy .fg-head{background:var(--fm-copy-soft)}
+.fmap .fg-live .fg-head{background:var(--fm-live-soft)}
+.fmap h3{margin:0 0 2px;font-family:var(--font);font-size:20px;line-height:1.3;color:var(--ink)}
+.fmap .fg-head p{margin:0;font-size:15px;line-height:1.45;color:var(--muted)}
+.fmap ul{display:grid;grid-row:span 2;grid-template-rows:subgrid;list-style:none;margin:0;padding:0 18px}
+.fmap li{display:grid;grid-template-columns:56px minmax(0,1fr);gap:16px;align-items:center;padding:20px 0}
+.fmap li+li{border-top:1px solid var(--line)}
+.fmap li svg{width:56px;height:56px;display:block}
+.fmap h4{margin:0 0 2px;font-family:var(--font);font-size:18px;line-height:1.35;color:var(--ink)}
+.fmap li p{margin:0;font-size:15px;line-height:1.5;color:var(--muted)}
+.fmap li p b{color:var(--ink)}
+@media (max-width:700px){.fmap{grid-template-columns:1fr;grid-template-rows:none;row-gap:14px}.fmap .fg,.fmap ul{grid-row:auto;grid-template-rows:none}}
 </style>
 
 <header class="top"><div class="top-in">
@@ -715,6 +738,13 @@ const LESSONS = [
     {t:"h", text:"Part 2. Put files where the AI can read them", why:"Directions tell the AI what to do. Files give it what to work from, and the AI reads only the files it can open."},
     {t:"p", html:`The AI reads only what you give it and what the app can open. You have four ways to give it files: upload them to a chat, save them in a project, link another app, or point an agent at a folder on your computer.`},
     {t:"p", html:`A <b>connector</b> is a link that lets an AI tool read or change data in another app, such as Outlook, SharePoint or Notion.`},
+    {t:"filemap", label:"Four ways to provide a file", groups:[
+      {kind:"copy", title:"Working from a copy", sub:"Later edits to the original won’t update this copy.", items:[
+        ["upload","Upload to a chat","A copy is available to <b>that conversation only</b>. Upload the new file if it changes."],
+        ["project","Save in a project","Every chat <b>in that project</b> can use the saved copy. Replace it when it changes."]]},
+      {kind:"live", title:"Accessing the current file", sub:"AI can read updated versions when it accesses them.", items:[
+        ["connector","Use a connector","Read a file <b>in another app</b>, such as Outlook or SharePoint. Access depends on the connector."],
+        ["folder","Point an agent to a folder","The agent works with <b>original files</b> and may change them."]]}]},
     {t:"compare", cols:["Upload to a chat","Project","Connector","Folder on your computer"], rows:[
       ["Where the file is","A copy in one chat","A copy saved in the project","In another app, such as Outlook, SharePoint or Notion","In a folder you choose"],
       ["Who can read the file","That chat only","Every chat in the project","Any chat where you turn the connector on","An agent you point at the folder, such as Claude Cowork or Claude Code"],
@@ -1535,6 +1565,19 @@ function renderBlock(b, ctx, seg, n){
       const w = el("div","tbl");
       w.innerHTML = `<table><thead><tr>${b.head.map(h=>`<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>${b.rows.map(r=>`<tr>${r.map((c,i)=>(i===0||b.plain)?`<td>${c}</td>`:`<td><b>${c}</b></td>`).join("")}</tr>`).join("")}</tbody></table>`;
       return w;
+    }
+    // File map: a label, then two groups of file options, each option with its picture. The pictures only decorate, so screen readers skip them.
+    case "filemap": {
+      const pics = {
+        upload:`<rect fill="#e8f5f5" height="35" rx="7" stroke="#126f7c" stroke-width="2" width="52" x="6" y="22"/><path d="M18 57 12 63 12 55" fill="#e8f5f5" stroke="#126f7c" stroke-linejoin="round" stroke-width="2"/><rect fill="#fff" height="39" rx="2" stroke="#126f7c" stroke-width="2" width="29" x="28" y="7"/><path d="M36 19h13M36 25h13M36 31h9" stroke="#72bec8" stroke-linecap="round" stroke-width="2.5"/><path d="M16 38h9" stroke="#d69b37" stroke-linecap="round" stroke-width="3"/>`,
+        project:`<path d="M8 26h19l6 7h29v25H8z" fill="#e5f0cf" stroke="#387a56" stroke-width="2"/><rect fill="#fff" height="36" rx="2" stroke="#126f7c" stroke-width="2" width="27" x="28" y="9"/><path d="M35 19h13M35 25h13M35 31h9" stroke="#72bec8" stroke-linecap="round" stroke-width="2.5"/><path d="M8 37h54l-5 23H13z" fill="#d5e6af" stroke="#387a56" stroke-linejoin="round" stroke-width="2"/>`,
+        connector:`<rect fill="#d8f0f0" height="37" rx="5" stroke="#126f7c" stroke-width="2" width="24" x="5" y="17"/><path d="M11 27h12M11 33h12" stroke="#72bec8" stroke-linecap="round" stroke-width="2.5"/><rect fill="#fff" height="37" rx="5" stroke="#126f7c" stroke-width="2" width="24" x="42" y="17"/><path d="M48 27h12M48 33h12" stroke="#72bec8" stroke-linecap="round" stroke-width="2.5"/><path d="M28 36h14" stroke="#d69b37" stroke-linecap="round" stroke-width="2.5"/><path d="m37 32 5 4-5 4" fill="none" stroke="#d69b37" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>`,
+        folder:`<rect fill="#d8f0f0" height="47" rx="5" stroke="#126f7c" stroke-width="2.5" width="60" x="5" y="8"/><rect fill="#fff" height="33" rx="2" width="48" x="11" y="15"/><path d="M21 25h14l5 6h12v12H21z" fill="#f7da97" stroke="#bd862b" stroke-width="2"/><path d="M6 60h58" stroke="#126f7c" stroke-linecap="round" stroke-width="3"/>`};
+      const wrap = el("div","fmap-wrap");
+      const w = el("div","fmap");
+      w.innerHTML = b.groups.map(g => `<section class="fg fg-${g.kind}"><div class="fg-head"><h3>${g.title}</h3><p>${g.sub}</p></div><ul>${g.items.map(it => `<li><svg viewBox="0 0 70 70" aria-hidden="true" focusable="false">${pics[it[0]]}</svg><div><h4>${it[1]}</h4><p>${it[2]}</p></div></li>`).join("")}</ul></section>`).join("");
+      wrap.append(el("p","fmap-label",b.label), w);
+      return wrap;
     }
     case "compare": {
       const w = el("div","tbl cmp");
