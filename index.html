@@ -731,7 +731,7 @@ const LESSONS = [
   fits: "",
   intro: "Most weak replies come from what the AI was given, not from the model. Learn where to put your directions and files so the AI uses them every time.",
   blocks: [
-    {t:"h", text:"Part 1. Put directions in a prompt or in custom instructions", why:"Start with your directions. A missing direction is the most common reason a reply misses."},
+    {t:"h", text:"Part 1. Put directions in a prompt or in custom instructions", why:""},
     {t:"p", html:`A <b>prompt</b> is everything you send in one message: your request, your instructions, any examples and any attached files. A rule in a prompt applies to that message only.`},
     {t:"p", html:`<b>Custom instructions</b> are saved directions the AI follows in every chat you start, such as your role, your tone or the format you prefer. You write them once in the app’s settings, and the app adds them to every chat for you.`},
     {t:"statement", text:"A prompt applies to one message. Custom instructions apply to every chat."},
@@ -769,7 +769,7 @@ const LESSONS = [
           why:"You want criticism of this proposal only, so the rule goes in the prompt."}]},
     {t:"frd", kind:"job", html:`${a(L.directions,"Get AI to Follow Your Directions")} shows how to set up custom instructions in Claude, ChatGPT and Copilot.`},
     {t:"gate"},
-    {t:"h", text:"Part 2. Put files where the AI can read them", why:"Directions tell the AI what to do. Files give it what to work from, and the AI reads only the files it can open."},
+    {t:"h", text:"Part 2. Put files where the AI can read them", why:""},
     {t:"p", html:`The AI reads only what you give it and what the app can open. You have four ways to give it files: upload them to a chat, save them in a project, link another app, or point an agent at a folder on your computer.`},
     {t:"p", html:`A <b>connector</b> is a link that lets an AI tool read or change data in another app, such as Outlook, SharePoint or Notion.`},
     {t:"filemap", label:"Four ways to provide a file", groups:[
@@ -803,7 +803,7 @@ const LESSONS = [
       <li>The SharePoint folder: connector. The files change each week, so the connector reads the current version.</li></ul>`},
     {t:"frd", kind:"job", html:`${a(L.directions,"Get AI to Follow Your Directions")} shows how to set up projects in Claude, ChatGPT and Copilot.`},
     {t:"gate"},
-    {t:"h", text:"Part 3. Find out why the AI seems to forget", why:"With your directions and files in place, the AI can still seem to forget them. Seven causes look the same in the chat, and each one needs a different fix."},
+    {t:"h", text:"Part 3. Find out why the AI seems to forget", why:""},
     {t:"p", html:`Two of the causes depend on the <b>context window</b>: the most text a model can read at one time, including the whole chat, any files and the model’s own replies. Each message adds to it. Each new chat starts with an empty context window.`},
     {t:"p", html:`AI apps measure the text in a context window in <b>tokens</b>. One token is about three-quarters of an English word. Context windows and usage limits both count tokens.`},
     {t:"vis", layout:"pair", label:"What the AI can read now", items:[
@@ -834,7 +834,7 @@ const LESSONS = [
       <li>Short and long replies: change your saved instructions. The two sets of instructions disagree. Delete “Be brief” from custom instructions, or add “except in this project” to it.</li>
       <li>The skipped rule from halfway through: repeat the rule in your prompt. The chat fits, but the model follows the middle of a chat less closely than the end.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 4. Fix a wrong reply", why:"Parts 1 to 3 covered what the AI is given and what it can read. When a reply is wrong, check those three things in that order. Then set up guards so fewer replies go wrong."},
+    {t:"h", text:"Part 4. Fix a wrong reply", why:""},
     {t:"p", html:`When a reply fails, check the causes in this order. First, the prompt: most weak replies come from a prompt that leaves out the goal, the reader or the format. Second, what the app can read. Third, the <b>knowledge cutoff</b>: the date the model’s learning stops. The model knows nothing that happened after that date, in any chat. Change the model last, after the prompt and the files are right.`},
     {t:"note", html:`<b>Prompt or model?</b> Imagine giving the same prompt and files to a capable new hire. If the new hire would need to ask questions or guess, the prompt is missing something, so rewrite the prompt. If the new hire would get it right and the AI does not, choose a more capable model or more thinking time.`},
     {t:"p", html:`Some apps search the web when a question needs current facts. The app runs the search and lists the sources, and the model still writes the summary. Check the summary against the sources.`},
@@ -905,7 +905,7 @@ const LESSONS = [
   fits: "Lessons 1 and 2 covered chats, where the AI replies and you do the work. Lesson 3 covers agents, which do the steps for you, so a clear brief, a safety check and a way to undo matter more.",
   intro: "An agent can do in minutes a task that takes you an hour. Learn how to brief one, keep it safe, and check its work before anyone else sees it.",
   blocks: [
-    {t:"h", text:"Part 1. Learn how an agent works", why:"Use an agent only when the AI must do the steps itself. So first, learn to tell an agent from a chat."},
+    {t:"h", text:"Part 1. Learn how an agent works", why:""},
     {t:"p", html:`<b>Tool use</b> is an action an AI takes outside the conversation, such as searching the web, reading a file or sending an email.`},
     {t:"p", html:`<b>Agentic AI</b> works toward a goal on its own. It makes a plan, takes actions, checks the results, and repeats until the task is done.`},
     {t:"p", html:`An <b>agent</b> is an AI tool that completes a task with several steps. Claude Cowork, Claude Code, ChatGPT Work and Codex are agents.`},
@@ -930,7 +930,7 @@ const LESSONS = [
       <li>The briefing: agent. ChatGPT Work searches, reads and builds the briefing itself.</li>
       <li>The web search: chat. Claude used a tool once, then stopped and waited for you.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 2. Brief an agent", why:"Now that you can spot a task for an agent, tell it what to do. A brief does for an agent what your directions did for a chat in Lesson 2."},
+    {t:"h", text:"Part 2. Brief an agent", why:""},
     {t:"p", html:`An agent works for minutes without you, so it cannot ask what you meant at each step. Before it starts, give it what a new colleague would need.`},
     {t:"process", intro:"A brief answers four questions.", steps:[
       ["Goal","What is the finished work for, and who will read it?"],
@@ -954,7 +954,7 @@ const LESSONS = [
       <li>The one-page Word file: done. It says what the result looks like and where it goes.</li>
       <li>Ask before you overwrite: limits. It says what the agent must check with you first.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 3. Keep an agent safe", why:"With a clear brief, the agent does the steps without you. Learn how to keep it from doing a step you never asked for."},
+    {t:"h", text:"Part 3. Keep an agent safe", why:""},
     {t:"p", html:`An agent takes real actions, such as sending email or deleting files. Two terms help you keep it safe.`},
     {t:"p", html:`An <b>approval prompt</b> is a pause in which the agent asks you before it takes an action. You allow the action or stop it.`},
     {t:"p", html:`A <b>prompt injection</b> is an instruction that someone hides in a web page, email or file to make the AI do something you did not ask for. The agent reads the text and may follow it.`},
@@ -971,7 +971,7 @@ const LESSONS = [
       <li>Deleting the folder: approval prompt. Claude Code asked before it acted.</li>
       <li>The white text: prompt injection. The instruction was hidden in the document the AI read.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 4. Check and undo what an agent changed", why:"Even a safe agent with a clear brief makes mistakes. Save a version first, so you can check its changes and undo them before anyone else sees the result."},
+    {t:"h", text:"Part 4. Check and undo what an agent changed", why:""},
     {t:"p", html:`The agent did the steps, but you send the result. Before anyone else sees it, open the files it changed, compare the result with your brief, and check the facts a client will rely on.`},
     {t:"p", html:`<b>Version control</b> saves each version of your files, shows what changed, and lets you go back. An agent can change dozens of files in one run. With version control, you can undo the agent’s changes, or keep some and undo the rest.`},
     {t:"p", html:`You can use two kinds of version control.`},
@@ -1033,7 +1033,7 @@ const LESSONS = [
   fits: "Lessons 2 and 3 showed how to give the AI good directions and a clear brief. Lesson 4 shows how to save that work, so you never rebuild it for a task you repeat.",
   intro: "When you do the same task every week, save the method once. Then share it with colleagues and let it run on a schedule.",
   blocks: [
-    {t:"h", text:"Part 1. Save a method as a skill", why:"Once a set of directions works for a task you repeat, save it as a skill, so you never retype it."},
+    {t:"h", text:"Part 1. Save a method as a skill", why:""},
     {t:"p", html:`A <b>skill</b> is a saved set of instructions an agent loads for one kind of task, such as building a Fredrickson job aid. The agent follows the same method every time, and you never retype it.`},
     {t:"p", html:`<b>Custom instructions</b> are saved directions the AI follows in every chat. Custom instructions load every time, so keep them short and general. A skill loads only when a task needs it, so it can contain a full method.`},
     {t:"statement", text:"Does it load in every chat, or only for one kind of task? Every chat: custom instructions. One kind of task: a skill."},
@@ -1050,7 +1050,7 @@ const LESSONS = [
       <li>“Keep answers short”: custom instructions. You want it in every chat.</li>
       <li>The proposal rules: skill. The agent loads them only for proposals.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 2. Share a method as a plugin", why:"A skill saves the method for you. A plugin gives colleagues the same method in one install."},
+    {t:"h", text:"Part 2. Share a method as a plugin", why:""},
     {t:"p", html:`A <b>plugin</b> is an add-on you install that gives an AI tool new commands, skills or connectors. One install can add several of them at once, so a colleague gets your whole method in one step.`},
     {t:"p", html:`A skill and a plugin do different jobs. A <b>skill</b> is one saved method that the agent loads for one kind of task. A <b>plugin</b> is the package you install, and it can hold several skills along with commands and connectors. Start with a skill. Choose a plugin only when a skill file cannot do the job.`},
     {t:"statement", text:"Start with a skill. Choose a plugin when several skills should arrive together, or when the method needs a part that runs or connects to another app."},
@@ -1085,7 +1085,7 @@ const LESSONS = [
       <li>The method that runs a script: plugin. A skill file holds only text. A script is a part that runs, so Luke reviews it first.</li>
       <li>The SharePoint search: connector. It links ChatGPT to one app.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 3. Run a task on a schedule", why:"Your method is saved and shared. For a task that comes at the same time each week, let it run without you."},
+    {t:"h", text:"Part 3. Run a task on a schedule", why:""},
     {t:"p", html:`A <b>scheduled task</b> is a saved prompt that an app runs on a schedule you set, such as every weekday at 8 a.m., without you starting it. Claude Cowork, ChatGPT and Copilot each offer scheduled tasks, on paid plans or with the right license.`},
     {t:"tabs", tabs:[
       {title:"Good for a schedule", html:`<ul class="list"><li>Every Monday, summarize last week’s client emails.</li><li>Every weekday, list news about three clients.</li><li>Every Friday at 7 a.m., draft the status report from the team’s notes for that week.</li></ul>`},
@@ -1145,7 +1145,7 @@ const LESSONS = [
   fits: "Lessons 1 to 4 showed what you can do with AI. Lesson 5 shows the Fredrickson rules for doing it with client work, and every earlier lesson follows these rules.",
   intro: "Fredrickson’s AI policy sets a few rules for every staff member. This lesson shows which apps you may use, when you may add client content, what you tell a client and how to ask for a new tool.",
   blocks: [
-    {t:"h", text:"Part 1. Use an approved app in your work account", why:"Every other rule depends on which app and which account you use, so this rule comes first."},
+    {t:"h", text:"Part 1. Use an approved app in your work account", why:""},
     {t:"p", html:`Fredrickson approves three AI apps: <b>Claude</b>, <b>ChatGPT</b> and <b>Microsoft 365 Copilot</b>. You use them in your Fredrickson <b>work account</b>: the account the company set up, which a company contract covers.`},
     {t:"p", html:`An account you pay for or sign up for yourself is <b>your own account</b>. It is not a work account, even when you sign up with your work email.`},
     {t:"statement", text:"Use an approved app, and sign in to your work account."},
@@ -1167,7 +1167,7 @@ const LESSONS = [
       <li>The new note-taking tool: breaks the rule. The tool is not approved. Part 4 shows how to ask for a new tool.</li>
       <li>Copilot with internal notes: follows the rule. You used an approved app in your work account, and the notes hold no client content.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 2. Get the client’s permission before you add client content", why:"You are in an approved app, in your work account. Next, learn what client content you may add there."},
+    {t:"h", text:"Part 2. Get the client’s permission before you add client content", why:""},
     {t:"p", html:`<b>Client content</b> is anything that comes from a client or describes the client’s business, such as documents, data, names and call notes. You add client content to AI only when both of these are true:`},
     {t:"vis", layout:"both", label:"Both conditions are required", join:"And", items:[
       ["account","Approved app","You are in an approved app, in your work account."],
@@ -1193,13 +1193,13 @@ const LESSONS = [
       <li>The client meeting notes: needs permission. The notes describe the client’s business.</li>
       <li>The AI terms: no permission needed. The training holds no client content.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 3. Tell clients how you used AI", why:"When the work is done, tell the client how AI helped make it."},
+    {t:"h", text:"Part 3. Tell clients how you used AI", why:""},
     {t:"p", html:`Tell each client how you used AI on their project. The policy gives this sample wording. Keep the lines that are true for your project, and replace the words in brackets.`},
     {t:"note", html:`“Generative AI was used as part of the process of creating this [eLearning, deliverable], in the following ways:<ul class="list"><li>Gathering and summarizing non-copyrighted data about [topic]</li><li>Reviewing of a writing sample for tone and against a style guide</li><li>Creating initial drafts of content or assets to provide initial sample examples for discussion prior to developing training</li><li>Initial drafts of outlines, quiz questions and scenarios for ideation purposes</li></ul>No proprietary content was used in these processes.”`},
     {t:"p", html:`Keep the last line only when it is true. If you added client content with the client’s permission, remove that line.`},
     {t:"statement", text:"Tell each client how you used AI on their project."},
     {t:"gate"},
-    {t:"h", text:"Part 4. Ask Luke before you use a new AI tool", why:"Parts 1 to 3 cover the three approved apps. This part covers any other AI tool you want to try."},
+    {t:"h", text:"Part 4. Ask Luke before you use a new AI tool", why:""},
     {t:"p", html:`The policy calls this process <b>AI License Management</b>. Luke, the Technology Manager, reviews and approves each AI tool.`},
     {t:"process", intro:"Follow four steps, in order.", steps:[
       ["Check the tool’s website","Spend 15 minutes or less. Check that the tool is legitimate and safe, stores data in a secure place, does not use your data to train its model, and does not share your data outside that secure place."],
