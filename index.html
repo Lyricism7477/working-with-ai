@@ -847,21 +847,21 @@ const LESSONS = [
       ["It is a new chat","Each new chat starts with an empty context window. The AI reads none of your other chats, except for what memory saved.", qrows([["What you see","The AI does not know what you told it yesterday."],["The fix","Put rules you use often in custom instructions or a project."]], true)],
       ["It never read the whole file","The file was too long, a scanned image, or a type the app cannot open.", qrows([["What you see","The AI knows nothing about part of a file you attached."],["The fix","Ask which pages it could read, and ask for the page of each point."]], true)],
       ["Two sets of instructions disagree","Your custom instructions, a project’s instructions and your prompt say different things, so the AI follows one of them.", qrows([["What you see","The AI follows one rule and ignores a rule you wrote somewhere else."],["The fix","Delete the rule from the place where it does not belong."]], true)]]},
-    {t:"statement", text:"When the AI seems to forget, ask where the information was: early in this chat, in another chat, in a file, or in another set of instructions. The fix depends on where it was."},
-    {t:"sort", goal:"At work, you see what went wrong, not why. Practice choosing the first fix to try for six problems.", prompt:"Drag each problem to the fix that works, or select a pile.", piles:["Start a new chat","Repeat the rule in your prompt","Change your saved instructions","Ask what it could read"],
-      cards:[["After three hours in one chat, Claude no longer uses the client name you gave it at the start.",0,"The chat got longer than the context window. Paste a handoff note with the client name into the new chat."],
-        ["You ask for a bulleted list and paste a long paragraph to edit, all in one message. The AI replies with a paragraph.",1,"The AI followed the paragraph, because it read the paragraph last. Put “Reply in bullets” after the paragraph."],
-        ["Every Monday you start a new chat and type the same five rules for the newsletter.",2,"A new chat starts empty, so save the rules in a newsletter project."],
-        ["ChatGPT summarizes a 90-page report and says nothing about the last chapter.",3,"Ask which pages it could read. If it missed the last chapter, give it that chapter on its own."],
-        ["Your custom instructions say “Be brief.” Your client project says “Explain each step in detail.” Replies in the project are sometimes short and sometimes long.",2,"The two sets of instructions disagree. Delete “Be brief” from custom instructions, or add “except in this project” to it."],
-        ["In a long chat that still fits in the context window, Copilot skips one rule you gave halfway through.",1,"The chat fits, but the model follows the middle of a chat less closely than the end."]]},
+    {t:"statement", text:"When the AI seems to forget, ask where the information was: earlier in this chat, in another chat, in a file, or in another set of instructions. The fix depends on where it was."},
+    {t:"sort", goal:"At work, you see what went wrong, not why. Practice finding where the missing information was, so you know which fix to try first.", prompt:"Drag each problem to where the information was, or select a pile.", piles:["Earlier in this chat","In another chat","In a file","In another set of instructions"], say:"the information was", sayNot:"the information was not",
+      cards:[["After three hours in one chat, Claude no longer uses the client name you gave it at the start.",0,"After three hours, the chat got longer than the context window, so the app dropped the start. Start a new chat and paste a handoff note with the client name."],
+        ["Early in a chat, you ask for replies in bullets. Later, you paste a long paragraph to edit, and the AI replies with a paragraph.",0,"The AI usually follows what it read most recently, and the paragraph came last. Put “Reply in bullets” after the paragraph."],
+        ["Every Monday you start a new newsletter chat. The AI doesn’t know the five rules you gave it last Monday.",1,"A new chat starts empty and reads none of your other chats. Save the rules in a newsletter project, so every newsletter chat starts with them."],
+        ["ChatGPT summarizes a 90-page report and says nothing about the last chapter.",2,"The AI may not have read all 90 pages. Ask which pages it could read. If it missed the last chapter, give it that chapter on its own."],
+        ["Your custom instructions say “Be brief.” Your client project says “Explain each step in detail.” Replies in the project are sometimes short and sometimes long.",3,"Your custom instructions and your project disagree, so the AI follows one or the other. Delete “Be brief” from custom instructions, or add “except in client projects” to it."],
+        ["In a long chat that still fits in the context window, Copilot skips one rule you gave halfway through.",0,"The chat still fits, but models follow the middle of a chat less closely than the start and the end. Repeat the rule at the end of your prompt."]]},
     {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
-      <li>The client name after three hours: start a new chat. The chat got longer than the context window. Paste a handoff note with the client name into the new chat.</li>
-      <li>The paragraph instead of bullets: repeat the rule in your prompt. The AI followed the paragraph, because it read the paragraph last. Put “Reply in bullets” after the paragraph.</li>
-      <li>The five newsletter rules: change your saved instructions. A new chat starts empty, so save the rules in a newsletter project.</li>
-      <li>The missing last chapter: ask what it could read. Ask which pages it could read. If it missed the last chapter, give it that chapter on its own.</li>
-      <li>Short and long replies: change your saved instructions. The two sets of instructions disagree. Delete “Be brief” from custom instructions, or add “except in this project” to it.</li>
-      <li>The skipped rule from halfway through: repeat the rule in your prompt. The chat fits, but the model follows the middle of a chat less closely than the end.</li></ul>`},
+      <li>The client name after three hours: earlier in this chat. The chat got longer than the context window, so the app dropped the start. Start a new chat and paste a handoff note with the client name.</li>
+      <li>The paragraph instead of bullets: earlier in this chat. The AI usually follows what it read most recently, and the paragraph came last. Put “Reply in bullets” after the paragraph.</li>
+      <li>The five newsletter rules: in another chat. A new chat starts empty and reads none of your other chats. Save the rules in a newsletter project.</li>
+      <li>The missing last chapter: in a file. The AI may not have read all 90 pages. Ask which pages it could read. If it missed the last chapter, give it that chapter on its own.</li>
+      <li>Short and long replies: in another set of instructions. Your custom instructions and your project disagree. Delete “Be brief” from custom instructions, or add “except in client projects” to it.</li>
+      <li>The skipped rule from halfway through: earlier in this chat. The chat still fits, but models follow the middle of a chat less closely than the start and the end. Repeat the rule at the end of your prompt.</li></ul>`},
     {t:"gate"},
     {t:"h", text:"Part 4. Fix weak or false replies", why:""},
     {t:"p", html:`When a reply fails, check the causes in this order. First, the prompt: most weak replies come from a prompt that leaves out the goal, the reader or the format. Second, what the app can read. Third, the <b>knowledge cutoff</b>: the date the model’s learning stops. The model knows nothing that happened after that date, in any chat. Change the model last, after the prompt and the files are right.`},
@@ -2233,12 +2233,15 @@ function sortBlock(b, ctx, seg){
     if(pi === ans){
       pileEls[pi].querySelector("ul").append(el("li",null,text));
       // Name the card that was placed, because the next card is already showing.
-      status.textContent = `Correct. “${text.replace(/[.]$/,"")}” goes in ${b.piles[pi]}.` + (why ? " " + why : "");
+      // A sort can set `say` (for example "the information was") when its pile names don't read well after "goes in".
+      const placed = b.say ? `For “${text.replace(/[.]$/,"")}”, ${b.say} ${b.piles[pi].toLowerCase()}.` : `“${text.replace(/[.]$/,"")}” goes in ${b.piles[pi]}.`;
+      status.textContent = `Correct. ${placed}` + (why ? " " + why : "");
       if(missed) misses++; missed = false; k++; show();
     } else {
       missed = true;
       // Give the reason as a clue toward the right pile, so a wrong choice still teaches something.
-      status.textContent = `Not quite. This card does not go in ${b.piles[pi]}.` + (why ? ` A clue: ${why}` : "") + " Try again.";
+      const notHere = b.sayNot ? `For this card, ${b.sayNot} ${b.piles[pi].toLowerCase()}.` : `This card does not go in ${b.piles[pi]}.`;
+      status.textContent = `Not quite. ${notHere}` + (why ? ` A clue: ${why}` : "") + " Try again.";
       card.classList.remove("shake"); void card.offsetWidth; card.classList.add("shake");
     }
   }
