@@ -723,6 +723,13 @@ const LESSONS = [
     {t:"gate"},
     {t:"h", text:"Part 4. Choose chat, a project or an agent", why:""},
     {t:"p", html:`You have the app, the model and the thinking setting. Last, choose where in the app to work. A chat, a project and an agent each take on a different share of the work. Each app offers more than one place to work.<ul class="list"><li>In a <b>chat</b>, you type a request, the AI replies, and you do the rest. </li><li>A <b>project</b> is a workspace that keeps the same files and instructions ready for every chat inside it. Claude and ChatGPT call it a project. In Copilot, look for Projects, Notebooks or Workspaces.</li><li>An <b>agent</b> does the steps of a task itself, such as opening files, searching the web and building a document. Some agents also have projects. For example, a project in Claude Cowork keeps the same files and instructions ready for every Cowork task inside it. Lesson 3 covers agents in full: how they work, and how to brief them, keep them safe and check their work.</li></ul>`},
+    {t:"p", html:`<b>Same word, different meaning.</b> Each app names these features its own way, and two apps can use one word for different things. This course uses each word as the first column describes it. Lessons 2 and 4 cover connectors, plugins and skills.`},
+    {t:"table", plain:true, head:["The word in this course","Copilot","ChatGPT","Claude"], rows:[
+      ["<b>Project</b>: a workspace that keeps the same files and instructions ready for every chat","Projects for your own work, or Workspaces for a team. You may still see the older name, Notebooks.","Projects","Projects"],
+      ["<b>Agent</b>: an AI that does a task with several steps for you","Copilot Cowork. Copilot also uses “agent” for an assistant that someone set up for one job. That kind mostly answers questions, like a project.","ChatGPT Work and Codex","Claude Cowork and Claude Code"],
+      ["<b>Connector</b>: links the AI to one other app","Connectors, which your admin sets up for the whole organization","Apps","Connectors"],
+      ["<b>Plugin</b>: a package that adds several abilities in one install","None that you can install yourself","Plugins, which contain apps","Plugins"],
+      ["<b>Skill</b>: a saved set of instructions an agent loads for one kind of task","None. The closest match is an agent someone built for one job in Agent Builder.","Skills","Skills"]]},
     {t:"p", html:`Choose the simplest option that can do the task. Check the options in this order: chat, then a project, then an agent.`},
     {t:"flow"},
     {t:"p", html:`Answer the questions from the top. The first question checks whether chat or a project can do the task. You need an agent only when the answer is yes.`},
