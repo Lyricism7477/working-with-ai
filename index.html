@@ -109,11 +109,43 @@ p{margin:0}
 .note{border-left:3px solid var(--accent);padding:4px 0 4px 18px}
 .brief{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:20px 24px;box-shadow:var(--shadow)}
 .brief-t{font-weight:800;margin:0 0 10px}
-.brief dl{margin:0}
-.brief dl>div{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:10px 0;border-top:1px solid var(--line)}
-.brief dt{font-weight:800;color:var(--brand-ink)}
-.brief dd{margin:0}
-@media (max-width:560px){.brief dl>div{grid-template-columns:1fr;gap:2px}}
+.brief-msg{margin:0;padding:18px 20px;border-radius:10px;background:var(--surface);display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px 18px;line-height:1.6}
+.brief-row{display:contents}
+.brief-tag{margin:0;font-weight:800;color:var(--ink);white-space:nowrap}
+.brief-text{margin:0}
+@media (max-width:600px){.brief-msg{grid-template-columns:1fr;gap:2px}.brief-text{margin-bottom:10px}.brief-row:last-child .brief-text{margin-bottom:0}}
+/* What an agent does: the agent in the middle, six parts around it. The selected part turns teal, its line lights up,
+   and a callout with a pointer opens under the diagram (on a phone, right under the selected part). */
+.hubwrap h3{margin:0 0 4px}.hubwrap > p{margin:0 0 18px}
+.hub{display:grid;grid-template-columns:minmax(0,1fr) 150px minmax(0,1fr);gap:16px 40px;position:relative}
+.hub-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.hub-lines line{stroke:var(--line);stroke-width:2;transition:stroke .2s}
+.hub-lines circle{fill:var(--bg);stroke:var(--line);stroke-width:2;transition:fill .2s,stroke .2s}
+.hub-lines .on line{stroke:var(--link);stroke-width:3}
+.hub-lines .on circle{fill:var(--link);stroke:var(--link)}
+.hub-core{grid-column:2;grid-row:1 / span 3;align-self:center;justify-self:center;position:relative;width:140px;height:156px;display:grid;place-items:center}
+.hub-core::before{content:"";position:absolute;inset:-26px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c-agent) 30%,transparent) 0%,transparent 68%)}
+.hub-hex{position:relative;width:100%;height:100%;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:var(--c-agent)}
+.hub-hex-in{position:absolute;inset:4px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(160deg,var(--c-agent-soft) 15%,color-mix(in srgb,var(--c-agent) 40%,var(--c-agent-soft)));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-family:var(--font-head);font-weight:800;font-size:22px;color:var(--ink)}
+.hub-hex-in svg{width:30px;height:30px;fill:var(--c-agent)}
+.hub-node{position:relative;z-index:1;display:flex;align-items:center;gap:12px;width:100%;min-height:68px;padding:10px 20px 10px 12px;border:1.5px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink);font:inherit;font-weight:700;font-size:15.5px;line-height:1.25;text-align:left;cursor:pointer;box-shadow:0 2px 8px rgba(11,61,69,.08);transition:background .2s,border-color .2s,color .2s,transform .2s}
+.hub-node .chip{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);transition:background .2s}
+.hub-node .icon{width:24px;height:24px;stroke:var(--link);transition:stroke .2s}
+.hub-node:hover{border-color:var(--link);transform:translateY(-1px)}
+.hub-node[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.hub-node[aria-pressed="true"] .chip{background:rgba(255,255,255,.18)}
+.hub-node[aria-pressed="true"] .icon{stroke:var(--on-brand)}
+.hub-node:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.hub-l{grid-column:1;grid-row:var(--r)}.hub-r{grid-column:3;grid-row:var(--r)}
+.hub-detail{position:relative;margin:26px 0 0;padding:18px 22px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg);box-shadow:0 4px 16px rgba(11,61,69,.10)}
+.hub-detail::before{content:"";position:absolute;top:-11px;left:var(--tail,40px);width:20px;height:20px;margin-left:-10px;background:var(--bg);border-left:1.5px solid var(--line);border-top:1.5px solid var(--line);transform:rotate(45deg);transition:left .25s}
+.hub-detail h4{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-size:17px}
+.hub-detail h4 .icon{flex:none;box-sizing:content-box;width:20px;height:20px;padding:7px;border-radius:50%;background:var(--brand);stroke:var(--on-brand)}
+.hub-detail p{margin:0}
+.hub-detail.in{animation:hubIn .25s ease-out}
+@keyframes hubIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.hub-node,.hub-detail::before,.hub-lines line,.hub-lines circle{transition:none}.hub-detail.in{animation:none}.hub-node:hover{transform:none}}
+@media (max-width:600px){.hub{grid-template-columns:1fr;gap:10px}.hub-lines{display:none}.hub-core{display:none}.hub .hub-l,.hub .hub-r{grid-column:1;grid-row:auto}.hub .hub-detail{margin:6px 0 8px}}
 .note.skip{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
 .tbl{overflow-x:auto}
 /* Fredrickson callouts share the brand stripe: "At Fredrickson" facts, "Job aid" pointers and "Set up" steps. */
@@ -149,7 +181,7 @@ th{font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted
 .app dl{margin:0;display:flex;flex-direction:column;gap:10px}
 .app dt{font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:700}
 .app dd{margin:2px 0 0}
-ul.list{margin:0;padding-left:44px;display:flex;flex-direction:column;gap:6px}
+ul.list,.stack ol.list{margin:0;padding-left:44px;display:flex;flex-direction:column;gap:6px}
 p:empty,h2:empty,h3:empty,li:empty{display:none}
 
 /* Knowledge check */
@@ -270,6 +302,15 @@ textarea.write{font:inherit;color:var(--ink);background:var(--bg);border:1.5px s
 .ltabs .panel>p:first-child{margin-top:0}
 /* Quiet list: a label on the left, the text on the right, thin lines between rows. Stacks on a phone. */
 .qlist{margin:0;padding:0}
+/* Setup ladder: one task, set up a little more at each step. A quiet numbered rail, no boxes. */
+.ladder{list-style:none;margin:0;padding:0}
+.ladder li{position:relative;padding:0 0 22px 52px}
+.ladder li:last-child{padding-bottom:0}
+.ladder li::before{content:counter(list-item);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-weight:800;font-size:15px;background:var(--bg)}
+.ladder li:not(:last-child)::after{content:"";position:absolute;left:16px;top:36px;bottom:4px;width:2px;margin-left:-1px;background:var(--line)}
+.ladder h4{margin:4px 0 4px;font-size:17px}
+.ladder p{margin:0 0 4px}
+.ladder .uses{color:var(--muted);font-size:15px}
 /* App comparison: questions down the left, apps across the top, alternating row shading. */
 .appt{border:1px solid var(--line);border-radius:12px;background:var(--bg);box-shadow:var(--shadow);padding:8px;overflow:hidden}
 .appt table{table-layout:fixed;font-size:15px;line-height:1.5}
@@ -665,6 +706,9 @@ const LESSONS = [
             ["Thought for 4 seconds", `<p>New managers learn the SBI model to give clear feedback in one-on-ones and follow up well, then practice with three realistic scenarios. 45 minutes.</p>`, "148 characters, so it fits. The everyday model did the same job with less of your limit.", "ok"]],
           why:"Haiku answered without thinking and wrote 175 characters. Sonnet and Opus each thought for a few seconds, counted the characters and fit the limit. Part 3 shows a second fix on this same task: more thinking time for Haiku."}]},
     {t:"p", html:`For a short, simple task, the smallest model often gives the same answer as the largest. When a reply misses, try a larger model. Part 3 shows the other fix: more thinking time.`},
+    {t:"p", html:`<b>Use different models for different steps.</b> One piece of work can use more than one model, even across apps. Give each step to the model that does that step best.`},
+    {t:"p", html:`<ul class="list"><li><b>A short video:</b> Claude writes the script, and ChatGPT makes the pictures. Gemini turns the pictures into a video clip. Use Gemini only when the video holds no Fredrickson or client information.</li><li><b>A job aid:</b> Sonnet drafts the steps. Opus then checks the draft against all 20 rules in the style guide.</li><li><b>A plan from a meeting:</b> Copilot, with a license, lists the decisions from the Teams meeting. Claude turns the decisions into a plan with owners and dates.</li></ul>`},
+    {t:"p", html:`Write down which model did each step. The next time you do the work, send each step to the same model.`},
     {t:"gate"},
     {t:"h", text:"Part 3. Choose how long the model thinks", why:""},
     {t:"p", html:`Many apps also let a model <b>think</b> before it answers. The model works through the problem step by step and checks its own work, then answers. Thinking time is a separate setting from the model, so you can give the same model more time or less.`},
@@ -932,19 +976,21 @@ const LESSONS = [
 {
   title: "Let an agent do the work", min: 12,
   terms: "",
-  builds: "Learn how an agent works, how to brief one, how to keep it safe, and how to check and undo what it changed.",
+  builds: "Learn how an agent works, how to brief one, how to use it safely, and how to check and undo what it changed.",
   fits: "",
-  intro: "In a chat, the AI writes a reply and you do the work. An agent does the work itself, and some hour-long tasks take it a few minutes. This lesson shows you how to brief an agent, keep it safe and check its work before anyone else sees it.",
+  intro: "In a chat, the AI writes a reply and you do the work. An agent does the work itself, and some hour-long tasks take it a few minutes. This lesson shows you how to brief an agent, use it safely and check its work before anyone else sees it.",
   blocks: [
     {t:"h", text:"Part 1. Learn how an agent works", why:""},
     {t:"p", html:`<b>Tool use</b> is an action an AI takes outside the conversation, such as searching the web, reading a file or sending an email.`},
     {t:"p", html:`<b>Agentic AI</b> works toward a goal on its own. It makes a plan, takes actions, checks the results, and repeats until the task is done.`},
     {t:"p", html:`An <b>agent</b> is AI that does the work by itself, including checking its own work. Claude Cowork, Claude Code, ChatGPT Work and Codex are agents.`},
-    {t:"process", intro:"An agent repeats four steps until the task is done.", steps:[
-      ["Plan","The agent reads your request and decides which steps the task needs."],
-      ["Act","The agent takes a step, such as opening a file, searching the web or writing a draft."],
-      ["Check","The agent looks at the result of that step."],
-      ["Repeat","If the task is not done, the agent plans the next step. When it is done, the agent gives you the result."]]},
+    {t:"hub", title:"What an agent does", hint:"Select each part to see what the agent does.", core:"Agent", parts:[
+      ["brief","Follows your instructions","You give the agent the goal, the files to use, what the finished work looks like and what it must not do. Part 2 calls these instructions a brief and shows how to write one."],
+      ["folder","Opens files and apps you give it","The agent can open only the folders, apps and websites you give it, such as one OneDrive folder or your Outlook email."],
+      ["web","Uses the web and other tools","The agent can search the web, read a file, run a script or build a Word file. Each of these actions is tool use."],
+      ["loop","Works in steps and checks each one","The agent plans the steps the task needs, then takes one step at a time. After each step, the agent checks the result. If the result is wrong, the agent fixes it. If the task isn’t done, the agent takes the next step."],
+      ["ask","Asks before risky actions","Most agents ask for your approval before they delete, send or overwrite something. Read each request before you approve it. Part 3 shows how to use an agent safely."],
+      ["done","Gives you the finished work","When the task is done, the agent gives you the result, such as a report saved in a folder. Part 4 shows how to check and undo what the agent changed."]]},
     {t:"statement", text:"A chat answers one message and waits for you. An agent keeps working between your messages."},
     {t:"tabs", tabs:[
       {title:"Agent", html:`<p>The AI does the steps itself.</p><ul class="list"><li>Claude Cowork opens five files in a folder and builds one status report.</li><li>ChatGPT Work researches a market on the web and builds a briefing deck.</li><li>Claude Code fixes a broken script, runs it, and fixes it again until it works.</li></ul>`},
@@ -962,8 +1008,8 @@ const LESSONS = [
       <li>The web search: chat. Claude used a tool once, then stopped and waited for you.</li></ul>`},
     {t:"gate"},
     {t:"h", text:"Part 2. Brief an agent", why:""},
-    {t:"p", html:`An agent works for minutes without you, so it cannot ask what you meant at each step. Before it starts, give it what a new colleague would need.`},
-    {t:"p", html:`A brief answers four questions. What is the work for? What should the agent use? What does the finished work look like? What must the agent not do without asking you?`},
+    {t:"p", html:`An agent works on its own for several minutes, so it can’t stop to ask what you meant. Before it starts, give it a <b>brief</b>: the details a new colleague would need to do the task without asking you questions.`},
+    {t:"p", html:`A brief answers four questions:<ol class="list"><li><b>Goal:</b> What is the work for?</li><li><b>Sources:</b> What should the agent use?</li><li><b>Done:</b> What does the finished work look like?</li><li><b>Limits:</b> What must the agent not do without asking you?</li></ol>`},
     {t:"brief", title:"A sample brief, with each part labeled", rows:[
       ["Goal","Write this week’s status report for Acme’s training director, so the director knows what the team finished and what comes next."],
       ["Sources","Read the five team notes in the Acme > Week 46 folder, and use last week’s report as the model. Don’t open any other folder."],
@@ -984,8 +1030,8 @@ const LESSONS = [
       <li>The half-page Word summary: done. It says what the finished work looks like and where it goes.</li>
       <li>Ask before you email: limits. It says what the agent must ask you about first.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 3. Keep an agent safe", why:""},
-    {t:"p", html:`An agent takes real actions, such as sending email or deleting files. Two terms help you keep it safe.`},
+    {t:"h", text:"Part 3. Use an agent safely", why:""},
+    {t:"p", html:`An agent takes real actions, such as sending email or deleting files. Two terms help you use an agent safely.`},
     {t:"p", html:`An <b>approval prompt</b> is a pause in which the agent asks you before it takes an action. You allow the action or stop it.`},
     {t:"p", html:`A <b>prompt injection</b> is an instruction that someone hides in a web page, email or file to make the AI do something you did not ask for. The agent reads the text and may follow it.`},
     {t:"p", html:`<b>Where the risk is highest.</b> An injection can do real harm only when the agent can do three things at once. Ask these three questions before you start an agent.<ul class="list"><li>Can the agent read private information, such as your email, client files or SharePoint?</li><li>Will the agent read something written outside Fredrickson, such as a web page, an outside email or a file a vendor sent?</li><li>Can the agent send information out, such as by sending an email, posting a message, filling in a form or opening a link?</li></ul>`},
@@ -1011,23 +1057,36 @@ const LESSONS = [
       <li>The white text: prompt injection. The instruction was hidden in the document the AI read.</li></ul>`},
     {t:"gate"},
     {t:"h", text:"Part 4. Check and undo what an agent changed", why:""},
-    {t:"p", html:`The agent did the steps, but you send the result. Before anyone else sees it, open the files it changed, compare the result with your brief, and check the facts a client will rely on.`},
+    {t:"p", html:`The agent did the steps, but you send the result. You check an agent’s work in three steps. Save a version before the agent starts, see what the agent changed, then undo what you don’t want.`},
     {t:"p", html:`<b>Version control</b> saves each version of your files, shows what changed, and lets you go back. An agent can change dozens of files in one run. With version control, you can undo the agent’s changes, or keep some and undo the rest.`},
-    {t:"p", html:`You can use two kinds of version control.`},
-    {t:"table", head:["Use","When the files are"], rows:[
-      ["OneDrive or SharePoint version history","Office documents that people edit in Word, Excel or PowerPoint"],
-      ["GitHub","Text files that an agent creates or changes, such as scripts, web pages or instruction files"]]},
     {t:"p", html:`A copy named “Report final v2” is a second file, not version control. Nothing records what changed between the copies, and an agent can overwrite both.`},
+    {t:"p", html:`<b>Step 1. Save a version before the agent starts.</b> You can use two kinds of version control: OneDrive or SharePoint version history, and Git.`},
+    {t:"p", html:`<b>Git</b> is version control for text files, such as scripts, web pages and instruction files. Git runs on your computer. Git calls each saved version a <b>commit</b>. A <b>Git site</b> keeps a copy of your commits online, so the history survives if your computer fails. GitHub is the best-known Git site. GitLab, Bitbucket and Microsoft’s Azure DevOps are other Git sites.`},
+    {t:"compare", cols:["OneDrive or SharePoint version history","Git"], rows:[
+      ["Best for","Office documents that people edit in Word, Excel or PowerPoint","Text files that an agent creates or changes"],
+      ["Setup","None. OneDrive and SharePoint save a new version each time a file changes.","Set up Git once on your computer. Ask Luke before you install Git or choose a Git site."],
+      ["What you save","Each file keeps its own history.","Each commit saves the whole folder at once."],
+      ["How you see changes","Word marks every change between two versions. Excel and PowerPoint open the older version for you to read.","Git marks every added and removed line in every file."],
+      ["Watch out","You check and restore files one at a time. Your admin sets how long OneDrive keeps versions.","Git shows no line changes inside Word or Excel files. Keep a Git folder outside OneDrive, because OneDrive syncing can damage Git’s files."]]},
     {t:"statement", text:"Save a version before the agent starts. Check what changed before anyone else sees it."},
-    {t:"sort", goal:"Practice choosing where to save a version before an agent starts.", prompt:"Drag each project to OneDrive version history or GitHub, or select a pile.", piles:["OneDrive version history","GitHub"],
-      cards:[["A Word proposal that three colleagues edit at the same time",0,"Colleagues edit an Office document together, and GitHub cannot combine their changes inside a Word file."],["A folder of instruction files that Claude Code will change",1,"They are text files an agent will change."],
-        ["An Excel budget your manager updates each month",0,"It is an Office document a person edits in Excel."],["A script an agent will fix, where you want to see which lines changed",1,"GitHub shows exactly which lines the agent changed."]]},
+    {t:"sort", goal:"Practice choosing where to save a version before an agent starts.", prompt:"Drag each project to OneDrive version history or Git, or select a pile.", piles:["OneDrive version history","Git"],
+      cards:[["A Word proposal that three colleagues edit at the same time",0,"Colleagues edit an Office document together, and Git cannot combine their changes inside a Word file."],["A folder of instruction files that Claude Code will change",1,"They are text files an agent will change."],
+        ["An Excel budget your manager updates each month",0,"It is an Office document a person edits in Excel."],["A script an agent will fix, where you want to see which lines changed",1,"Git shows exactly which lines the agent changed."]]},
     {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
-      <li>The Word proposal: OneDrive. Colleagues edit an Office document together, and GitHub cannot combine their changes inside a Word file.</li>
-      <li>The instruction files: GitHub. They are text files an agent will change.</li>
+      <li>The Word proposal: OneDrive. Colleagues edit an Office document together, and Git cannot combine their changes inside a Word file.</li>
+      <li>The instruction files: Git. They are text files an agent will change.</li>
       <li>The Excel budget: OneDrive. It is an Office document a person edits in Excel.</li>
-      <li>The script: GitHub. GitHub shows exactly which lines the agent changed.</li></ul>`},
-    {t:"frd", kind:"job", html:`${a(L.versions,"Choose Version Control for Your Work")} shows how to go back to an earlier version in each option. If you choose GitHub, ${a(L.github,"Save and Restore Versions with GitHub")} shows how to set it up.`},
+      <li>The script: Git. Git shows exactly which lines the agent changed.</li></ul>`},
+    {t:"p", html:`<b>Step 2. See what the agent changed.</b> Ask the agent to list every file it changed and why. Then compare that list with what your version control shows, because the agent’s summary can leave a change out.`},
+    {t:"tabs", hint:"Select the tool you use.", tabs:[
+      {title:"Git", html:`<ol class="list"><li>Open your Git app, such as GitHub Desktop, and select the <b>Changes</b> tab. If the agent made its own commit, select <b>History</b>, then select that commit.</li><li>Read the list of changed files. Check that the brief let the agent change each one.</li><li>Select each file. Added lines show a plus sign, and removed lines show a minus sign.</li></ol>`},
+      {title:"Word file", html:`<ol class="list"><li>Open the document in Word.</li><li>Select the file name at the top of the window, then select <b>Version history</b>.</li><li>Select the version from before the agent started, then select <b>Compare</b>.</li><li>Read each marked change.</li></ol>`}]},
+    {t:"p", html:`Then compare the result with your brief. Check the goal, the sources the agent used, the finished work and the limits. Check every fact a client will rely on, such as names, numbers and dates.`},
+    {t:"p", html:`<b>Step 3. Undo what you don’t want.</b> Keep the changes that are right, and undo the rest.`},
+    {t:"tabs", hint:"Select the tool you use.", tabs:[
+      {title:"Git", html:`<ul class="list"><li>To undo changes that are not in a commit yet, right-click the file in <b>Changes</b>, then select <b>Discard Changes</b>.</li><li>To undo a commit, select <b>History</b>, right-click the commit, then select <b>Revert Changes in Commit</b>.</li></ul>`},
+      {title:"Word file", html:`<p>In <b>Version history</b>, select the version you want to keep, then select <b>Restore</b>.</p>`}]},
+    {t:"frd", kind:"job", html:`${a(L.versions,"Choose Version Control for Your Work")} compares the two options in more detail. ${a(L.github,"Save and Restore Versions with GitHub")} shows how to set up Git with GitHub as your Git site.`},
     {t:"gate"},
     {t:"h", text:"Knowledge Check: apply what you learned"},
     {t:"p", html:`Answer five questions and write one brief. Your score appears after the last question. The brief is not scored. You check it against a model brief.`},
@@ -1047,9 +1106,9 @@ const LESSONS = [
     {t:"kc", check:true, others:[null, "The agent checks each step. It does not check whether the result fits your brief and your client.", "Cowork wrote the report, so its own answer is not a check.", "A report can sound right and still have a wrong fact or miss part of your brief."], q:"Cowork finished the client report. What do you do before it goes to the client?",
       choices:["Open what it changed, compare it with your brief, and check the facts the client will rely on.", "Send it. The agent checked its own work.", "Ask Cowork whether the report is ready to send.", "Read the first paragraph, and send it if it sounds right."], correct:0,
       right:"Correct. The agent did the steps, but you send the result.", wrong:"Not quite. The agent checks each step, not whether the result fits your client. Open what it changed and check it against your brief."},
-    {t:"kc", check:true, others:["A connector links the AI to another app. It does not save versions of your files.", "An approval prompt asks you before an action. It does not let you undo changes afterward.", null, "A copy named “final v2” is a second file. It does not record what changed, and it cannot undo the agent’s changes."], q:"You save a version in GitHub before Claude Code changes a folder of scripts. Afterward, you undo every change the agent made. What did GitHub give you?",
+    {t:"kc", check:true, others:["A connector links the AI to another app. It does not save versions of your files.", "An approval prompt asks you before an action. It does not let you undo changes afterward.", null, "A copy named “final v2” is a second file. It does not record what changed, and it cannot undo the agent’s changes."], q:"You make a commit in Git before Claude Code changes a folder of scripts. Afterward, you undo every change the agent made. What did Git give you?",
       choices:["A connector", "An approval prompt", "Version control", "A backup copy named “final v2”"], correct:2,
-      right:"Correct. GitHub saved a version you could go back to.", wrong:"Not quite. GitHub saved a version and let you go back to it. That is version control."},
+      right:"Correct. Git saved a version you could go back to.", wrong:"Not quite. Git saved a version and let you go back to it. That is version control."},
     {t:"score", pass:4},
     {t:"cards", cards:[
       ["Tool use","An action an AI takes outside the conversation, such as searching the web, reading a file or sending an email."],
@@ -1059,8 +1118,9 @@ const LESSONS = [
       ["Prompt injection","An instruction that someone hides in a web page, email or file to make the AI do something you did not ask for."],
       ["Version control","A system that saves each change to your files, shows what changed and lets you go back to an earlier point."],
       ["Repository","A folder that version control tracks, together with the history of every saved version."],
+      ["Git","Version control for text files, such as scripts, web pages and instruction files."],
       ["Commit","One saved version of the files in a repository, with a short note about what changed."],
-      ["GitHub","A website that stores repositories online and keeps their full history."],
+      ["Git site","A website that keeps a copy of your commits online, such as GitHub, GitLab, Bitbucket or Azure DevOps."],
       ["Restore","Return a file or folder to an earlier saved version."]]},
     {t:"end", html:`You can now tell an agent from a chat, brief an agent, tell an approval prompt from a prompt injection, and check and undo what an agent changed. Post a question or something you tried in the ${a(L.teams,"Learning and practicing with AI tools")} channel in Teams. Lesson 4 shows how to save a task so it runs the same way every time.`}
   ]
@@ -1068,7 +1128,7 @@ const LESSONS = [
 {
   title: "Make it repeatable", min: 8,
   terms: "",
-  builds: "Save a method once, share it, and run it on a schedule.",
+  builds: "Save a method once, share it, run it on a schedule, and see how the pieces work together.",
   fits: "Lessons 2 and 3 showed how to give the AI good directions and a clear brief. Lesson 4 shows how to save that work, so you never rebuild it for a task you repeat.",
   intro: "With AI, you can set a task you repeat to run on a schedule you choose. For example, a scheduled task can sort your inbox, send your team an update or pull this week’s industry news into a short summary.",
   blocks: [
@@ -1141,6 +1201,17 @@ const LESSONS = [
       <li>One install for three colleagues: plugin. The package contains a skill and a connector.</li>
       <li>The Friday draft: scheduled task. It runs at a set time without you starting it.</li>
       <li>The Monday summary: scheduled task. It also runs at a set time without you starting it.</li></ul>`},
+    {t:"gate"},
+    {t:"h", text:"Part 4. See how the pieces work together", why:""},
+    {t:"p", html:`Each piece in this course does one job. Real work often uses several pieces at once. Here is one task, the weekly status report for Acme, set up five ways. Each setup adds one or two pieces.`},
+    {t:"ladder", steps:[
+      ["Chat","You paste the team’s notes into a chat and ask for a draft.","You copy the draft into Word, fix it and save it.","Uses: a chat"],
+      ["Project","The notes and last week’s report sit in a project, so every chat starts with them.","You still start the chat, copy the draft and save it.","Uses: a project"],
+      ["Agent with a brief","Claude Cowork reads the five notes in the Acme > Week 46 folder, builds the Word file and saves it.","You make a commit or check version history first, then check what the agent changed.","Uses: an agent, a brief and version control"],
+      ["Agent with a skill and a schedule","Every Friday at 7 a.m., Cowork loads the status report skill, reads the week’s notes through the SharePoint connector, and saves a draft.","You read each draft before the client sees it.","Uses: an agent, a skill, a connector and a scheduled task"],
+      ["Team setup","A plugin gives every project lead the status report skill and the SharePoint connector in one install. Each lead schedules the report for their own client.","Each lead reads each draft. Luke reviews the connector before anyone installs the plugin.","Uses: a plugin, a skill, a connector and a scheduled task"]]},
+    {t:"statement", text:"Start with the simplest setup that works. Add a piece when you repeat the task."},
+    {t:"p", html:`Each piece you add saves you a step, but it also needs setup and checking. A chat is enough for a task you do once. Move to a skill, a schedule or a plugin when you do the same task every week, or when your team does it too.`},
     {t:"gate"},
     {t:"h", text:"Knowledge Check: decide what each task needs, and why"},
     {t:"p", html:`Each choice gives an answer and the reason for it. Pick the one with the right answer and the right reason. Answer all four, then write one definition. Your score appears after the last question.`},
@@ -1340,7 +1411,13 @@ const ICONS = {
   check: '<path d="M8.5 5H7a2.5 2.5 0 0 0-2.5 2.5V18A2.5 2.5 0 0 0 7 20.5h10a2.5 2.5 0 0 0 2.5-2.5V7.5A2.5 2.5 0 0 0 17 5h-1.5"/><rect x="8.5" y="3.5" width="7" height="3.6" rx="1.3"/><path d="m8.6 13.6 2.6 2.6 4.5-4.7"/>',
   terms: '<path d="M12 7C9.7 5.3 6.8 4.9 3.5 5.5v13c3.2-.6 6.2-.2 8.5 1.6"/><path d="M12 7c2.3-1.7 5.2-2.1 8.5-1.5v13c-3.2-.6-6.2-.2-8.5 1.6"/><path d="M12 7v13.1"/>',
   fred: '<path d="M12 3.5 19.5 6v5.4c0 4.7-2.6 7.5-7.5 9.1-4.9-1.6-7.5-4.4-7.5-9.1V6L12 3.5Z"/><path d="m8.8 12 2.1 2.1 4.4-4.4"/>',
-  job: '<path d="M6.5 3.5h7.2l5.8 5.8v9.2a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z"/><path d="M13.7 3.5v5.8h5.8"/><path d="M8.2 13.5h7.6M8.2 17h5.2"/>'
+  job: '<path d="M6.5 3.5h7.2l5.8 5.8v9.2a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z"/><path d="M13.7 3.5v5.8h5.8"/><path d="M8.2 13.5h7.6M8.2 17h5.2"/>',
+  brief: '<path d="M6.5 3.5h7.2l5.8 5.8v9.2a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z"/><path d="M13.7 3.5v5.8h5.8"/><path d="M8.2 13.5h7.6M8.2 17h5.2"/>',
+  folder: '<path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2Z"/>',
+  web: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.3 2.4 3.4 5.2 3.4 8.5s-1.1 6.1-3.4 8.5c-2.3-2.4-3.4-5.2-3.4-8.5s1.1-6.1 3.4-8.5Z"/>',
+  loop: '<path d="M19.5 12a7.5 7.5 0 0 1-13 5.1"/><path d="M4.5 12a7.5 7.5 0 0 1 13-5.1"/><path d="M17.5 3.5v3.4h-3.4"/><path d="M6.5 20.5v-3.4h3.4"/>',
+  ask: '<path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v8.5a1.5 1.5 0 0 1-1.5 1.5h-7l-4.5 3.5V17H5a1.5 1.5 0 0 1-1.5-1.5V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M10 9.6a2 2 0 1 1 2.6 1.9c-.4.2-.6.5-.6.9v.4"/><path d="M12 14.6v.1"/>',
+  done: '<circle cx="12" cy="12" r="8.5"/><path d="m8.3 12.2 2.5 2.5 5-5"/>'
 };
 const icon = k => `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${ICONS[k]}</svg>`;
 const ICON_RULES = [
@@ -1389,7 +1466,7 @@ function renderHome(){
     <p class="lede">This course takes about <b>an hour</b>. You learn to talk about AI with confidence, choose the right app and model, catch and fix wrong AI answers, and follow Fredrickson’s AI rules.</p>
     <p><b>Last updated ${UPDATED}.</b> AI apps change every few months, so your app may look different from this course.</p>`));
   wrap.append(el("div","stack",`<h2>Each lesson uses what the lesson before it taught</h2>
-    <p>The lessons follow the order you work in. Before Lesson 1, set up your apps once.</p><ul class="list"><li><b>Lesson 1</b> shows you how to choose the app, the model and where in the app to work.</li><li><b>Lesson 2</b> shows you where to put your directions and files, and how to fix a wrong reply.</li><li><b>Lesson 3</b> shows you how an agent works, and how to brief it, keep it safe and check its work.</li><li><b>Lesson 4</b> shows you how to save a method as a skill, share it as a plugin and run a task on a schedule.</li><li><b>Lesson 5</b> shows you which AI apps Fredrickson approves, when you may add client content, what you tell a client and how to ask for a new tool.</li></ul>`));
+    <p>The lessons follow the order you work in. Before Lesson 1, set up your apps once.</p><ul class="list"><li><b>Lesson 1</b> shows you how to choose the app, the model and where in the app to work.</li><li><b>Lesson 2</b> shows you where to put your directions and files, and how to fix a wrong reply.</li><li><b>Lesson 3</b> shows you how an agent works, and how to brief it, use it safely and check its work.</li><li><b>Lesson 4</b> shows you how to save a method as a skill, share it as a plugin, run a task on a schedule and fit the pieces together.</li><li><b>Lesson 5</b> shows you which AI apps Fredrickson approves, when you may add client content, what you tell a client and how to ask for a new tool.</li></ul>`));
   const sDone = setupDone();
   const pre = el("li","lrow pre"+(sDone?" done":""));
   pre.append(el("span","num",sDone?"✓":""));
@@ -1714,6 +1791,8 @@ function renderBlock(b, ctx, seg, n){
     }
     case "pq": return shade(pqBlock(b, ctx, seg));
     case "process": return shade(processBlock(b));
+    // One task, set up a little more at each step: [title, what happens, what you still do, pieces it uses].
+    case "ladder": { const w = el("div"); w.innerHTML = `<ol class="ladder">${b.steps.map(x => `<li><h4>${x[0]}</h4><p>${x[1]}</p><p>${x[2]}</p><p class="uses">${x[3]}</p></li>`).join("")}</ol>`; return w; }
     case "cards": return shade(cardsBlock(b));
     case "kc": return shade(kcBlock(b, ctx, seg));
     case "sort": return shade(sortBlock(b, ctx, seg));
@@ -1722,10 +1801,11 @@ function renderBlock(b, ctx, seg, n){
     case "score": { const s = el("div","score"); s.hidden = true; ctx.scoreEls.push({s, pass:b.pass}); return s; }
     case "end": return endBlock(b, n);
     case "html": return el("div","stack",b.html);
-    // A sample brief: each line of the brief sits beside the label of the part it covers.
+    case "hub": return shade(hubBlock(b));
+    // A sample brief: one message, as the learner would send it. Each part sits on its own line, with its label in a column on the left.
     case "brief": {
       const w = el("div","brief");
-      w.innerHTML = `<p class="brief-t">${b.title}</p><dl>${b.rows.map(r => `<div><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join("")}</dl>`;
+      w.innerHTML = `<p class="brief-t">${b.title}</p><dl class="brief-msg">${b.rows.map(r => `<div class="brief-row"><dt class="brief-tag">${r[0]}</dt><dd class="brief-text">${r[1]}</dd></div>`).join("")}</dl>`;
       return shade(w);
     }
     case "setupend": {
@@ -1867,6 +1947,64 @@ function practiceQ(b, parent, onDone){
   w.append(fs, submit, fb); parent.append(w); return st;
 }
 
+// What an agent does: the agent in the middle and its parts around it, half on each side.
+// Selecting a part turns it teal, lights its line to the agent, and opens a callout whose pointer aims at that part.
+// The callout sits under the diagram, or right under the selected part on a phone. The first part starts selected.
+function hubBlock(b){
+  const w = el("div","hubwrap");
+  w.append(el("h3",null,b.title), el("p",null,b.hint));
+  const g = el("div","hub"); const half = Math.ceil(b.parts.length / 2);
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(NS,"svg"); svg.setAttribute("class","hub-lines"); svg.setAttribute("aria-hidden","true"); svg.setAttribute("focusable","false");
+  const core = el("div","hub-core",`<div class="hub-hex"><div class="hub-hex-in"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2c.6 4.8 2.2 6.4 7 7-4.8.6-6.4 2.2-7 7-.6-4.8-2.2-6.4-7-7 4.8-.6 6.4-2.2 7-7Z"/><path d="M19 15c.3 2 .9 2.7 3 3-2.1.3-2.7.9-3 3-.3-2.1-.9-2.7-3-3 2.1-.3 2.7-1 3-3Z"/></svg>${b.core}</div></div>`);
+  g.append(svg, core);
+  const detail = el("div","hub-detail"); detail.setAttribute("aria-live","polite");
+  const links = b.parts.map(() => { const k = document.createElementNS(NS,"g"); k.append(document.createElementNS(NS,"line"), document.createElementNS(NS,"circle")); svg.append(k); return k; });
+  const btns = b.parts.map((p, i) => {
+    const bt = el("button","hub-node " + (i < half ? "hub-l" : "hub-r"), `<span class="chip">${icon(p[0])}</span><span>${p[1]}</span>`); bt.type = "button";
+    bt.style.setProperty("--r", i % half + 1);
+    bt.addEventListener("click", () => pick(i)); g.append(bt); return bt;
+  });
+  const phone = matchMedia("(max-width:600px)");
+  let sel = 0;
+  // Lines run from the inner edge of each part to the agent, measured from the real layout.
+  function draw(){
+    const G = g.getBoundingClientRect(); if(!G.width) return;
+    const C = core.getBoundingClientRect(), cx = C.left + C.width / 2 - G.left, cy = C.top + C.height / 2 - G.top;
+    btns.forEach((bt, i) => {
+      const R = bt.getBoundingClientRect(), left = i < half;
+      const x = (left ? R.right : R.left) - G.left, y = R.top + R.height / 2 - G.top;
+      const [ln, dot] = links[i].children;
+      ln.setAttribute("x1", x); ln.setAttribute("y1", y); ln.setAttribute("x2", cx); ln.setAttribute("y2", cy);
+      dot.setAttribute("cx", x); dot.setAttribute("cy", y); dot.setAttribute("r", 5);
+    });
+  }
+  // The pointer aims at the selected part.
+  function aim(){
+    const D = detail.getBoundingClientRect(); if(!D.width) return;
+    const R = btns[sel].getBoundingClientRect();
+    const x = Math.min(Math.max(R.left + Math.min(R.width / 2, 60) - D.left, 28), D.width - 28);
+    detail.style.setProperty("--tail", x + "px");
+  }
+  function place(){
+    if(phone.matches){ if(btns[sel].nextSibling !== detail) btns[sel].after(detail); }
+    else if(g.nextSibling !== detail) g.after(detail);
+    draw(); aim();
+  }
+  function pick(i){
+    sel = i;
+    btns.forEach((x, k) => x.setAttribute("aria-pressed", String(k === i)));
+    links.forEach((k, j) => k.classList.toggle("on", j === i));
+    detail.innerHTML = `<h4>${icon(b.parts[i][0])}<span>${b.parts[i][1]}</span></h4><p>${b.parts[i][2]}</p>`;
+    detail.classList.remove("in"); void detail.offsetWidth; detail.classList.add("in");
+    place();
+  }
+  w.append(g);
+  pick(0); detail.classList.remove("in");
+  phone.addEventListener("change", place);
+  new ResizeObserver(() => { draw(); aim(); }).observe(w);
+  return w;
+}
 function shade(node){ if(!node) return node; const s = el("div","ishade"); s.append(node); return s; }
 
 function caseBlock(b){
