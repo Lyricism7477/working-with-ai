@@ -419,7 +419,8 @@ details.acc .body{padding:0 18px 16px 48px}
 .ft h3{margin:0;font-size:19px}
 .ft-ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .ft-sky{position:relative;height:300px;overflow:hidden;border-radius:10px 10px 0 0;background:var(--fm-live-soft);border-bottom:4px solid var(--ink)}
-.ft-idle{position:absolute;inset:0;margin:0;display:flex;align-items:center;justify-content:center;padding:16px;text-align:center;color:var(--muted);font-size:15px}
+.ft-idle{position:absolute;inset:0;margin:0;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;padding:16px;text-align:center;color:var(--muted);font-size:15px}
+.ft-idle p{margin:0}
 .ft-idle[hidden]{display:none}
 .ft-drop{position:absolute;top:0;width:min(85%,360px);box-sizing:border-box;padding:10px 12px;border-radius:8px;background:var(--bg);border:1.5px solid var(--line);border-top:3px solid var(--turn);font-size:15px;line-height:1.45;color:var(--ink);box-shadow:var(--shadow);will-change:transform}
 .ft-drop.got{border-color:var(--good);background:var(--good-soft)}
@@ -720,7 +721,7 @@ const LESSONS = [
     {t:"p", html:`<b>Let the AI help you choose.</b> Use any of these four ways to choose the model and the thinking setting. The first three work in every app.`},
     {t:"table", head:["Way","What to do"], rows:[
       ["Ask about the task","Ask: “Before you answer, tell me whether this task needs careful step-by-step reasoning or a quick answer.” Ask about the task, not about model names. A model knows little about models released after it was trained."],
-      ["Save an instruction","Add a saved instruction: “If a task needs more thinking time than this setting gives, say so before you answer.”"],
+      ["Save a rule","Save this rule in the app’s settings, so every chat follows it: “If a task needs more thinking time than this setting gives, say so before you answer.”"],
       ["Test once","For a task you repeat, send the same prompt with two settings. Compare the replies, and keep the better setting for that task."],
       ["Use Auto","In Copilot and Gemini, leave the setting on Auto. The app then chooses the setting for each message."]]},
     {t:"gate"},
@@ -773,6 +774,7 @@ const LESSONS = [
       {title:"Prompt", html:`<p>Applies to one message.</p><ul class="list"><li>“Summarize this email in three bullets,” with the email pasted below.</li><li>“This summary is for the client’s CFO, so lead with cost.”</li></ul>`},
       {title:"Custom instructions", html:`<p>Apply to every chat you start.</p><ul class="list"><li>“I am an instructional designer. My audience is usually HR leaders.”</li><li>“Check today’s date before you answer.”</li></ul>`}]},
     {t:"note", html:`<b>Easy to mix up.</b> Ask: do I want this in every chat, or only now? Every chat: custom instructions. Only now: the prompt. A rule for only one client goes in a project, which Part 2 covers.`},
+    {t:"p", html:`Some apps also have <b>memory</b>, a feature that saves a few facts about you between chats. Memory works differently from custom instructions. You write custom instructions, and the app adds every word to every chat. With memory, the app chooses which facts to save, and it may skip the one you need. So put any rule you need in every chat in custom instructions.`},
     {t:"p", html:`A good prompt holds four parts: the <b>goal</b>, the <b>reader</b>, the <b>format</b> and an <b>example</b> when you have one. Your custom instructions already say who you are, so the prompt holds what changes with each task.`},
     {t:"tabs", tabs:[
       {title:"Prompt missing parts", html:`<p>“Help me plan the workshop.”</p><p>The AI has to guess the goal, the audience, the length and what you want back, so the reply is generic.</p>`},
@@ -843,7 +845,7 @@ const LESSONS = [
       ["The chat got longer than the context window",`The <b>context window</b> is the most text a model can read at one time. It holds the whole chat, any files and the model’s own replies, and each message adds to it. AI apps measure this text in <b>tokens</b>. One token is about three-quarters of an English word. When a chat gets longer than the context window, the app drops or shortens early messages, so answers get worse. The AI won’t warn you, because it can’t see what the app removed.`, qrows([["What you see","The AI misses a rule or a file from the start of a long chat."],["The fix",`Start a new chat. Paste in a <b>handoff note</b>: a short summary of the work so far. ${a(L.limits,"Make Your AI Usage Limits Last Longer")} shows how.`]], true)],
       ["The rule is in the middle of a long chat","Even when the whole chat fits in the context window, models follow the start and the end of a chat more closely than the middle.", qrows([["What you see","The AI follows some of your earlier rules and skips others."],["The fix","Repeat the rule at the end of your prompt."]], true)],
       ["A newer message disagrees with an older rule","The AI usually follows what it read most recently.", qrows([["What you see","You asked for 100 words, then pasted a long example. The reply is as long as the example."],["The fix","Repeat the rule in the same prompt as the example."]], true)],
-      ["Memory did not save it",`<b>Memory</b> is a feature that saves a few facts about you between chats. The app chooses what to save, and it saves a short note, not the whole chat.`, qrows([["What you see","The AI uses some facts from past chats, but not the one you need."],["The fix",`Check what memory saved in the app’s settings. ${a(L.directions,"Get AI to Follow Your Directions")} shows where. Put rules you need every time in custom instructions, not memory.`]], true)],
+      ["Memory did not save it",`Memory saves only a few facts between chats, and the app chooses which ones. Memory keeps a short note, not the whole chat.`, qrows([["What you see","The AI uses some facts from past chats, but not the one you need."],["The fix",`Check what memory saved in the app’s settings. ${a(L.directions,"Get AI to Follow Your Directions")} shows where. Put rules you need every time in custom instructions, not memory.`]], true)],
       ["It is a new chat","Each new chat starts with an empty context window. The AI reads none of your other chats, except for what memory saved.", qrows([["What you see","The AI does not know what you told it yesterday."],["The fix","Put rules you use often in custom instructions or a project."]], true)],
       ["It never read the whole file","The file was too long, a scanned image, or a type the app cannot open.", qrows([["What you see","The AI knows nothing about part of a file you attached."],["The fix","Ask which pages it could read, and ask for the page of each point."]], true)],
       ["Two sets of instructions disagree","Your custom instructions, a project’s instructions and your prompt say different things, so the AI follows one of them.", qrows([["What you see","The AI follows one rule and ignores a rule you wrote somewhere else."],["The fix","Delete the rule from the place where it does not belong."]], true)]]},
@@ -1957,10 +1959,14 @@ function fallBlock(terms, upTo){
     ? "This is the final round. It holds every term from the course."
     : "You'll see this game again in every lesson. Each time it adds that lesson's terms, so it gets harder as you go."));
   const ctl = el("div","ft-ctl");
-  const startBtn = el("button","btn","Start"); startBtn.type = "button"; ctl.append(startBtn);
+  // Start sits on the game screen, where the eye already is. Restart stays below while a game runs.
+  const startBtn = el("button","btn","Start"); startBtn.type = "button";
+  const restartBtn = el("button","btn ghost","Restart"); restartBtn.type = "button"; restartBtn.hidden = true; ctl.append(restartBtn);
   const stat = el("p","omstat");
   const sky = el("div","ft-sky");
-  const idle = el("p","ft-idle",still ? "Select Start below. The first definition appears right away." : "Select Start below. The first definition falls right away.");
+  const idle = el("div","ft-idle");
+  const idleMsg = el("p",null,still ? "Select Start. The first definition appears right away." : "Select Start. The first definition falls right away.");
+  idle.append(idleMsg, startBtn);
   sky.append(idle);
   const sr = el("p","vh"); sr.setAttribute("aria-live","polite");
   const form = el("form","ft-form");
@@ -1988,7 +1994,7 @@ function fallBlock(terms, upTo){
     sky.querySelectorAll(".ft-drop").forEach(x => x.remove()); idle.hidden = true;
     queue = shuffle(terms.map((_,i)=>i)); cur = null; misses = 0; caught = 0; streak = 0;
     fallMs = 16000;
-    playing = true; startBtn.textContent = "Restart"; startBtn.className = "btn ghost";
+    playing = true; restartBtn.hidden = false;
     setInputs(true); input.value = ""; input.focus({preventScroll:true}); say("", "");
     showStat(); next();
     last = performance.now(); raf = requestAnimationFrame(loop);
@@ -2038,7 +2044,8 @@ function fallBlock(terms, upTo){
     }
     msg += lastLesson ? " You know every term in the course." : ` The game in Lesson ${upTo + 2} adds new terms.`;
     say("ok", msg + "</p>"); showStat();
-    startBtn.textContent = "Play again"; startBtn.className = "btn"; startBtn.focus({preventScroll:true});
+    restartBtn.hidden = true; idleMsg.textContent = timed() ? "Play again to see if fewer definitions land." : "Play again to practice the terms."; startBtn.textContent = "Play again";
+    idle.hidden = false; startBtn.focus({preventScroll:true});
   }
   form.addEventListener("submit", e => {
     e.preventDefault();
@@ -2059,7 +2066,7 @@ function fallBlock(terms, upTo){
       input.select();
     }
   });
-  startBtn.addEventListener("click", start);
+  startBtn.addEventListener("click", start); restartBtn.addEventListener("click", start);
   if("IntersectionObserver" in window) new IntersectionObserver(es => { onScreen = es[0].isIntersecting; }, {threshold:0.5}).observe(sky);
   showStat();
   return box;
