@@ -402,6 +402,24 @@ details.acc .body{padding:0 18px 16px 48px}
 .omstat{font-size:15px;color:var(--muted);margin:0}
 .omfb:empty{display:none}
 @media (max-width:560px){.om{grid-template-columns:1fr}.om-terms{flex-direction:row;flex-wrap:wrap}.om-terms .om-head{flex-basis:100%}.omcard{font-size:14.5px}}
+/* Bonus game (falling terms): a definition falls toward the ground line, and the learner types its term.
+   Tangerine top edge = your turn. Green = caught. Marigold = landed. */
+.ft h3{margin:0;font-size:19px}
+.ft-ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.ft-ctl label{font-weight:700;font-size:15px}
+.ft-ctl select{font:inherit;font-size:16px;padding:7px 10px;border:1.5px solid var(--field-line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.ft-sky{position:relative;height:300px;overflow:hidden;border-radius:10px 10px 0 0;background:var(--fm-live-soft);border-bottom:4px solid var(--ink)}
+.ft-idle{position:absolute;inset:0;margin:0;display:flex;align-items:center;justify-content:center;padding:16px;text-align:center;color:var(--muted);font-size:15px}
+.ft-idle[hidden]{display:none}
+.ft-drop{position:absolute;top:0;width:min(85%,360px);box-sizing:border-box;padding:10px 12px;border-radius:8px;background:var(--bg);border:1.5px solid var(--line);border-top:3px solid var(--turn);font-size:15px;line-height:1.45;color:var(--ink);box-shadow:var(--shadow);will-change:transform}
+.ft-drop.got{border-color:var(--good);background:var(--good-soft)}
+.ft-drop.miss{border-color:var(--bad);background:var(--bad-soft)}
+.ft-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ft-form label{flex-basis:100%;font-weight:700;font-size:15px}
+.ft-form input{flex:1 1 180px;min-width:0;font:inherit;font-size:16px;padding:9px 12px;border:1.5px solid var(--field-line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.ft-form input:focus-visible{outline:3px solid var(--focus);outline-offset:1px}
+.ft-form input:disabled{opacity:.6}
+@media (max-width:560px){.ft-sky{height:230px}.ft-drop{font-size:14.5px}}
 
 @media (prefers-reduced-motion:reduce){.card.shake{animation:none}}
 
@@ -1879,6 +1897,122 @@ function processBlock(b){
   draw(); w.append(dots, body, nav); return w;
 }
 
+// Bonus game: one definition at a time falls toward the ground, and the learner types its term.
+// Typing the term from memory is harder than matching, so it makes terms stick. Small typos and short forms such as "MCP" count.
+// Three landed definitions end a timed game. A missed term comes back later. "No timer" stops the falling, for anyone who needs more time.
+let ftCount = 0;
+function fallBlock(terms){
+  const id = "ft" + (++ftCount);
+  const shuffle = a => { const c = a.slice(); for(let i=c.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [c[i],c[j]]=[c[j],c[i]]; } return c; };
+  const words = ["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve"];
+  const num = n => words[n] || n;
+  const LIVES = 3;
+  const box = el("div","kc ft");
+  box.append(el("p","eyebrow","Bonus game"));
+  box.append(el("h3",null,"Type each term before its definition lands"));
+  box.append(el("p",null,`A definition falls from the top. Type its term and press Enter. A short form counts, such as MCP. If ${num(LIVES)} definitions land, the game ends.`));
+  const ctl = el("div","ft-ctl");
+  ctl.innerHTML = `<label for="${id}-speed">Speed</label><select id="${id}-speed"><option value="slow">Slow</option><option value="normal">Normal</option><option value="off">No timer</option></select>`;
+  const speed = ctl.querySelector("select");
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) speed.value = "off";
+  const startBtn = el("button","btn","Start"); startBtn.type = "button"; ctl.append(startBtn);
+  const stat = el("p","omstat");
+  const sky = el("div","ft-sky");
+  const idle = el("p","ft-idle","Select Start. The first definition falls right away.");
+  sky.append(idle);
+  const sr = el("p","vh"); sr.setAttribute("aria-live","polite");
+  const form = el("form","ft-form");
+  form.innerHTML = `<label for="${id}-in">Type the term</label><input id="${id}-in" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" disabled><button class="btn" type="submit" disabled>Enter</button><button class="btn ghost ft-skip" type="button" disabled>Skip</button>`;
+  const input = form.querySelector("input"), enter = form.querySelector('button[type="submit"]'), skip = form.querySelector(".ft-skip");
+  const fb = el("div","fb omfb"); fb.setAttribute("aria-live","polite");
+  const say = (cls, html) => { fb.className = "fb omfb " + cls; fb.innerHTML = html; };
+  box.append(ctl, stat, sky, sr, form, fb);
+
+  const norm = s => s.toLowerCase().replace(/[’']/g,"").replace(/[^a-z0-9]+/g," ").trim();
+  const lev = (a, b) => { const d = Array.from({length:a.length+1}, (_,i) => [i]); for(let j=1;j<=b.length;j++) d[0][j] = j;
+    for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++) d[i][j] = Math.min(d[i-1][j]+1, d[i][j-1]+1, d[i-1][j-1] + (a[i-1]===b[j-1] ? 0 : 1)); return d[a.length][b.length]; };
+  const answers = t => { const out = [t], m = t.match(/^(.*?)\s*\((.*)\)\s*$/); if(m) out.push(m[1], m[2]); return out.map(norm).filter(Boolean).flatMap(x => x.endsWith("s") ? [x, x.slice(0,-1)] : [x, x+"s"]); };
+  const right = (typed, ti) => { const v = norm(typed); if(!v) return false;
+    return answers(terms[ti][0]).some(a => v === a || lev(v, a) <= (a.length >= 10 ? 2 : a.length >= 5 ? 1 : 0)); };
+
+  let queue, cur, misses, caught, fallMs, playing = false, raf = 0, last = 0, onScreen = true;
+  const timed = () => speed.value !== "off";
+  const showStat = () => { stat.textContent = `Caught: ${caught} of ${terms.length}.` + (timed() ? ` Misses left: ${LIVES - misses}.` : ""); };
+  const setInputs = on => { [input, enter, skip].forEach(x => x.disabled = !on); };
+
+  function start(){
+    cancelAnimationFrame(raf);
+    sky.querySelectorAll(".ft-drop").forEach(x => x.remove()); idle.hidden = true;
+    queue = shuffle(terms.map((_,i)=>i)); cur = null; misses = 0; caught = 0;
+    fallMs = speed.value === "slow" ? 22000 : 14000;
+    playing = true; startBtn.textContent = "Restart"; startBtn.className = "btn ghost";
+    setInputs(true); input.value = ""; input.focus({preventScroll:true}); say("", "");
+    showStat(); next();
+    last = performance.now(); raf = requestAnimationFrame(loop);
+  }
+  function next(){
+    if(!playing) return;
+    if(!queue.length){ win(); return; }
+    const ti = queue.shift();
+    const d = el("div","ft-drop", terms[ti][1]); sky.append(d);
+    const room = Math.max(0, sky.clientWidth - d.offsetWidth);
+    d.style.left = Math.round(Math.random() * room) + "px";
+    const ground = sky.clientHeight - d.offsetHeight;
+    cur = {ti, el:d, y:0, ground, v: ground / fallMs};
+    d.style.transform = "translateY(0)";
+    sr.textContent = "Definition: " + terms[ti][1];
+  }
+  function loop(ts){
+    if(!playing) return;
+    const dt = Math.min(100, ts - last); last = ts;
+    if(cur && timed() && onScreen && !document.hidden){
+      cur.y += dt * cur.v;
+      if(cur.y >= cur.ground){ cur.y = cur.ground; landed(); }
+      if(cur) cur.el.style.transform = `translateY(${cur.y}px)`;
+    }
+    raf = requestAnimationFrame(loop);
+  }
+  function landed(){
+    const c = cur; cur = null; c.el.classList.add("miss");
+    if(timed()) misses++;
+    queue.push(c.ti);
+    say("no", `<p><b>${timed() ? "Landed." : "Skipped."}</b> That was ${terms[c.ti][0]}. It comes back later.</p>`);
+    showStat();
+    if(timed() && misses >= LIVES){ lose(); return; }
+    setTimeout(() => { c.el.remove(); next(); }, 1400);
+  }
+  function win(){
+    playing = false; setInputs(false);
+    say("ok", `<p><b>You caught all ${num(terms.length)} terms.</b>${timed() && misses ? ` ${misses === 1 ? "One definition" : num(misses)[0].toUpperCase() + num(misses).slice(1) + " definitions"} landed along the way.` : ""}</p>`);
+    startBtn.textContent = "Play again"; startBtn.className = "btn"; startBtn.focus({preventScroll:true});
+  }
+  function lose(){
+    playing = false; setInputs(false);
+    say("no", `<p><b>Game over.</b> ${num(LIVES)[0].toUpperCase() + num(LIVES).slice(1)} definitions landed. You caught ${caught} of ${terms.length} terms. Try the Slow speed, or play again.</p>`);
+    startBtn.textContent = "Play again"; startBtn.className = "btn"; startBtn.focus({preventScroll:true});
+  }
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    if(!playing || !cur) return;
+    if(right(input.value, cur.ti)){
+      const c = cur; cur = null; caught++;
+      c.el.classList.add("got"); input.value = "";
+      fallMs = Math.max(speed.value === "slow" ? 12000 : 7000, fallMs * 0.9);
+      say("ok", `<p><b>Caught.</b> That is ${terms[c.ti][0]}.</p>`);
+      showStat();
+      setTimeout(() => { c.el.remove(); next(); }, 500);
+    } else {
+      say("no", `<p><b>Not that term.</b> Try again.</p>`);
+      input.select();
+    }
+  });
+  skip.addEventListener("click", () => { if(playing && cur){ landed(); input.focus({preventScroll:true}); } });
+  startBtn.addEventListener("click", start);
+  speed.addEventListener("change", () => { if(playing) showStat(); });
+  if("IntersectionObserver" in window) new IntersectionObserver(es => { onScreen = es[0].isIntersecting; }, {threshold:0.5}).observe(sky);
+  showStat();
+  return box;
+}
 // Term review as open matching: every term and definition stays face up. The learner selects a term, then its definition, in either order.
 // A matched pair turns green and locks, and the definition shows its term. A miss shows what the selected term means.
 // One round for all terms. No timer and no score. A full list stays below.
@@ -1940,6 +2074,7 @@ function cardsBlock(b){
     }
     showStat();
   }
+  w.append(fallBlock(terms));
   const all = el("details","acc");
   all.innerHTML = `<summary>See all ${terms.length} terms and definitions</summary><div class="body">${terms.map(([t,d])=>entry(t,d)).join("")}</div>`;
   w.append(all);
