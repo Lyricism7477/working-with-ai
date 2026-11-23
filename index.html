@@ -357,10 +357,10 @@ details.acc .body{padding:0 18px 16px 48px}
 /* Small phones: one card per row. */
 @container (max-width:380px){
   .flow .fleaves{grid-template-columns:1fr;grid-template-rows:none;row-gap:4px}
-  .flow .fleaves::before,.flow .fleaves::after{display:none}
+  .flow .fleaves::before{display:none}
   .flow .fcol{grid-row:auto;grid-template-rows:none}
   .flow .leaf{grid-row:auto;grid-template-rows:none}
-  .flow .yn::before{display:none}
+  .flow .fcol+.fcol .yn::before{display:none}
 }
 
 /* Flashcards */
