@@ -174,6 +174,7 @@ textarea.write{font:inherit;color:var(--ink);background:var(--bg);border:1.5px s
 .card.shake{animation:shake .35s}
 @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .piles{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:8px}
+@media (max-width:760px){.piles{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:560px){.piles{grid-template-columns:1fr}}
 .pile{border:1.5px dashed var(--field-line);border-radius:8px;padding:10px 12px;background:var(--bg);display:flex;flex-direction:column;gap:6px;text-align:left;cursor:pointer;color:var(--ink);min-height:56px}
 .pile.over{border-color:var(--accent);background:var(--accent-soft)}
@@ -2203,7 +2204,7 @@ function sortBlock(b, ctx, seg){
   w.append(el("p","eyebrow","Practice"));
   if(b.goal) w.append(el("p",null,`<b>${b.goal}</b>`));
   w.append(el("p",null,b.goal ? b.prompt : `<b>${b.prompt}</b>`));
-  const deck = el("div","deck"); const piles = el("div","piles"); piles.style.setProperty("--n", b.piles.length===4 ? 2 : b.piles.length); const status = el("p","status"); status.setAttribute("aria-live","polite");
+  const deck = el("div","deck"); const piles = el("div","piles"); piles.style.setProperty("--n", b.piles.length); const status = el("p","status"); status.setAttribute("aria-live","polite");
   const pileEls = b.piles.map((name,pi)=>{
     const p = el("div","pile"); p.dataset.pi = pi; p.tabIndex = 0; p.setAttribute("role","button");
     p.innerHTML = `<span class="pn">${name}</span><ul></ul>`;
