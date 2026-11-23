@@ -1897,22 +1897,28 @@ function processBlock(b){
 
 // Bonus game: one definition at a time falls toward the ground, and the learner types its term.
 // Typing the term from memory is harder than matching, so it makes terms stick. Small typos and short forms such as "MCP" count.
-// The fall speeds up after each catch. Three landed definitions end the game. A missed term comes back later.
-// Under reduced motion the definition does not fall, so there is no clock and no game over.
+// The game uses every term from this lesson and the lessons before it. It ends when the learner has caught every term.
+// A landed definition comes back later, so no term is skipped. The fall speeds up after each catch and slows after each landing.
+// The score is how many definitions landed. The lowest score per lesson stays in this browser only.
+// Under reduced motion the definition does not fall. After three wrong tries the game shows the term and brings it back later.
 let ftCount = 0;
-function fallBlock(terms){
+function fallBlock(terms, upTo){
   const id = "ft" + (++ftCount);
   const shuffle = a => { const c = a.slice(); for(let i=c.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [c[i],c[j]]=[c[j],c[i]]; } return c; };
   const words = ["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve"];
   const num = n => words[n] || n;
-  const LIVES = 3;
+  const cap = s => String(s)[0].toUpperCase() + String(s).slice(1);
+  const span = upTo === 0 ? "Lesson 1" : `Lessons 1 to ${upTo + 1}`;
+  const BEST_KEY = "wwai-ft-best-" + upTo;
+  const getBest = () => { try { const v = localStorage.getItem(BEST_KEY); return v === null ? null : +v; } catch(e){ return null; } };
+  const setBest = v => { try { localStorage.setItem(BEST_KEY, String(v)); } catch(e){} };
   const box = el("div","kc ft");
   box.append(el("p","eyebrow","Bonus game"));
   box.append(el("h3",null,"Type each term before its definition lands"));
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   box.append(el("p",null, still
-    ? "A definition appears at the top. Type its term and press Enter on your keyboard. A short form counts, such as MCP. After three wrong tries, the game shows the term and moves on."
-    : `A definition falls from the top. Type its term and press Enter on your keyboard. A short form counts, such as MCP. Each catch makes the next one fall faster. If ${num(LIVES)} definitions land, the game ends.`));
+    ? `A definition appears at the top. Type its term and press Enter on your keyboard. A short form counts, such as MCP. This game uses all ${num(terms.length)} terms from ${span}. After three wrong tries, the game shows the term and brings it back later.`
+    : `A definition falls from the top. Type its term and press Enter on your keyboard. A short form counts, such as MCP. This game uses all ${num(terms.length)} terms from ${span}. A definition that lands comes back later. Catch every term with as few landings as you can.`));
   const ctl = el("div","ft-ctl");
   const startBtn = el("button","btn","Start"); startBtn.type = "button"; ctl.append(startBtn);
   const stat = el("p","omstat");
@@ -1936,14 +1942,15 @@ function fallBlock(terms){
 
   let queue, cur, misses = 0, caught = 0, tries = 0, fallMs, playing = false, raf = 0, last = 0, onScreen = true;
   const timed = () => !still;
-  const showStat = () => { stat.textContent = `Caught: ${caught} of ${terms.length}.` + (timed() ? ` Misses left: ${LIVES - misses}.` : ""); };
+  const showStat = () => { const best = getBest();
+    stat.textContent = `Caught: ${caught} of ${terms.length}.` + (timed() ? ` Landed: ${misses}.` + (best === null ? "" : ` Your best: ${best} landed.`) : ""); };
   const setInputs = on => { input.disabled = !on; };
 
   function start(){
     cancelAnimationFrame(raf);
     sky.querySelectorAll(".ft-drop").forEach(x => x.remove()); idle.hidden = true;
     queue = shuffle(terms.map((_,i)=>i)); cur = null; misses = 0; caught = 0;
-    fallMs = 18000;
+    fallMs = 16000;
     playing = true; startBtn.textContent = "Restart"; startBtn.className = "btn ghost";
     setInputs(true); input.value = ""; input.focus({preventScroll:true}); say("", "");
     showStat(); next();
@@ -1973,21 +1980,23 @@ function fallBlock(terms){
   }
   function landed(){
     const c = cur; cur = null; c.el.classList.add("miss");
-    if(timed()) misses++;
-    queue.push(c.ti);
+    if(timed()){ misses++; fallMs = Math.min(16000, fallMs * 1.2); }
+    // The term comes back after three others, or sooner when fewer are left.
+    queue.splice(Math.min(3, queue.length), 0, c.ti);
     say("no", `<p><b>${timed() ? "Landed." : "Three tries."}</b> That was ${terms[c.ti][0]}. It comes back later.</p>`);
     showStat();
-    if(timed() && misses >= LIVES){ lose(); return; }
     setTimeout(() => { c.el.remove(); next(); }, 1400);
   }
   function win(){
     playing = false; setInputs(false);
-    say("ok", `<p><b>You caught all ${num(terms.length)} terms.</b>${timed() && misses ? ` ${misses === 1 ? "One definition" : num(misses)[0].toUpperCase() + num(misses).slice(1) + " definitions"} landed along the way.` : ""}</p>`);
-    startBtn.textContent = "Play again"; startBtn.className = "btn"; startBtn.focus({preventScroll:true});
-  }
-  function lose(){
-    playing = false; setInputs(false);
-    say("no", `<p><b>Game over.</b> ${num(LIVES)[0].toUpperCase() + num(LIVES).slice(1)} definitions landed. You caught ${caught} of ${terms.length} terms. Play again to beat your score.</p>`);
+    let msg = `<p><b>You caught all ${num(terms.length)} terms.</b>`;
+    if(timed()){
+      const best = getBest();
+      msg += misses === 0 ? " None landed." : ` ${cap(num(misses))} landed.`;
+      if(best === null || misses < best){ setBest(misses); if(best !== null) msg += " That is your new best."; }
+      else msg += ` Your best is ${best} landed.`;
+    }
+    say("ok", msg + "</p>"); showStat();
     startBtn.textContent = "Play again"; startBtn.className = "btn"; startBtn.focus({preventScroll:true});
   }
   form.addEventListener("submit", e => {
@@ -1996,7 +2005,7 @@ function fallBlock(terms){
     if(right(input.value, cur.ti)){
       const c = cur; cur = null; caught++;
       c.el.classList.add("got"); input.value = "";
-      fallMs = Math.max(6000, fallMs * 0.85);
+      fallMs = Math.max(5000, fallMs * 0.9);
       say("ok", `<p><b>Caught.</b> That is ${terms[c.ti][0]}.</p>`);
       showStat();
       setTimeout(() => { c.el.remove(); next(); }, 500);
@@ -2011,6 +2020,12 @@ function fallBlock(terms){
   if("IntersectionObserver" in window) new IntersectionObserver(es => { onScreen = es[0].isIntersecting; }, {threshold:0.5}).observe(sky);
   showStat();
   return box;
+}
+// Every term from Lesson 1 through the lesson at index upTo, with no repeats, for the bonus game.
+function termsThrough(upTo){
+  const seen = new Set(), out = [];
+  LESSONS.slice(0, upTo + 1).forEach(L => L.blocks.forEach(x => { if(x.t === "cards") x.cards.forEach(c => { if(!seen.has(c[0])){ seen.add(c[0]); out.push(c); } }); }));
+  return out;
 }
 // Term review as open matching: every term and definition stays face up. The learner selects a term, then its definition, in either order.
 // A matched pair turns green and locks, and the definition shows its term. A miss shows what the selected term means.
@@ -2073,7 +2088,8 @@ function cardsBlock(b){
     }
     showStat();
   }
-  w.append(fallBlock(terms));
+  const upTo = LESSONS.findIndex(L => L.blocks.includes(b));
+  if(upTo >= 0) w.append(fallBlock(termsThrough(upTo), upTo));
   const all = el("details","acc");
   all.innerHTML = `<summary>See all ${terms.length} terms and definitions</summary><div class="body">${terms.map(([t,d])=>entry(t,d)).join("")}</div>`;
   w.append(all);
