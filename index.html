@@ -386,22 +386,22 @@ details.acc .body{padding:0 18px 16px 48px}
 .score .big{font-size:26px;font-weight:800;color:var(--brand-ink)}
 .finish{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 
-/* Memory match: every card holds both faces in one grid cell, so a card never changes size when it flips.
-   Teal = a card to click. Green = a found pair. Marigold = not a match. */
-.mmgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));grid-auto-rows:1fr;gap:10px}
-.mmcard{all:unset;box-sizing:border-box;display:grid;cursor:pointer;border:1.5px solid var(--link);border-radius:10px;background:var(--accent-soft);padding:12px;font-size:14.5px;line-height:1.45;color:var(--ink);text-align:left}
-.mmcard>span{grid-area:1/1}
-.mmcard .back{align-self:center;justify-self:center;font-weight:800;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--link)}
-.mmcard .front{visibility:hidden}
-.mmcard .front b{display:block;font-size:16px}
-.mmcard.up{background:var(--bg);border-width:2px}
-.mmcard.up .back{visibility:hidden}.mmcard.up .front{visibility:visible}
-.mmcard.found{border-color:var(--good);background:var(--good-soft);cursor:default}
-.mmcard.miss{border-color:var(--bad);background:var(--bad-soft)}
-.mmcard:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-.mmstat{font-size:15px;color:var(--muted);margin:0}
-.mmfb:empty{display:none}
-@media (max-width:560px){.mmgrid{grid-template-columns:1fr 1fr;gap:8px}.mmcard{padding:10px;font-size:13.5px;line-height:1.4}.mmcard .front b{font-size:15px}.mmcard .back{font-size:12px;letter-spacing:.5px}}
+/* Term match: terms and definitions stay face up. The learner selects a term, then its definition, in either order.
+   Teal = a card to click, filled teal = the selected card. Green with a check = a matched pair. Marigold = not a match. */
+.om{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:16px;align-items:start}
+.om-col{display:flex;flex-direction:column;gap:8px}
+.om-head{margin:0;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.omcard{all:unset;box-sizing:border-box;cursor:pointer;border:1.5px solid var(--link);border-radius:8px;background:var(--accent-soft);padding:9px 12px;font-size:15px;line-height:1.45;color:var(--ink);text-align:left}
+.omcard.term{font-weight:700}
+.omcard[aria-pressed="true"]{background:var(--link);color:var(--bg)}
+.omcard.found{border-color:var(--good);background:var(--good-soft);color:var(--ink);cursor:default}
+.omcard.found.term::before{content:"¹3 a0";color:var(--good)}
+.omcard .om-tag{display:block;font-weight:700}
+.omcard.miss{border-color:var(--bad);background:var(--bad-soft);color:var(--ink)}
+.omcard:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.omstat{font-size:15px;color:var(--muted);margin:0}
+.omfb:empty{display:none}
+@media (max-width:560px){.om{grid-template-columns:1fr}.om-terms{flex-direction:row;flex-wrap:wrap}.om-terms .om-head{flex-basis:100%}.omcard{font-size:14.5px}}
 
 @media (prefers-reduced-motion:reduce){.card.shake{animation:none}}
 
@@ -1879,74 +1879,63 @@ function processBlock(b){
   draw(); w.append(dots, body, nav); return w;
 }
 
-// Term review as memory match: cards lie face down, half terms and half definitions. The learner flips two at a time.
-// A found pair stays face up. A miss stays up, with a note on what the term means, until the next click turns both back.
-// Lessons with more than six terms play in two short rounds. No timer and no score that counts. A full list stays below.
+// Term review as open matching: every term and definition stays face up. The learner selects a term, then its definition, in either order.
+// A matched pair turns green and locks, and the definition shows its term. A miss shows what the selected term means.
+// One round for all terms. No timer and no score. A full list stays below.
 function cardsBlock(b){
   const terms = b.cards;
   const shuffle = a => { const c = a.slice(); for(let i=c.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [c[i],c[j]]=[c[j],c[i]]; } return c; };
   const words = ["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve"];
   const num = n => words[n] || n;
-  const nRounds = Math.ceil(terms.length / 6);
   const w = el("div","stack");
   w.append(el("h2",null,"Match each term to its definition"));
-  w.append(el("p",null,`Flip two cards at a time: one term and one definition. Find all ${num(terms.length)} pairs from this lesson${nRounds > 1 ? `, in ${num(nRounds)} rounds` : ""}.`));
+  w.append(el("p",null,`Select a term, then select its definition. Match all ${num(terms.length)} terms from this lesson.`));
   const card = el("div","kc"); w.append(card);
   const entry = (t, d) => `<dl class="termdef"><dt>${t}</dt><dd>${d}</dd></dl>`;
-  let rounds, r, tries, totalTries;
   function start(){
-    const order = shuffle(terms.map((_,i)=>i)), size = Math.ceil(terms.length / nRounds);
-    rounds = []; for(let i=0;i<order.length;i+=size) rounds.push(order.slice(i, i+size));
-    r = 0; totalTries = 0; play();
-  }
-  function play(){
-    const set = rounds[r]; tries = 0;
-    let found = 0, first = null, miss = null;
+    let sel = null, miss = null, found = 0;
     card.replaceChildren();
-    if(nRounds > 1) card.append(el("p","eyebrow",`Round ${r+1} of ${nRounds}`));
-    const stat = el("p","mmstat"); card.append(stat);
-    const showStat = () => { stat.textContent = `Pairs found: ${found} of ${set.length}. Tries: ${tries}.`; };
-    const grid = el("div","mmgrid"); card.append(grid);
-    const fb = el("div","fb mmfb"); fb.setAttribute("aria-live","polite"); card.append(fb);
-    const say = (cls, html) => { fb.className = "fb mmfb " + cls; fb.innerHTML = html; };
-    const cards = shuffle(set.flatMap(ti => [{ti, kind:"term"}, {ti, kind:"def"}]));
-    const label = c => c.el.classList.contains("up") ? (c.kind === "term" ? `Term: ${terms[c.ti][0]}` : `Definition: ${terms[c.ti][1]}`) : `${c.kind === "term" ? "Term" : "Definition"} card, face down`;
-    const turn = (c, up) => { c.el.classList.toggle("up", up); c.el.setAttribute("aria-label", label(c)); };
-    cards.forEach(c => {
-      c.el = el("button","mmcard"); c.el.type = "button";
-      c.el.innerHTML = `<span class="back" aria-hidden="true">${c.kind === "term" ? "Term" : "Definition"}</span><span class="front" aria-hidden="true">${c.kind === "term" ? `<b>${terms[c.ti][0]}</b>` : terms[c.ti][1]}</span>`;
-      turn(c, false);
-      c.el.addEventListener("click", () => flip(c));
-      grid.append(c.el);
-    });
-    function flip(c){
-      if(c.found) return;
-      if(miss){ miss.forEach(m => { m.el.classList.remove("miss"); turn(m, false); }); miss = null; say("", ""); }
-      if(c === first || c.el.classList.contains("up")) return;
-      turn(c, true);
-      if(!first){ first = c; return; }
-      const a = first, z = c; first = null; tries++; totalTries++;
-      if(a.kind === z.kind){
-        [a,z].forEach(m => m.el.classList.add("miss")); miss = [a,z];
-        say("no", `<p><b>Not a match.</b> Both cards are ${a.kind === "term" ? "terms" : "definitions"}. Choose one term and one definition.</p>`);
-      } else if(a.ti === z.ti){
-        [a,z].forEach(m => { m.found = true; m.el.classList.add("found"); m.el.setAttribute("aria-disabled","true"); });
+    const stat = el("p","omstat"); card.append(stat);
+    const showStat = () => { stat.textContent = `Matched: ${found} of ${terms.length}.`; };
+    const board = el("div","om"); card.append(board);
+    const tcol = el("div","om-col om-terms"), dcol = el("div","om-col om-defs");
+    tcol.append(el("p","om-head","Terms")); dcol.append(el("p","om-head","Definitions"));
+    board.append(tcol, dcol);
+    const fb = el("div","fb omfb"); fb.setAttribute("aria-live","polite"); card.append(fb);
+    const say = (cls, html) => { fb.className = "fb omfb " + cls; fb.innerHTML = html; };
+    const mk = (kind, ti) => {
+      const o = {kind, ti, el: el("button","omcard "+kind)};
+      o.el.type = "button"; o.el.setAttribute("aria-pressed","false");
+      o.el.innerHTML = kind === "term" ? terms[ti][0] : terms[ti][1];
+      o.el.addEventListener("click", () => pick(o));
+      return o;
+    };
+    terms.forEach((_,i) => tcol.append(mk("term",i).el));
+    shuffle(terms.map((_,i)=>i)).forEach(i => dcol.append(mk("def",i).el));
+    const select = o => { if(sel) sel.el.setAttribute("aria-pressed","false"); sel = o; if(o) o.el.setAttribute("aria-pressed","true"); };
+    function pick(o){
+      if(o.found) return;
+      if(miss){ miss.forEach(m => m.el.classList.remove("miss")); miss = null; }
+      if(sel === o){ select(null); return; }
+      if(!sel || sel.kind === o.kind){ select(o); return; }
+      const a = sel, z = o; select(null);
+      const t = a.kind === "term" ? a : z, d = a.kind === "term" ? z : a;
+      if(t.ti === d.ti){
+        [t,d].forEach(m => { m.found = true; m.el.classList.add("found"); m.el.removeAttribute("aria-pressed"); m.el.setAttribute("aria-disabled","true"); });
+        d.el.innerHTML = `<span class="om-tag">${terms[t.ti][0]}</span>${terms[t.ti][1]}`;
         found++;
-        say("ok", `<p><b>Match.</b> That is the definition of ${terms[a.ti][0]}.</p>`);
+        say("ok", `<p><b>Match.</b> That is the definition of ${terms[t.ti][0]}.</p>`);
       } else {
-        [a,z].forEach(m => m.el.classList.add("miss")); miss = [a,z];
-        const t = a.kind === "term" ? a : z;
-        say("no", `<p><b>Not a match.</b> Here is what the term means:</p>` + entry(terms[t.ti][0], terms[t.ti][1]));
+        [t,d].forEach(m => m.el.classList.add("miss")); miss = [t,d];
+        say("no", `<p><b>Not a match.</b> Here is what ${terms[t.ti][0]} means:</p>` + entry(terms[t.ti][0], terms[t.ti][1]));
       }
       showStat();
-      if(found === set.length) done();
+      if(found === terms.length) done();
     }
     function done(){
-      const last = r === rounds.length - 1;
-      const all = last && nRounds > 1 ? ` That makes all ${num(terms.length)} terms in ${totalTries} tries.` : "";
-      say("ok", `<p><b>You found all ${num(set.length)} pairs in ${tries} tries.</b>${all}</p>`);
-      const btn = el("button", last ? "btn ghost" : "btn", last ? "Play again" : `Next round`); btn.type = "button";
-      btn.addEventListener("click", () => { if(last) start(); else { r++; play(); } card.querySelector(".mmcard").focus(); });
+      say("ok", `<p><b>You matched all ${num(terms.length)} terms.</b></p>`);
+      const btn = el("button","btn ghost","Play again"); btn.type = "button";
+      btn.addEventListener("click", () => { start(); card.querySelector(".omcard").focus(); });
       card.append(btn); btn.focus({preventScroll:true});
     }
     showStat();
