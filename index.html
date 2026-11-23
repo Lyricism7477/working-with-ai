@@ -634,7 +634,7 @@ const LESSONS = [
     {t:"p", html:`For a short, simple task, the smallest model often gives the same answer as the largest. When a reply misses, try a larger model. Part 3 shows the other fix: more thinking time.`},
     {t:"vis", layout:"pair", label:"Two different settings", items:[
       ["model","Choose a model","Change which model answers the task. A larger model may handle harder work.","warm"],
-      ["thinking","Choose thinking time","Keep the model; change how long it works through the problem."]]},
+      ["thinking","Choose thinking time","Keep the same model. Give it more or less time to work through the problem."]]},
     {t:"gate"},
     {t:"h", text:"Part 3. Choose how long the model thinks", why:""},
     {t:"p", html:`Many apps also let a model <b>think</b> before it answers. The model works through the problem step by step and checks its own work, then answers. Thinking time is a separate setting from the model, so you can give the same model more time or less.`},
@@ -807,9 +807,9 @@ const LESSONS = [
     {t:"p", html:`Two of the causes depend on the <b>context window</b>: the most text a model can read at one time, including the whole chat, any files and the model’s own replies. Each message adds to it. Each new chat starts with an empty context window.`},
     {t:"p", html:`AI apps measure the text in a context window in <b>tokens</b>. One token is about three-quarters of an English word. Context windows and usage limits both count tokens.`},
     {t:"vis", layout:"pair", label:"What the AI can read now", items:[
-      ["longchat","A long chat","Some earlier details may no longer be available in the model’s current context."],
-      ["newchat","A new chat","Starts with an empty context window. It doesn’t automatically contain the previous chat.","warm"]],
-      note:"Conceptual illustration, not a fixed token threshold. Other causes of apparent forgetting are covered below."},
+      ["longchat","A long chat","The AI may no longer read details from early in the chat."],
+      ["newchat","A new chat","Starts with an empty context window. Your earlier chat is not in that window.","warm"]],
+      note:"The picture shows the idea, not the exact point where early details drop out. The steps below cover other reasons the AI seems to forget."},
     {t:"process", label:"Cause", intro:"Select Start to see each cause, what it looks like in the chat and its fix.", steps:[
       ["The chat got longer than the context window","The app dropped or shortened early messages, so answers get worse.", qrows([["What you see","The AI misses a rule or a file from the start of a long chat."],["The fix",`Start a new chat. Paste in a <b>handoff note</b>: a short summary of the work so far. ${a(L.limits,"Make Your AI Usage Limits Last Longer")} shows how.`]], true)],
       ["The rule is in the middle of a long chat","Even when the whole chat fits in the context window, models follow the start and the end of a chat more closely than the middle.", qrows([["What you see","The AI follows some of your earlier rules and skips others."],["The fix","Repeat the rule at the end of your prompt."]], true)],
@@ -1065,7 +1065,7 @@ const LESSONS = [
       ["skill","Skill","A saved method for one kind of task."],
       ["plugin","Plugin","An installable package. It can contain skills, connectors and commands."],
       ["connector","Connector","A link between the AI and another app."]],
-      note:"These are different roles: a connector does not need to be inside a plugin."},
+      note:"A connector can also work on its own, outside a plugin."},
     {t:"tabs", tabs:[
       {title:"Connector", html:`<p>Links the AI to one other app.</p><ul class="list"><li>You turn on the Outlook connector in Claude’s Settings, and Claude can read your calendar.</li><li>Your admin connects Copilot to the company’s SharePoint sites.</li></ul>`},
       {title:"Plugin", html:`<p>A package that adds several abilities in one install.</p><ul class="list"><li>A plugin adds a /wrap-up command, a job aid skill and a Notion connector to Cowork.</li><li>A ChatGPT plugin adds a set of skills and apps for one team.</li></ul>`}]},
