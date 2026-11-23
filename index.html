@@ -322,6 +322,9 @@ details.acc .body{padding:0 18px 16px 48px}
 .dots span.on{background:var(--accent)}
 .proc .stepname{font-size:20px;font-weight:800;color:var(--brand-ink)}
 .proc .nav{display:flex;justify-content:space-between;gap:10px}
+.pfit{display:grid}
+.pfit>*{grid-area:1/1}
+.pghost{visibility:hidden}
 
 .pset{display:flex;flex-direction:column;gap:14px}
 
@@ -1902,14 +1905,18 @@ function processBlock(b){
   const body = el("div","stack"); body.setAttribute("aria-live","polite");
   const nav = el("div","nav"); const back = el("button","btn ghost","Back"); const next = el("button","btn","Start");
   back.type = next.type = "button"; nav.append(back,next);
+  const view = k => k<0 ? `<p class="stepname">${b.intro}</p>` : `<p class="eyebrow">${b.label || "Step"} ${k+1} of ${b.steps.length}</p><p class="stepname">${b.steps[k][0]}</p><p>${b.steps[k][1]}</p>${b.steps[k][2] || ""}`;
+  // The box keeps one height: hidden copies of every step sit in the same grid cell, so the tallest step sets the height.
+  const fit = el("div","pfit");
+  [-1, ...b.steps.keys()].forEach(k => { const g = el("div","stack pghost", view(k)); g.setAttribute("aria-hidden","true"); fit.append(g); });
+  fit.append(body);
   function draw(){
     [...dots.children].forEach((d,j)=>d.classList.toggle("on", j<=i));
-    if(i<0) body.innerHTML = `<p class="stepname">${b.intro}</p>`;
-    else body.innerHTML = `<p class="eyebrow">${b.label || "Step"} ${i+1} of ${b.steps.length}</p><p class="stepname">${b.steps[i][0]}</p><p>${b.steps[i][1]}</p>${b.steps[i][2] || ""}`;
+    body.innerHTML = view(i);
     back.disabled = i<0; next.disabled = i>=b.steps.length-1; next.textContent = i<0 ? "Start" : "Next";
   }
   back.addEventListener("click",()=>{ i--; draw(); }); next.addEventListener("click",()=>{ i++; draw(); });
-  draw(); w.append(dots, body, nav); return w;
+  draw(); w.append(dots, fit, nav); return w;
 }
 
 // Bonus game: one definition at a time falls toward the ground, and the learner types its term.
