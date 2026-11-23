@@ -862,7 +862,7 @@ const LESSONS = [
       <li>Short and long replies: change your saved instructions. The two sets of instructions disagree. Delete “Be brief” from custom instructions, or add “except in this project” to it.</li>
       <li>The skipped rule from halfway through: repeat the rule in your prompt. The chat fits, but the model follows the middle of a chat less closely than the end.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 4. Fix a wrong reply", why:""},
+    {t:"h", text:"Part 4. Fix weak or false replies", why:""},
     {t:"p", html:`When a reply fails, check the causes in this order. First, the prompt: most weak replies come from a prompt that leaves out the goal, the reader or the format. Second, what the app can read. Third, the <b>knowledge cutoff</b>: the date the model’s learning stops. The model knows nothing that happened after that date, in any chat. Change the model last, after the prompt and the files are right.`},
     {t:"note", html:`<b>Prompt or model?</b> Imagine giving the same prompt and files to a capable new hire. If the new hire would need to ask questions or guess, the prompt is missing something, so rewrite the prompt. If the new hire would get it right and the AI does not, choose a more capable model or more thinking time.`},
     {t:"p", html:`Some apps search the web when a question needs current facts. The app runs the search and lists the sources, and the model still writes the summary. Check the summary against the sources.`},
@@ -876,19 +876,19 @@ const LESSONS = [
       ["Questions that suggest an answer", `<p>Ask “Isn’t this the best option?” and the reply usually says yes.</p>${qrows([["Set up once","Add a custom instruction: name weaknesses, and disagree when the evidence does."],["Still up to you","Ask a neutral question. No setting can rewrite your question for you."]], true)}`]]},
     {t:"note", html:`<b>Easy to mix up.</b> A hallucination and an out-of-date answer need different guards. Ask: was this ever true? If never, the guard is a source for every fact. If it was true before the cutoff, the guard is the date and a web search.`},
     {t:"p", html:`The custom instructions, web search and code settings from <a href="#setup">Before you start</a> set up most of these guards. The “Still up to you” row in each kind is what no setting does for you.`},
-    {t:"sort", goal:"Practice finding the cause of a wrong reply, so you change the right thing first.", prompt:"Drag each problem to the change that fixes it, or select a pile.", piles:["Rewrite the prompt","Add or link the file","Turn on web search","Choose a different model"],
+    {t:"sort", goal:"Practice finding the cause of a wrong reply, so you change the right thing first.", prompt:"Drag each problem to the change that fixes it, or select a pile.", piles:["Rewrite the prompt","Upload the file or use a connector","Turn on web search","Choose a different model"],
       cards:[["You ask, “Help me plan the workshop,” and the reply is generic.",0,"Add the goal, the audience, the length and what you want back."],
-        ["Claude cannot see a client email in your Outlook inbox.",1,"Copilot reads Outlook, or you can link Microsoft 365 to Claude. A different model cannot read the email either."],
+        ["Claude cannot see a client email in your Outlook inbox.",1,"An email is kept in another app, so Claude needs a connector to read it. Use the Microsoft 365 connector in Claude, or ask Copilot, which already reads Outlook. A different model cannot read the email either."],
         ["You need a press release the client posted on its public website this week.",2,"The page is newer than the model’s knowledge cutoff, and it is public, so a search can find it. A search cannot find news that is not public."],
         ["The draft uses the wrong tone, and your prompt never said who will read it.",0,"Say who the reader is."],
-        ["ChatGPT cannot open a job aid page in Notion.",1,"Paste the page in, or link Notion to ChatGPT."],
+        ["ChatGPT cannot open a job aid page in Notion.",1,"Paste the page into the chat, or use the Notion connector in ChatGPT."],
         ["Your prompt gives the goal, the reader, the format and an example. The app has every file it needs. The plan still skips steps.",3,"The prompt and the files are right, so a more capable model or more thinking time is the next change."]]},
     {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
       <li>The generic workshop plan: rewrite the prompt. Add the goal, the audience, the length and what you want back.</li>
-      <li>The Outlook email: add or link the file. Copilot reads Outlook, or you can link Microsoft 365 to Claude. A different model cannot read the email either.</li>
+      <li>The Outlook email: use a connector. An email is kept in another app, so Claude needs a connector to read it. Use the Microsoft 365 connector in Claude, or ask Copilot, which already reads Outlook. A different model cannot read the email either.</li>
       <li>The public press release: turn on web search. The page is newer than the model’s knowledge cutoff, and it is public, so a search can find it. A search cannot find news that is not public.</li>
       <li>The wrong tone: rewrite the prompt. Say who the reader is.</li>
-      <li>The Notion page: add or link the file. Paste the page in, or link Notion to ChatGPT.</li>
+      <li>The Notion page: upload the file or use a connector. Paste the page into the chat, or use the Notion connector in ChatGPT.</li>
       <li>The plan that still skips steps: choose a different model. The prompt and the files are right, so a more capable model or more thinking time is the next change.</li></ul>`},
     {t:"statement", text:"Set up once what you can. Then check the facts a client will rely on."},
     {t:"gate"},
