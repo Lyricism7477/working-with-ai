@@ -1921,6 +1921,10 @@ function fallBlock(terms, upTo){
   box.append(el("p",null, still
     ? `A definition appears at the top. Type its term and press Enter on your keyboard. A short form counts, such as MCP. This game uses all ${num(terms.length)} terms from ${span}. After three wrong tries, the game shows the term and brings it back later.`
     : `A definition falls from the top. Type its term and press Enter on your keyboard. A short form counts, such as MCP. This game uses all ${num(terms.length)} terms from ${span}. A definition that lands comes back later. Catch every term with as few landings as you can.`));
+  const lastLesson = upTo === LESSONS.length - 1;
+  box.append(el("p",null, lastLesson
+    ? "This is the final round. It holds every term from the course."
+    : "You'll see this game again in every lesson. Each time it adds that lesson's terms, so it gets harder as you go."));
   const ctl = el("div","ft-ctl");
   const startBtn = el("button","btn","Start"); startBtn.type = "button"; ctl.append(startBtn);
   const stat = el("p","omstat");
@@ -1942,7 +1946,7 @@ function fallBlock(terms, upTo){
   const right = (typed, ti) => { const v = norm(typed); if(!v) return false;
     return answers(terms[ti][0]).some(a => v === a || lev(v, a) <= (a.length >= 10 ? 2 : a.length >= 5 ? 1 : 0)); };
 
-  let queue, cur, misses = 0, caught = 0, tries = 0, fallMs, playing = false, raf = 0, last = 0, onScreen = true;
+  let queue, cur, misses = 0, caught = 0, streak = 0, tries = 0, fallMs, playing = false, raf = 0, last = 0, onScreen = true;
   const timed = () => !still;
   const showStat = () => { const best = getBest();
     stat.textContent = `Caught: ${caught} of ${terms.length}.` + (timed() ? ` Landed: ${misses}.` + (best === null ? "" : ` Your best: ${best} landed.`) : ""); };
@@ -1951,7 +1955,7 @@ function fallBlock(terms, upTo){
   function start(){
     cancelAnimationFrame(raf);
     sky.querySelectorAll(".ft-drop").forEach(x => x.remove()); idle.hidden = true;
-    queue = shuffle(terms.map((_,i)=>i)); cur = null; misses = 0; caught = 0;
+    queue = shuffle(terms.map((_,i)=>i)); cur = null; misses = 0; caught = 0; streak = 0;
     fallMs = 16000;
     playing = true; startBtn.textContent = "Restart"; startBtn.className = "btn ghost";
     setInputs(true); input.value = ""; input.focus({preventScroll:true}); say("", "");
@@ -1985,19 +1989,23 @@ function fallBlock(terms, upTo){
     if(timed()){ misses++; fallMs = Math.min(16000, fallMs * 1.2); }
     // The term comes back after three others, or sooner when fewer are left.
     queue.splice(Math.min(3, queue.length), 0, c.ti);
-    say("no", `<p><b>${timed() ? "Landed." : "Three tries."}</b> That was ${terms[c.ti][0]}. It comes back later.</p>`);
+    streak = 0;
+    say("no", timed()
+      ? `<p><b>Landed.</b> That was ${terms[c.ti][0]}. Watch for it again soon.</p>`
+      : `<p><b>Here's the answer: ${terms[c.ti][0]}.</b> Watch for it again soon.</p>`);
     showStat();
     setTimeout(() => { c.el.remove(); next(); }, 1400);
   }
   function win(){
     playing = false; setInputs(false);
-    let msg = `<p><b>You caught all ${num(terms.length)} terms.</b>`;
+    let msg = `<p><b>You caught all ${num(terms.length)} terms. Great work!</b>`;
     if(timed()){
       const best = getBest();
-      msg += misses === 0 ? " None landed." : ` ${cap(num(misses))} landed.`;
-      if(best === null || misses < best){ setBest(misses); if(best !== null) msg += " That is your new best."; }
+      msg += misses === 0 ? " A perfect game: none landed." : ` ${cap(num(misses))} landed.`;
+      if(best === null || misses < best){ setBest(misses); if(best !== null) msg += " That's a new best!"; }
       else msg += ` Your best is ${best} landed.`;
     }
+    msg += lastLesson ? " You know every term in the course." : ` The game in Lesson ${upTo + 2} adds new terms.`;
     say("ok", msg + "</p>"); showStat();
     startBtn.textContent = "Play again"; startBtn.className = "btn"; startBtn.focus({preventScroll:true});
   }
@@ -2008,13 +2016,15 @@ function fallBlock(terms, upTo){
       const c = cur; cur = null; caught++;
       c.el.classList.add("got"); input.value = "";
       fallMs = Math.max(5000, fallMs * 0.9);
-      say("ok", `<p><b>Caught.</b> That is ${terms[c.ti][0]}.</p>`);
+      streak++;
+      const cheer = streak >= 3 ? `${cap(num(streak))} in a row!` : ["Nice catch!","Got it!","Yes!","Right on!","Well done!"][Math.floor(Math.random()*5)];
+      say("ok", `<p><b>${cheer}</b> That's ${terms[c.ti][0]}.</p>`);
       showStat();
       setTimeout(() => { c.el.remove(); next(); }, 500);
     } else {
       tries++;
       if(!timed() && tries >= 3){ input.value = ""; landed(); return; }
-      say("no", `<p><b>Not that term.</b> Try again.</p>`);
+      say("no", `<p><b>Not that one.</b> Try again.</p>`);
       input.select();
     }
   });
