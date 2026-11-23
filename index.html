@@ -514,9 +514,10 @@ a,.otitle:hover,.howto>summary,details.acc>summary,.btn.ghost,.copybtn,.burger,.
 .vis h4{margin:0 0 2px;font-family:var(--font);font-size:17px;line-height:1.35;color:var(--ink)}
 .vis li p{margin:0;font-size:15px;line-height:1.5;color:var(--muted)}
 .vis .vis-note{margin:12px 0 0;font-size:14px;line-height:1.5;color:var(--muted)}
-.vis-three ul{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;border-top:2px solid var(--ink);padding-top:16px}
-.vis-three svg{width:96px;height:77px;margin:0 0 10px -6px}
-.vis-three .vis-note{padding-bottom:14px;border-bottom:2px solid var(--ink)}
+.vis-three ul{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.vis-three li{display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 16px 18px;border-top:3px solid var(--fm-live);background:var(--fm-live-soft);border-radius:0 0 7px 7px}
+.vis-three li.warm{border-top-color:var(--fm-copy);background:var(--fm-copy-soft)}
+.vis-three svg{width:88px;height:70px;margin:0 0 12px}
 .vis-pair ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .vis-pair li{display:flex;align-items:center;gap:16px;padding:18px 18px 18px 14px;border-left:3px solid var(--fm-live);background:var(--fm-live-soft);border-radius:0 7px 7px 0}
 .vis-pair li.warm{border-left-color:var(--fm-copy);background:var(--fm-copy-soft)}
@@ -527,7 +528,8 @@ a,.otitle:hover,.howto>summary,details.acc>summary,.btn.ghost,.copybtn,.burger,.
 .vis-both svg{width:76px;height:61px}
 @container (max-width:560px){
   .vis-three ul{grid-template-columns:1fr;gap:14px}
-  .vis-three li{display:flex;align-items:center;gap:14px}
+  .vis-three li{flex-direction:row;align-items:center;text-align:left;gap:14px;padding:14px 16px 14px 12px;border-top:0;border-left:3px solid var(--fm-live);border-radius:0 7px 7px 0}
+  .vis-three li.warm{border-left-color:var(--fm-copy)}
   .vis-three svg{width:72px;height:58px;margin:0}
   .vis-pair ul{grid-template-columns:1fr;gap:12px}
   .vis-pair svg{width:72px;height:56px}
@@ -1062,7 +1064,7 @@ const LESSONS = [
     {t:"p", html:`A <b>connector</b> links the AI to one other app. A plugin can contain connectors, along with skills and commands.`},
     {t:"vis", layout:"three", label:"How the parts differ", items:[
       ["skill","Skill","A saved method for one kind of task."],
-      ["plugin","Plugin","An installable package. It can contain skills, connectors and commands."],
+      ["plugin","Plugin","An installable package. It can contain skills, connectors and commands.","warm"],
       ["connector","Connector","A link between the AI and another app."]]},
     {t:"tabs", tabs:[
       {title:"Connector", html:`<p>Links the AI to one other app.</p><ul class="list"><li>You turn on the Outlook connector in Claude’s Settings, and Claude can read your calendar.</li><li>Your admin connects Copilot to the company’s SharePoint sites.</li></ul>`},
