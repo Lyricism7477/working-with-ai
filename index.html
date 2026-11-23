@@ -1935,7 +1935,7 @@ function fallBlock(terms){
   const right = (typed, ti) => { const v = norm(typed); if(!v) return false;
     return answers(terms[ti][0]).some(a => v === a || lev(v, a) <= (a.length >= 10 ? 2 : a.length >= 5 ? 1 : 0)); };
 
-  let queue, cur, misses, caught, fallMs, playing = false, raf = 0, last = 0, onScreen = true;
+  let queue, cur, misses = 0, caught = 0, fallMs, playing = false, raf = 0, last = 0, onScreen = true;
   const timed = () => speed.value !== "off";
   const showStat = () => { stat.textContent = `Caught: ${caught} of ${terms.length}.` + (timed() ? ` Misses left: ${LIVES - misses}.` : ""); };
   const setInputs = on => { [input, enter, skip].forEach(x => x.disabled = !on); };
