@@ -732,10 +732,10 @@ const LESSONS = [
     {t:"score", pass:3},
     {t:"cards", cards:[
       ["App","The window you sign in to, type in and upload files to, such as Copilot or Claude."],
-      ["Model","The AI behind an app that reads your request and answers it. One app can offer several models."],
+      ["Model","The AI behind an app that reads your request and writes the answer. Many apps let you choose a faster one or a more capable one."],
       ["Usage limit","The amount of AI use your plan allows before you must wait or switch to a smaller model."],
-      ["Thinking","A setting in which the model works through a problem step by step before it replies. Slower, and right more often on hard tasks."],
-      ["Chat","A conversation in which you type a request, the AI replies, and you do the rest."],
+      ["Thinking","A setting that makes the model work through a problem step by step before it answers. Answers take longer and are right more often on hard tasks."],
+      ["Chat","A conversation where you type a request, the AI replies and you do the rest."],
       ["Project","A workspace that keeps the same files and instructions ready for every chat inside it."]]},
     {t:"end", html:`You can now choose an app for a task and say why, choose a model and how long it thinks, and choose chat, a project or an agent. Post a question or something you tried in the ${a(L.teams,"Learning and practicing with AI tools")} channel in Teams. Lesson 2 shows how to give the AI what it needs.`}
   ]
@@ -906,9 +906,9 @@ const LESSONS = [
       ["Connector","A link that lets an AI tool read or change data in another app, such as Outlook, SharePoint or Notion."],
       ["MCP (Model Context Protocol)","A shared standard for building connectors, so one connector works with many AI tools."],
       ["Context window","The most text a model can read at one time: the whole chat, any files and its own replies."],
-      ["Token","The unit AI apps use to measure text. One token is about three-quarters of an English word."],
+      ["Token","The small piece of text an AI app counts to measure how much you send and get back. One piece is about three-quarters of an English word."],
       ["Memory","A feature that saves a few facts about you between chats. The app chooses what to save."],
-      ["Knowledge cutoff","The date the model’s learning stops. The model does not know later events unless it searches or you tell it."],
+      ["Knowledge cutoff","The date the model’s learning stops. The model has no record of later events unless it searches the web or you tell it."],
       ["Hallucination","A false statement the AI gives as fact. It was never true."]]},
     {t:"end", html:`You can now choose where to put a direction and a file, find the cause when the AI seems to forget, and set up once what you can to prevent wrong answers. Post a question or something you tried in the ${a(L.teams,"Learning and practicing with AI tools")} channel in Teams. Lesson 3 shows how to let an agent do the work.`}
   ]
@@ -1029,11 +1029,11 @@ const LESSONS = [
     {t:"score", pass:4},
     {t:"cards", cards:[
       ["Tool use","An action an AI takes outside the conversation, such as searching the web, reading a file or sending an email."],
-      ["Agentic AI","AI that works toward a goal on its own: it plans, acts, checks the results, and repeats until the task is done."],
+      ["Agentic AI","AI that works toward a goal on its own: it plans, acts, checks the results and repeats until the task is done."],
       ["Agent","An AI tool that completes a task with several steps, such as Claude Cowork, Claude Code, ChatGPT Work or Codex."],
       ["Approval prompt","A pause in which the agent asks you before it takes an action."],
       ["Prompt injection","An instruction that someone hides in a web page, email or file to make the AI do something you did not ask for."],
-      ["Version control","A system that saves each version of your files, shows what changed, and lets you go back."],
+      ["Version control","A system that saves each change to your files, shows what changed and lets you go back to an earlier point."],
       ["Repository","A folder that version control tracks, together with the history of every saved version."],
       ["Commit","One saved version of the files in a repository, with a short note about what changed."],
       ["GitHub","A website that stores repositories online and keeps their full history."],
@@ -1244,9 +1244,9 @@ const LESSONS = [
       right:"Correct. That is the first step of AI License Management. If the tool passes, test it with no Fredrickson or client data, then ask Luke for a full review.", wrong:"Not quite. AI License Management starts with 15 minutes or less on the tool’s website. A finished client file is still client data. Signing up with your work email does not make an account a work account."},
     {t:"score", pass:3},
     {t:"cards", cards:[
-      ["Work account","An AI account the company set up, which a company contract covers."],
-      ["Your own account","An AI account you pay for or sign up for yourself. It is not approved for client content."],
-      ["Client content","Anything that comes from a client or describes the client’s business, such as documents, data, names and call notes."]]},
+      ["Work account","A login to an AI tool that the company set up for you, under a company contract."],
+      ["Your own account","A login to an AI tool that you pay for or sign up for yourself. Use it only for work with no client content."],
+      ["Client content","Anything that comes from an organization we do work for or describes its business, such as documents, data, names and call notes."]]},
     {t:"note", html:`<p><b>Keep five habits that no setting does for you.</b></p><ul class="list"><li>Choose the app that fits the task. Lesson 1 shows how.</li><li>Start a new chat for each task. Lesson 2 Part 3 shows why.</li><li>Ask a neutral question, not one that suggests the answer.</li><li>Check the sources before anyone relies on a fact.</li><li>Get the client’s permission before you add client content.</li></ul>`},
     {t:"end", html:`You can now decide where you may add client content, tell a client how you used AI, and take the first step before you use a new AI tool. That finishes the course. Post a question or something you tried in the ${a(L.teams,"Learning and practicing with AI tools")} channel in Teams.`}
   ]
@@ -1911,21 +1911,21 @@ function fallBlock(terms){
   box.append(el("h3",null,"Type each term before its definition lands"));
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   box.append(el("p",null, still
-    ? "A definition appears at the top. Type its term and press Enter. A short form counts, such as MCP."
-    : `A definition falls from the top. Type its term and press Enter. A short form counts, such as MCP. Each catch makes the next one fall faster. If ${num(LIVES)} definitions land, the game ends.`));
+    ? "A definition appears at the top. Type its term and press Enter on your keyboard. A short form counts, such as MCP. After three wrong tries, the game shows the term and moves on."
+    : `A definition falls from the top. Type its term and press Enter on your keyboard. A short form counts, such as MCP. Each catch makes the next one fall faster. If ${num(LIVES)} definitions land, the game ends.`));
   const ctl = el("div","ft-ctl");
   const startBtn = el("button","btn","Start"); startBtn.type = "button"; ctl.append(startBtn);
   const stat = el("p","omstat");
   const sky = el("div","ft-sky");
-  const idle = el("p","ft-idle","Select Start. The first definition falls right away.");
+  const idle = el("p","ft-idle",still ? "Select Start below. The first definition appears right away." : "Select Start below. The first definition falls right away.");
   sky.append(idle);
   const sr = el("p","vh"); sr.setAttribute("aria-live","polite");
   const form = el("form","ft-form");
-  form.innerHTML = `<label for="${id}-in">Type the term</label><input id="${id}-in" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" disabled><button class="btn" type="submit" disabled>Enter</button><button class="btn ghost ft-skip" type="button" disabled>Skip</button>`;
-  const input = form.querySelector("input"), enter = form.querySelector('button[type="submit"]'), skip = form.querySelector(".ft-skip");
+  form.innerHTML = `<label for="${id}-in">Type the term</label><input id="${id}-in" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="enter" disabled>`;
+  const input = form.querySelector("input");
   const fb = el("div","fb omfb"); fb.setAttribute("aria-live","polite");
   const say = (cls, html) => { fb.className = "fb omfb " + cls; fb.innerHTML = html; };
-  box.append(ctl, stat, sky, sr, form, fb);
+  box.append(stat, sky, sr, form, fb, ctl);
 
   const norm = s => s.toLowerCase().replace(/[’']/g,"").replace(/[^a-z0-9]+/g," ").trim();
   const lev = (a, b) => { const d = Array.from({length:a.length+1}, (_,i) => [i]); for(let j=1;j<=b.length;j++) d[0][j] = j;
@@ -1934,10 +1934,10 @@ function fallBlock(terms){
   const right = (typed, ti) => { const v = norm(typed); if(!v) return false;
     return answers(terms[ti][0]).some(a => v === a || lev(v, a) <= (a.length >= 10 ? 2 : a.length >= 5 ? 1 : 0)); };
 
-  let queue, cur, misses = 0, caught = 0, fallMs, playing = false, raf = 0, last = 0, onScreen = true;
+  let queue, cur, misses = 0, caught = 0, tries = 0, fallMs, playing = false, raf = 0, last = 0, onScreen = true;
   const timed = () => !still;
   const showStat = () => { stat.textContent = `Caught: ${caught} of ${terms.length}.` + (timed() ? ` Misses left: ${LIVES - misses}.` : ""); };
-  const setInputs = on => { [input, enter, skip].forEach(x => x.disabled = !on); };
+  const setInputs = on => { input.disabled = !on; };
 
   function start(){
     cancelAnimationFrame(raf);
@@ -1952,7 +1952,7 @@ function fallBlock(terms){
   function next(){
     if(!playing) return;
     if(!queue.length){ win(); return; }
-    const ti = queue.shift();
+    const ti = queue.shift(); tries = 0;
     const d = el("div","ft-drop", terms[ti][1]); sky.append(d);
     const room = Math.max(0, sky.clientWidth - d.offsetWidth);
     d.style.left = Math.round(Math.random() * room) + "px";
@@ -1975,7 +1975,7 @@ function fallBlock(terms){
     const c = cur; cur = null; c.el.classList.add("miss");
     if(timed()) misses++;
     queue.push(c.ti);
-    say("no", `<p><b>${timed() ? "Landed." : "Skipped."}</b> That was ${terms[c.ti][0]}. It comes back later.</p>`);
+    say("no", `<p><b>${timed() ? "Landed." : "Three tries."}</b> That was ${terms[c.ti][0]}. It comes back later.</p>`);
     showStat();
     if(timed() && misses >= LIVES){ lose(); return; }
     setTimeout(() => { c.el.remove(); next(); }, 1400);
@@ -2001,11 +2001,12 @@ function fallBlock(terms){
       showStat();
       setTimeout(() => { c.el.remove(); next(); }, 500);
     } else {
+      tries++;
+      if(!timed() && tries >= 3){ input.value = ""; landed(); return; }
       say("no", `<p><b>Not that term.</b> Try again.</p>`);
       input.select();
     }
   });
-  skip.addEventListener("click", () => { if(playing && cur){ landed(); input.focus({preventScroll:true}); } });
   startBtn.addEventListener("click", start);
   if("IntersectionObserver" in window) new IntersectionObserver(es => { onScreen = es[0].isIntersecting; }, {threshold:0.5}).observe(sky);
   showStat();
