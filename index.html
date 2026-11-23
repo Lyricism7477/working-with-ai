@@ -808,8 +808,7 @@ const LESSONS = [
     {t:"p", html:`AI apps measure the text in a context window in <b>tokens</b>. One token is about three-quarters of an English word. Context windows and usage limits both count tokens.`},
     {t:"vis", layout:"pair", label:"What the AI can read now", items:[
       ["longchat","A long chat","The AI may no longer read details from early in the chat."],
-      ["newchat","A new chat","Starts with an empty context window. Your earlier chat is not in that window.","warm"]],
-      note:"The picture shows the idea, not the exact point where early details drop out. The steps below cover other reasons the AI seems to forget."},
+      ["newchat","A new chat","Starts with an empty context window. Your earlier chat is not in that window.","warm"]]},
     {t:"process", label:"Cause", intro:"Select Start to see each cause, what it looks like in the chat and its fix.", steps:[
       ["The chat got longer than the context window","The app dropped or shortened early messages, so answers get worse.", qrows([["What you see","The AI misses a rule or a file from the start of a long chat."],["The fix",`Start a new chat. Paste in a <b>handoff note</b>: a short summary of the work so far. ${a(L.limits,"Make Your AI Usage Limits Last Longer")} shows how.`]], true)],
       ["The rule is in the middle of a long chat","Even when the whole chat fits in the context window, models follow the start and the end of a chat more closely than the middle.", qrows([["What you see","The AI follows some of your earlier rules and skips others."],["The fix","Repeat the rule at the end of your prompt."]], true)],
