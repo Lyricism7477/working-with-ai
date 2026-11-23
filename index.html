@@ -2024,7 +2024,7 @@ function sortBlock(b, ctx, seg){
   w.append(el("p","eyebrow","Practice"));
   if(b.goal) w.append(el("p",null,`<b>${b.goal}</b>`));
   w.append(el("p",null,b.goal ? b.prompt : `<b>${b.prompt}</b>`));
-  const deck = el("div","deck"); const piles = el("div","piles"); piles.style.setProperty("--n", b.piles.length); const status = el("p","status"); status.setAttribute("aria-live","polite");
+  const deck = el("div","deck"); const piles = el("div","piles"); piles.style.setProperty("--n", b.piles.length===4 ? 2 : b.piles.length); const status = el("p","status"); status.setAttribute("aria-live","polite");
   const pileEls = b.piles.map((name,pi)=>{
     const p = el("div","pile"); p.dataset.pi = pi; p.tabIndex = 0; p.setAttribute("role","button");
     p.innerHTML = `<span class="pn">${name}</span><ul></ul>`;
