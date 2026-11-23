@@ -504,6 +504,36 @@ a,.otitle:hover,.howto>summary,details.acc>summary,.btn.ghost,.copybtn,.burger,.
 .fmap li p{margin:0;font-size:15px;line-height:1.5;color:var(--muted)}
 .fmap li p b{color:var(--ink)}
 @media (max-width:700px){.fmap{grid-template-columns:1fr;grid-template-rows:none;row-gap:14px}.fmap .fg,.fmap ul{grid-row:auto;grid-template-rows:none}}
+/* Visual batch 3 (Nov 23, 2026): static pictures from ChatGPT's mocks at four spots. Labels are HTML text; the pictures only decorate.
+   Card colors use the diagram tones from the file map, not tangerine (your turn) or green (right or done). */
+.vis-label{margin:24px 0 12px;font-size:13px;line-height:1.4;letter-spacing:1.1px;font-weight:700;text-transform:uppercase;color:var(--fm-label)}
+.vis{container-type:inline-size;margin:0 0 8px}
+.vis ul{list-style:none;margin:0;padding:0}
+.vis svg{display:block;flex:none}
+.vis h4{margin:0 0 2px;font-family:var(--font);font-size:17px;line-height:1.35;color:var(--ink)}
+.vis li p{margin:0;font-size:15px;line-height:1.5;color:var(--muted)}
+.vis .vis-note{margin:12px 0 0;font-size:14px;line-height:1.5;color:var(--muted)}
+.vis-three ul{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;border-top:2px solid var(--ink);padding-top:16px}
+.vis-three svg{width:96px;height:77px;margin:0 0 10px -6px}
+.vis-three .vis-note{padding-bottom:14px;border-bottom:2px solid var(--ink)}
+.vis-pair ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.vis-pair li{display:flex;align-items:center;gap:16px;padding:18px 18px 18px 14px;border-left:3px solid var(--fm-live);background:var(--fm-live-soft);border-radius:0 7px 7px 0}
+.vis-pair li.warm{border-left-color:var(--fm-copy);background:var(--fm-copy-soft)}
+.vis-pair svg{width:88px;height:68px}
+.vis-both ul{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0}
+.vis-both li{display:flex;align-items:center;gap:14px}
+.vis-both li.and{font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--ink);justify-content:center}
+.vis-both svg{width:76px;height:61px}
+@container (max-width:560px){
+  .vis-three ul{grid-template-columns:1fr;gap:14px}
+  .vis-three li{display:flex;align-items:center;gap:14px}
+  .vis-three svg{width:72px;height:58px;margin:0}
+  .vis-pair ul{grid-template-columns:1fr;gap:12px}
+  .vis-pair svg{width:72px;height:56px}
+  .vis-both ul{grid-template-columns:1fr;gap:10px}
+  .vis-both li.and{justify-content:flex-start;padding-left:20px}
+  .vis-both svg{width:64px;height:51px}
+}
 </style>
 
 <header class="top"><div class="top-in">
@@ -601,6 +631,9 @@ const LESSONS = [
             ["Thought for 4 seconds", `<p>New managers learn the SBI model to give clear feedback in one-on-ones and follow up well, then practice with three realistic scenarios. 45 minutes.</p>`, "148 characters, so it fits. The everyday model did the same job with less of your limit.", "ok"]],
           why:"Haiku answered without thinking and wrote 175 characters. Sonnet and Opus each thought for a few seconds, counted the characters and fit the limit. Part 3 shows a second fix on this same task: more thinking time for Haiku."}]},
     {t:"p", html:`For a short, simple task, the smallest model often gives the same answer as the largest. When a reply misses, try a larger model. Part 3 shows the other fix: more thinking time.`},
+    {t:"vis", layout:"pair", label:"Two different settings", items:[
+      ["model","Choose a model","Change which model answers the task. A larger model may handle harder work.","warm"],
+      ["thinking","Choose thinking time","Keep the model; change how long it works through the problem."]]},
     {t:"gate"},
     {t:"h", text:"Part 3. Choose how long the model thinks", why:""},
     {t:"p", html:`Many apps also let a model <b>think</b> before it answers. The model works through the problem step by step and checks its own work, then answers. Thinking time is a separate setting from the model, so you can give the same model more time or less.`},
@@ -772,6 +805,10 @@ const LESSONS = [
     {t:"h", text:"Part 3. Find out why the AI seems to forget", why:"With your directions and files in place, the AI can still seem to forget them. Seven causes look the same in the chat, and each one needs a different fix."},
     {t:"p", html:`Two of the causes depend on the <b>context window</b>: the most text a model can read at one time, including the whole chat, any files and the model’s own replies. Each message adds to it. Each new chat starts with an empty context window.`},
     {t:"p", html:`AI apps measure the text in a context window in <b>tokens</b>. One token is about three-quarters of an English word. Context windows and usage limits both count tokens.`},
+    {t:"vis", layout:"pair", label:"What the AI can read now", items:[
+      ["longchat","A long chat","Some earlier details may no longer be available in the model’s current context."],
+      ["newchat","A new chat","Starts with an empty context window. It doesn’t automatically contain the previous chat.","warm"]],
+      note:"Conceptual illustration, not a fixed token threshold. Other causes of apparent forgetting are covered below."},
     {t:"process", label:"Cause", intro:"Select Start to see each cause, what it looks like in the chat and its fix.", steps:[
       ["The chat got longer than the context window","The app dropped or shortened early messages, so answers get worse.", qrows([["What you see","The AI misses a rule or a file from the start of a long chat."],["The fix",`Start a new chat. Paste in a <b>handoff note</b>: a short summary of the work so far. ${a(L.limits,"Make Your AI Usage Limits Last Longer")} shows how.`]], true)],
       ["The rule is in the middle of a long chat","Even when the whole chat fits in the context window, models follow the start and the end of a chat more closely than the middle.", qrows([["What you see","The AI follows some of your earlier rules and skips others."],["The fix","Repeat the rule at the end of your prompt."]], true)],
@@ -1023,7 +1060,11 @@ const LESSONS = [
     {t:"frd", html:`At Fredrickson, most staff write skills. A few owners put approved skills into one plugin for each team or topic. To share a plugin, the owner proposes it on the Git site, and a reviewer approves it. Luke also reviews any part that runs or connects to another app before anyone installs the plugin.`},
     {t:"note", html:`[unconfirmed: Fredrickson has not decided on this review process yet. The Git site has no name or link yet.]`},
     {t:"p", html:`A <b>connector</b> links the AI to one other app. A plugin can contain connectors, along with skills and commands.`},
-    {t:"statement", text:"A connector links the AI to one app. A plugin is a package you install, and it can contain connectors, skills and commands."},
+    {t:"vis", layout:"three", label:"How the parts differ", items:[
+      ["skill","Skill","A saved method for one kind of task."],
+      ["plugin","Plugin","An installable package. It can contain skills, connectors and commands."],
+      ["connector","Connector","A link between the AI and another app."]],
+      note:"These are different roles: a connector does not need to be inside a plugin."},
     {t:"tabs", tabs:[
       {title:"Connector", html:`<p>Links the AI to one other app.</p><ul class="list"><li>You turn on the Outlook connector in Claude’s Settings, and Claude can read your calendar.</li><li>Your admin connects Copilot to the company’s SharePoint sites.</li></ul>`},
       {title:"Plugin", html:`<p>A package that adds several abilities in one install.</p><ul class="list"><li>A plugin adds a /wrap-up command, a job aid skill and a Notion connector to Cowork.</li><li>A ChatGPT plugin adds a set of skills and apps for one team.</li></ul>`}]},
@@ -1126,7 +1167,10 @@ const LESSONS = [
       <li>Copilot with internal notes: follows the rule. You used an approved app in your work account, and the notes hold no client content.</li></ul>`},
     {t:"gate"},
     {t:"h", text:"Part 2. Get the client’s permission before you add client content", why:"You are in an approved app, in your work account. Next, learn what client content you may add there."},
-    {t:"p", html:`<b>Client content</b> is anything that comes from a client or describes the client’s business, such as documents, data, names and call notes. You add client content to AI only when both of these are true:<ul class="list"><li>The client gave permission.</li><li>You are in an approved app, in your work account.</li></ul>`},
+    {t:"p", html:`<b>Client content</b> is anything that comes from a client or describes the client’s business, such as documents, data, names and call notes. You add client content to AI only when both of these are true:`},
+    {t:"vis", layout:"both", label:"Both conditions are required", join:"And", items:[
+      ["account","Approved app","You are in an approved app, in your work account."],
+      ["permission","Client permission","The client gave permission."]]},
     {t:"p", html:`If either one is missing, leave the client content out. You can still ask the AI for help with the general task, such as a structure for a report, with no client details.`},
     {t:"p", html:`The <b>Engagement Lead</b> on your project gets the client’s permission. The policy asks for that permission in writing. The Engagement Lead also records any limits a client sets on AI. Some clients ask for no AI at all on their project. On that project, you use no AI.`},
     {t:"note", html:`[needs: who at the client gives the written permission, and where the Engagement Lead keeps it. The policy does not say. Ask Mark or Robin.]`},
@@ -1566,6 +1610,15 @@ function renderBlock(b, ctx, seg, n){
       w.innerHTML = `<table><thead><tr>${b.head.map(h=>`<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>${b.rows.map(r=>`<tr>${r.map((c,i)=>(i===0||b.plain)?`<td>${c}</td>`:`<td><b>${c}</b></td>`).join("")}</tr>`).join("")}</tbody></table>`;
       return w;
     }
+    // Static picture blocks (visual batch 3): a label, then parts with a picture, a name and one line. The pictures only decorate, so screen readers skip them.
+    case "vis": {
+      const wrap = el("div","vis-wrap");
+      const w = el("div","vis vis-"+b.layout);
+      const item = it => { const [vb,inner] = VIS_PICS[it[0]]; return `<li${it[3] ? ` class="${it[3]}"` : ""}><svg viewBox="${vb}" aria-hidden="true" focusable="false">${inner}</svg><div><h4>${it[1]}</h4><p>${it[2]}</p></div></li>`; };
+      w.innerHTML = `<ul>${b.items.map((it,i) => (b.join && i ? `<li class="and">${b.join}</li>` : "") + item(it)).join("")}</ul>` + (b.note ? `<p class="vis-note">${b.note}</p>` : "");
+      wrap.append(el("p","vis-label",b.label), w);
+      return wrap;
+    }
     // File map: a label, then two groups of file options, each option with its picture. The pictures only decorate, so screen readers skip them.
     case "filemap": {
       const pics = {
@@ -1640,6 +1693,16 @@ function renderBlock(b, ctx, seg, n){
 }
 
 /* ---------- choose an option: apps, flowchart and practice (Lesson 1) ---------- */
+const VIS_PICS = {
+  skill:["0 0 200 160",`<g stroke-linecap="round" stroke-linejoin="round"><rect x="45" y="15" width="112" height="128" rx="9" fill="#FFFFFF" stroke="#126F7C" stroke-width="4"/><path d="M46 24 Q46 15 55 15 h70 l32 32" fill="#FFF8EC" stroke="none"/><rect x="61" y="35" width="36" height="11" rx="3" fill="#FF9C01"/><rect x="62" y="59" width="12" height="12" rx="3" fill="#E1F0EC" stroke="#81BD00" stroke-width="2"/><path d="m65 64 3 3 5-6" fill="none" stroke="#81BD00" stroke-width="2.7"/><path d="M86 65 h51" fill="none" stroke="#126F7C" stroke-width="3"/><rect x="62" y="81" width="12" height="12" rx="3" fill="#E1F0EC" stroke="#81BD00" stroke-width="2"/><path d="m65 86 3 3 5-6" fill="none" stroke="#81BD00" stroke-width="2.7"/><path d="M86 87 h51" fill="none" stroke="#126F7C" stroke-width="3"/><rect x="62" y="103" width="12" height="12" rx="3" fill="#E1F0EC" stroke="#81BD00" stroke-width="2"/><path d="m65 108 3 3 5-6" fill="none" stroke="#81BD00" stroke-width="2.7"/><path d="M86 109 h42" fill="none" stroke="#126F7C" stroke-width="3"/></g>`],
+  plugin:["0 0 200 160",`<g stroke-linecap="round" stroke-linejoin="round"><rect x="22" y="28" width="158" height="115" rx="12" fill="#FFF9ED" stroke="#126F7C" stroke-width="4"/><path d="M22 48 V40 a12 12 0 0 1 12-12 h134 a12 12 0 0 1 12 12 v8" fill="#FDCF0A" stroke="#126F7C" stroke-width="4"/><circle cx="40" cy="39" r="3" fill="#FF9C01"/><circle cx="52" cy="39" r="3" fill="#126F7C"/><rect x="43" y="66" width="52" height="54" rx="5" fill="#FFFFFF" stroke="#126F7C" stroke-width="3"/><path d="M54 80 h27 M54 90 h27 M54 100 h19" stroke="#81BD00" stroke-width="3"/><rect x="109" y="69" width="53" height="46" rx="6" fill="#E9F4F3" stroke="#126F7C" stroke-width="3"/><circle cx="122" cy="92" r="5" fill="#1B92A5"/><circle cx="148" cy="92" r="5" fill="#81BD00"/><path d="M127 92 H143" stroke="#126F7C" stroke-width="3"/></g>`],
+  connector:["0 0 200 160",`<g stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="39" width="63" height="81" rx="8" fill="#E8F5F4" stroke="#126F7C" stroke-width="4"/><rect x="125" y="39" width="63" height="81" rx="8" fill="#FFF7E3" stroke="#126F7C" stroke-width="4"/><path d="M27 62 h30 M27 73 h24 M140 62 h30 M140 73 h24" stroke="#1B92A5" stroke-width="4"/><path d="M76 79 H121" stroke="#126F7C" stroke-width="4" fill="none"/><path d="m109 68 12 11-12 11" fill="none" stroke="#81BD00" stroke-width="5"/></g>`],
+  longchat:["0 0 200 150",`<g stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="21" width="78" height="57" rx="9" fill="#F3F7F7" stroke="#B9CECF" stroke-width="3" stroke-dasharray="5 5"/><path d="M20 42 h49 M20 55 h34" stroke="#B9CECF" stroke-width="4"/><path d="M92 49 h18" stroke="#B9CECF" stroke-width="3" stroke-dasharray="3 5"/><rect x="114" y="15" width="79" height="118" rx="11" fill="#EAF6F4" stroke="#126F7C" stroke-width="4"/><rect x="125" y="31" width="57" height="25" rx="6" fill="#FFFFFF" stroke="#81BD00" stroke-width="3"/><path d="M135 43 h37" stroke="#81BD00" stroke-width="3"/><rect x="125" y="65" width="57" height="25" rx="6" fill="#FFFFFF" stroke="#1B92A5" stroke-width="3"/><path d="M135 77 h37" stroke="#1B92A5" stroke-width="3"/><rect x="125" y="99" width="57" height="21" rx="6" fill="#FFFFFF" stroke="#FF9C01" stroke-width="3"/><path d="M135 109 h37" stroke="#FF9C01" stroke-width="3"/></g>`],
+  newchat:["0 0 200 150",`<g stroke-linecap="round" stroke-linejoin="round"><rect x="31" y="16" width="139" height="116" rx="11" fill="#FFFFFF" stroke="#126F7C" stroke-width="4"/><path d="M31 42 h139" stroke="#D6E3E3" stroke-width="3"/><circle cx="49" cy="30" r="4" fill="#FF9C01"/><circle cx="62" cy="30" r="4" fill="#81BD00"/><rect x="52" y="72" width="98" height="37" rx="9" stroke="#BFD7D6" stroke-width="2.5" stroke-dasharray="5 5" fill="#F7FAFA"/><path d="M87 90 h28 M101 78 v24" stroke="#8EBFC0" stroke-width="3"/></g>`],
+  model:["0 0 200 160",`<g stroke-linecap="round" stroke-linejoin="round"><rect x="13" y="62" width="54" height="67" rx="10" fill="#FAF0DB" stroke="#126F7C" stroke-width="3"/><rect x="72" y="41" width="54" height="88" rx="10" fill="#E8F3E6" stroke="#126F7C" stroke-width="3"/><rect x="131" y="18" width="54" height="111" rx="10" fill="#EAF5F5" stroke="#126F7C" stroke-width="3"/><path d="M27 81 h24 M27 92 h24 M86 61 h24 M86 72 h24 M86 83 h24 M145 39 h24 M145 50 h24 M145 61 h24 M145 72 h24" stroke="#1B92A5" stroke-width="3"/><path d="M143 111 h30" stroke="#FF9C01" stroke-width="6"/></g>`],
+  thinking:["0 0 200 160",`<g stroke-linecap="round" stroke-linejoin="round"><rect x="35" y="24" width="130" height="115" rx="12" fill="#FFFFFF" stroke="#126F7C" stroke-width="4"/><path d="M35 47 H165" stroke="#D6E3E3" stroke-width="3"/><rect x="49" y="33" width="20" height="7" rx="3" fill="#81BD00"/><path d="M56 118 V102 M86 118 V86 M116 118 V66 M146 118 V66" stroke="#1B92A5" stroke-width="8"/><rect x="106" y="58" width="20" height="70" rx="4" fill="none" stroke="#FF9C01" stroke-width="3"/></g>`],
+  account:["0 0 200 160",`<g stroke-linecap="round" stroke-linejoin="round"><rect x="23" y="24" width="152" height="106" rx="10" fill="#E9F5F3" stroke="#126F7C" stroke-width="4"/><path d="M23 52 h152" stroke="#126F7C" stroke-width="3"/><circle cx="42" cy="38" r="4" fill="#FF9C01"/><circle cx="57" cy="38" r="4" fill="#81BD00"/><rect x="48" y="66" width="101" height="43" rx="6" fill="#FFFFFF" stroke="#1B92A5" stroke-width="3"/><path d="M72 84 h42" stroke="#1B92A5" stroke-width="4"/><path d="m114 84 8 8 16-17" fill="none" stroke="#81BD00" stroke-width="5"/></g>`],
+  permission:["0 0 200 160",`<g stroke-linecap="round" stroke-linejoin="round"><path d="M46 20 h89 l25 26 v93 H46 z" fill="#FFF9ED" stroke="#126F7C" stroke-width="4"/><path d="M135 20 v26 h25" fill="#F9DB9A" stroke="#126F7C" stroke-width="3"/><path d="M64 66 h66 M64 81 h66 M64 96 h43" stroke="#1B92A5" stroke-width="3"/><path d="M64 118 q13 -14 27 0 q10 -13 20 -1" stroke="#FF9C01" stroke-width="3" fill="none"/><circle cx="145" cy="116" r="20" fill="#E3F1C7" stroke="#81BD00" stroke-width="3"/><path d="m136 116 7 7 13-16" stroke="#81BD00" stroke-width="4" fill="none"/></g>`]};
 const APPS = [["claude","Claude"],["chatgpt","ChatGPT"],["copilot","Microsoft 365 Copilot"]];
 
 // The four places the flowchart ends, and each app's name for that option.
