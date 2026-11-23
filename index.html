@@ -2500,10 +2500,9 @@ function endBlock(b, n){
   const last = n === LESSONS.length - 1;
   const btn = el("button","btn", nextOpen ? `Finish and start Lesson ${n+2}` : last ? "Finish the course" : "Finish this lesson"); btn.type="button";
   btn.addEventListener("click",()=>{ setDone(n); location.hash = nextOpen ? "#lesson-"+(n+2) : "#home"; });
-  const home = el("a","btn ghost","All lessons"); home.href="#home";
   f.append(btn);
   if(n > 0){ const prev = el("a","btn ghost",`Back to Lesson ${n}`); prev.href = "#lesson-"+n; f.append(prev); }
-  f.append(home); w.append(f); return w;
+  w.append(f); return w;
 }
 
 /* ---------- routing ---------- */
