@@ -317,45 +317,50 @@ details.acc .body{padding:0 18px 16px 48px}
 
 .pset{display:flex;flex-direction:column;gap:14px}
 
-/* Decision flowchart */
-.flow{display:flex;flex-direction:column;align-items:center;font-size:15.5px;line-height:1.4}
-.flow .fq{background:var(--brand);color:var(--on-brand);border-radius:10px;padding:12px 16px;text-align:center;font-weight:700;width:100%;max-width:340px;min-height:74px;display:flex;align-items:center;justify-content:center;box-sizing:border-box;margin:0}
-.flow .fq small{display:block;font-weight:400;font-size:14px;margin-top:4px}
-.flow .ynh{font-size:14px;text-align:center;width:100%;max-width:250px;min-height:2.8em;display:flex;align-items:center;justify-content:center;margin:4px 0 0}
-.flow .ynh-gap{font-size:14px;width:2px;height:calc(2.8em + 4px);background:var(--muted);flex:none}
-.flow .vl{width:2px;height:16px;background:var(--muted);flex:none}
-.flow .yn{font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:2px 10px;min-width:104px;text-align:center;box-sizing:border-box;border-radius:12px;border:1.5px solid var(--muted);color:var(--ink);background:var(--bg)}
-.flow .fbr{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;width:100%;position:relative}
-.flow .fbr::before{content:"";position:absolute;top:0;left:25%;right:25%;height:2px;background:var(--muted)}
-.flow .fcol{display:flex;flex-direction:column;align-items:center;min-width:0}
-.flow .leaf{border:2px solid var(--accent);background:var(--bg);border-radius:10px;padding:12px 14px;width:100%;box-sizing:border-box;flex:1}
-.flow .leaf .ln{font-weight:800;font-size:17px;color:var(--brand-ink)}
-.flow .leaf .lw{font-size:14px;color:var(--muted);margin:2px 0 0}
-.flow .leaf .lh{min-height:114px;margin-bottom:8px}
-.flow .leaf ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:14.5px}
-.flow .fbr .fbr{flex:1}
-.flow .fbr .fbr .fcol{align-items:stretch}
-.flow .fbr .fbr .fcol>.vl,.flow .fbr .fbr .fcol>.yn,.flow .fbr .fbr .fcol>.ynh,.flow .fbr .fbr .fcol>.ynh-gap{align-self:center}
-@media (max-width:640px){
-  .flow .fbr .fbr{grid-template-columns:1fr;gap:10px}
-  .flow .fbr .fbr::before{display:none}
-  .flow .fbr .fbr .ynh-gap{display:none}
-  .flow .leaf .lh{min-height:0}
-  .flow .fbr .fbr .fcol+.fcol>.vl:first-child{display:none}
-  .flow .fbr .fbr .fcol+.fcol{border-top:1px dashed var(--line);padding-top:10px}
+/* Decision flowchart (Lesson 1, Part 4). Compact layout from the ChatGPT mock Emily chose (Nov 23, 2026), with our filled concept colors on the cards.
+   Subgrid rows keep the two questions the same height and the dividers in all four cards on one line. */
+.flow{container-type:inline-size;font-size:14px;line-height:1.4;margin:0}
+.flow .fq{margin:0;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px 16px;text-align:center;font-weight:700;font-size:15.5px;line-height:1.35;color:var(--ink);display:flex;align-items:center;justify-content:center}
+.flow .fq1{max-width:320px;margin:0 auto;min-height:60px;box-sizing:border-box}
+.flow .fsplit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(5,auto);column-gap:20px;position:relative;padding-top:12px}
+.flow .fsplit::before,.flow .fleaves::before{content:"";position:absolute;top:12px;left:calc((100% - 20px)/4);right:calc((100% - 20px)/4);height:1.5px;background:var(--muted)}
+.flow .fsplit::after,.flow .fleaves::after{content:"";position:absolute;top:0;left:50%;width:1.5px;height:12px;background:var(--muted)}
+.flow .fhalf{display:grid;grid-row:1/-1;grid-template-rows:subgrid;min-width:0}
+.flow .fbl{margin:0;position:relative;text-align:center;font-size:12.5px;font-weight:700;color:var(--ink);padding:16px 0 10px}
+.flow .fbl::before,.flow .fbl::after{content:"";position:absolute;left:50%;width:1.5px;background:var(--muted)}
+.flow .fbl::before{top:0;height:12px}
+.flow .fbl::after{bottom:0;height:8px}
+.flow .fbl b{text-transform:uppercase;letter-spacing:.6px}
+.flow .fbl .sep{margin:0 6px;color:var(--muted)}
+.flow .fleaves{display:grid;grid-row:span 3;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:subgrid;column-gap:12px;position:relative;padding-top:12px}
+.flow .fleaves::before{left:calc((100% - 12px)/4);right:calc((100% - 12px)/4)}
+.flow .fcol{display:grid;grid-row:span 3;grid-template-rows:subgrid;min-width:0}
+.flow .yn{justify-self:center;position:relative;margin:12px 0 8px;font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:1px 12px;min-width:72px;text-align:center;box-sizing:border-box;border-radius:12px;border:1px solid var(--line);color:var(--ink);background:var(--bg)}
+.flow .yn::before{content:"";position:absolute;left:50%;bottom:100%;width:1.5px;height:12px;background:var(--muted)}
+.flow .leaf{display:grid;grid-row:span 2;grid-template-rows:subgrid;border-radius:8px;border-top:4px solid;padding:12px 14px 14px}
+.flow .lh{padding-bottom:10px;border-bottom:1px solid var(--line)}
+.flow .ln{margin:0;font-weight:800;font-size:15.5px;color:var(--ink)}
+.flow .lw{margin:2px 0 0;font-size:13.5px;color:var(--muted)}
+.flow .leaf ul{list-style:none;margin:0;padding:10px 0 0;display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:1.35}
+.flow .leaf li b{display:block;color:var(--ink)}
+.flow .leaf li span{color:var(--muted)}
+/* Narrow: the two halves stack. Each half keeps its question and two cards. */
+@container (max-width:600px){
+  .flow .fsplit{grid-template-columns:1fr;grid-template-rows:none;padding-top:0}
+  .flow .fsplit::before,.flow .fsplit::after{display:none}
+  .flow .fhalf{grid-row:auto;grid-template-rows:none}
+  .flow .fleaves{grid-row:auto;grid-template-rows:auto auto auto}
+  .flow .fhalf+.fhalf{margin-top:18px;padding-top:6px;border-top:1px dashed var(--line)}
+  .flow .fhalf+.fhalf .fbl::before{display:none}
+  .flow .fhalf+.fhalf .fbl{padding-top:4px}
 }
-@media (max-width:440px){
-  .flow{font-size:14.5px}
-  .flow .fbr{gap:0 8px}
-  .flow .fq{padding:10px}
-  .flow .leaf{padding:10px}
-}
-/* Small phones: stack every branch in one column, so the leaves keep a readable width. */
-@media (max-width:400px){
-  .flow .fbr{grid-template-columns:1fr;gap:10px}
-  .flow .fbr::before{display:none}
-  .flow .fcol+.fcol>.vl:first-child{display:none}
-  .flow .fcol+.fcol{border-top:1px dashed var(--line);padding-top:10px}
+/* Small phones: one card per row. */
+@container (max-width:380px){
+  .flow .fleaves{grid-template-columns:1fr;grid-template-rows:none;row-gap:4px}
+  .flow .fleaves::before{display:none}
+  .flow .fcol{grid-row:auto;grid-template-rows:none}
+  .flow .leaf{grid-row:auto;grid-template-rows:none}
+  .flow .fcol+.fcol .yn::before{display:none}
 }
 
 /* Flashcards */
@@ -473,14 +478,9 @@ a,.otitle:hover,.howto>summary,details.acc>summary,.btn.ghost,.copybtn,.burger,.
 .olesson.done .oring{border-color:var(--good);background:var(--good)}
 .oprog-bar span{background:var(--good)}
 /* 5. Concept colors live only inside diagrams: chat, project and agent keep one color each. */
-.flow .fq{background:#20383E;color:#fff}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .flow .fq{background:#34525A}}
-:root[data-theme="dark"] .flow .fq{background:#34525A}
-.flow .leaf{border-width:0 0 0 0;border-top:5px solid}
 .flow .leaf[data-leaf="chat"]{border-top-color:var(--c-chat);background:var(--c-chat-soft)}
 .flow .leaf[data-leaf="project"]{border-top-color:var(--c-proj);background:var(--c-proj-soft)}
 .flow .leaf[data-leaf="docs"],.flow .leaf[data-leaf="code"]{border-top-color:var(--c-agent);background:var(--c-agent-soft)}
-.flow .leaf .ln{color:var(--ink)}
 /* File map (Lesson 2, Part 2): the four ways to give the AI a file, in two groups. Matches the ChatGPT mock Emily chose (Nov 23, 2026).
    Warm = a copy; seafoam = the current file. Both boxes share one set of rows, so their dividers line up. */
 :root{--fm-copy:#E5B560;--fm-copy-soft:#FBF8EE;--fm-live:#3D9CA4;--fm-live-soft:#EEF8F7;--fm-label:#106D7A}
@@ -1668,22 +1668,19 @@ const PRACTICE = [
 ];
 
 function flowBlock(ctx){
-  const w = el("figure","flow"); w.style.margin = "0";
+  const w = el("figure","flow");
   w.setAttribute("aria-label","Flowchart for choosing chat, a project or an agent");
-  const leaf = k => `<div class="leaf" data-leaf="${k}"><div class="lh"><p class="ln">${LEAVES[k].name}</p><p class="lw">${LEAVES[k].why}</p></div><ul></ul></div>`;
-  const branch = (yn, inner, hint) => `<div class="fcol"><span class="vl"></span><span class="yn">${yn}</span>${hint ? `<p class="ynh">${hint}</p>` : `<span class="ynh-gap"></span>`}<span class="vl"></span>${inner}</div>`;
+  const leaf = (yn,k) => `<div class="fcol"><span class="yn">${yn}</span><div class="leaf" data-leaf="${k}"><div class="lh"><p class="ln">${LEAVES[k].name}</p><p class="lw">${LEAVES[k].why}</p></div><ul></ul></div></div>`;
+  const half = (yn, hint, q, leaves) => `<div class="fhalf"><p class="fbl"><b>${yn}</b><span class="sep" aria-hidden="true">·</span>${hint}</p><p class="fq">${q}</p><div class="fleaves">${leaves}</div></div>`;
   w.innerHTML = `
-    <p class="fq">1. Does the AI have to work outside the chat?</p>
-    <span class="vl"></span>
-    <div class="fbr">
-      ${branch("No", `<p class="fq">2. Will you do this task again, with the same files or rules?</p><span class="vl"></span>
-        <div class="fbr">${branch("Yes", leaf("project"))}${branch("No", leaf("chat"))}</div>`, "You paste in what it needs and copy its reply out.")}
-      ${branch("Yes", `<p class="fq">3. What do you want at the end?</p><span class="vl"></span>
-        <div class="fbr">${branch("A document", leaf("docs"), "Such as a report or a deck.")}${branch("A tool", leaf("code"), "Such as a script, a small website or an automation.")}</div>`, "It has to open files in a folder, search the web, build a file or run code.")}
+    <p class="fq fq1">Does the AI have to work outside the chat?</p>
+    <div class="fsplit">
+      ${half("No","The AI replies in chat","Will you do this task again, with the same files or rules?", leaf("Yes","project")+leaf("No","chat"))}
+      ${half("Yes","The AI takes steps outside chat","What do you want at the end?", leaf("A document","docs")+leaf("A tool","code"))}
     </div>`;
   w.querySelectorAll(".leaf").forEach(lf=>{
     const L2 = LEAVES[lf.dataset.leaf];
-    lf.querySelector("ul").innerHTML = APPS.map(([id,name]) => `<li><b>${name}:</b> ${L2.apps[id]}</li>`).join("");
+    lf.querySelector("ul").innerHTML = APPS.map(([id,name]) => `<li><b>${name}</b><span>${L2.apps[id]}</span></li>`).join("");
   });
   return w;
 }
