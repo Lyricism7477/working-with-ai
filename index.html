@@ -107,6 +107,13 @@ p{margin:0}
 .statement{font-size:inherit;line-height:1.55;font-weight:700;color:var(--keypoint);background:none;border-top:3px solid var(--rule);border-bottom:3px solid var(--rule);border-radius:0;padding:18px 0 20px;max-width:none;text-wrap:pretty}
 .statement::before{content:"Key point";display:block;margin-bottom:4px;font-size:12px;letter-spacing:.8px;text-transform:uppercase;font-weight:800;color:var(--keypoint)}
 .note{border-left:3px solid var(--accent);padding:4px 0 4px 18px}
+.brief{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:20px 24px;box-shadow:var(--shadow)}
+.brief-t{font-weight:800;margin:0 0 10px}
+.brief dl{margin:0}
+.brief dl>div{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:10px 0;border-top:1px solid var(--line)}
+.brief dt{font-weight:800;color:var(--brand-ink)}
+.brief dd{margin:0}
+@media (max-width:560px){.brief dl>div{grid-template-columns:1fr;gap:2px}}
 .note.skip{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
 .tbl{overflow-x:auto}
 /* Fredrickson callouts share the brand stripe: "At Fredrickson" facts, "Job aid" pointers and "Set up" steps. */
@@ -951,27 +958,26 @@ const LESSONS = [
     {t:"gate"},
     {t:"h", text:"Part 2. Brief an agent", why:""},
     {t:"p", html:`An agent works for minutes without you, so it cannot ask what you meant at each step. Before it starts, give it what a new colleague would need.`},
-    {t:"process", intro:"A brief answers four questions.", steps:[
-      ["Goal","What is the finished work for, and who will read it?"],
-      ["Sources","Which folder, files, apps or websites should it use, and which should it leave alone?"],
-      ["Done","What does the result look like: the file type, the length, and where to save it?"],
-      ["Limits","What must it ask you about first, such as sending, deleting or overwriting a file?"]]},
-    {t:"tabs", tabs:[
-      {title:"Weak brief", html:`<p>“Make the status report.”</p><p>The agent has to guess which files to read, what the report looks like and where to save it.</p>`},
-      {title:"Strong brief", html:`<p>“Read the five team notes in the Acme > Week 46 folder. Build a one-page status report in Word for the client’s training director, using last week’s report as the model. Save it in the same folder as Status report Week 46. Do not change or move any other file.”</p>`}]},
+    {t:"p", html:`A brief answers four questions. What is the work for? What should the agent use? What does the finished work look like? What must the agent not do without asking you?`},
+    {t:"brief", title:"A sample brief, with each part labeled", rows:[
+      ["Goal","Write this week’s status report for Acme’s training director, so the director knows what the team finished and what comes next."],
+      ["Sources","Read the five team notes in the Acme > Week 46 folder, and use last week’s report as the model. Don’t open any other folder."],
+      ["Done","Make a one-page Word file, and save it in the same folder as Status report Week 46."],
+      ["Limits","Don’t change or move any other file. Ask me before you overwrite anything."]]},
+    {t:"p", html:`A weak brief says only “Make the status report.” The agent then has to guess which files to read, what the report looks like and where to save it.`},
     {t:"p", html:`An agent can open only the folders, apps and websites you give it. Choose the smallest folder that holds what the task needs, and turn on only the connectors the task uses.`},
     {t:"p", html:`An agent run uses far more of your usage limit than a chat, because it reads files and checks its own work many times. Try a small version of the task first, such as one file instead of fifty. ${a(L.limits,"Make Your AI Usage Limits Last Longer")} shows other ways to save usage.`},
     {t:"statement", text:"Give the agent a goal, the sources, what done looks like and its limits. Give it the smallest folder that holds what the task needs."},
-    {t:"sort", goal:"Practice checking a brief for the four things an agent needs.", prompt:"Drag each line of a brief to the question it answers, or select a pile.", piles:["Goal","Sources","Done","Limits"],
-      cards:[["The report is for the client’s training director.",0,"It says who the work is for."],
-        ["Use only the files in the Week 46 folder.",1,"It says what to read, and so what to leave alone."],
-        ["Save it as a one-page Word file named Status report Week 46.",2,"It says what the result looks like and where it goes."],
-        ["Ask me before you overwrite any file.",3,"It says what the agent must check with you first."]]},
-    {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
-      <li>The training director: goal. It says who the work is for.</li>
-      <li>The Week 46 folder: sources. It says what to read, and so what to leave alone.</li>
-      <li>The one-page Word file: done. It says what the result looks like and where it goes.</li>
-      <li>Ask before you overwrite: limits. It says what the agent must check with you first.</li></ul>`},
+    {t:"sort", goal:"Practice sorting a brief into its four parts.", prompt:"Here is a brief for a new task: summarize a training survey. Drag each line to the part of the brief it covers, or select a pile.", piles:["Goal","Sources","Done","Limits"],
+      cards:[["The summary helps our team choose which workshop to run next quarter.",0,"It says what the work is for."],
+        ["Use only the survey results in the Q4 Survey folder.",1,"It says what the agent should use."],
+        ["Write a half-page summary in Word, and save it in the same folder.",2,"It says what the finished work looks like and where it goes."],
+        ["Ask me before you email the summary to anyone.",3,"It says what the agent must ask you about first."]]},
+    {t:"acc", title:"See where each line goes and why", html:`<ul class="list">
+      <li>Choosing the next workshop: goal. It says what the work is for.</li>
+      <li>The Q4 Survey folder: sources. It says what the agent should use.</li>
+      <li>The half-page Word summary: done. It says what the finished work looks like and where it goes.</li>
+      <li>Ask before you email: limits. It says what the agent must ask you about first.</li></ul>`},
     {t:"gate"},
     {t:"h", text:"Part 3. Keep an agent safe", why:""},
     {t:"p", html:`An agent takes real actions, such as sending email or deleting files. Two terms help you keep it safe.`},
@@ -1702,6 +1708,12 @@ function renderBlock(b, ctx, seg, n){
     case "score": { const s = el("div","score"); s.hidden = true; ctx.scoreEls.push({s, pass:b.pass}); return s; }
     case "end": return endBlock(b, n);
     case "html": return el("div","stack",b.html);
+    // A sample brief: each line of the brief sits beside the label of the part it covers.
+    case "brief": {
+      const w = el("div","brief");
+      w.innerHTML = `<p class="brief-t">${b.title}</p><dl>${b.rows.map(r => `<div><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join("")}</dl>`;
+      return shade(w);
+    }
     case "setupend": {
       const w = el("div","stack"); w.append(el("p",null,b.html));
       const f = el("div","finish");
