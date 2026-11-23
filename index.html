@@ -109,11 +109,43 @@ p{margin:0}
 .note{border-left:3px solid var(--accent);padding:4px 0 4px 18px}
 .brief{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:20px 24px;box-shadow:var(--shadow)}
 .brief-t{font-weight:800;margin:0 0 10px}
-.brief dl{margin:0}
-.brief dl>div{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:10px 0;border-top:1px solid var(--line)}
-.brief dt{font-weight:800;color:var(--brand-ink)}
-.brief dd{margin:0}
-@media (max-width:560px){.brief dl>div{grid-template-columns:1fr;gap:2px}}
+.brief-msg{margin:0;padding:18px 20px;border-radius:10px;background:var(--surface);display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px 18px;line-height:1.6}
+.brief-row{display:contents}
+.brief-tag{margin:0;font-weight:800;color:var(--ink);white-space:nowrap}
+.brief-text{margin:0}
+@media (max-width:600px){.brief-msg{grid-template-columns:1fr;gap:2px}.brief-text{margin-bottom:10px}.brief-row:last-child .brief-text{margin-bottom:0}}
+/* What an agent does: the agent in the middle, six parts around it. The selected part turns teal, its line lights up,
+   and a callout with a pointer opens under the diagram (on a phone, right under the selected part). */
+.hubwrap h3{margin:0 0 4px}.hubwrap > p{margin:0 0 18px}
+.hub{display:grid;grid-template-columns:minmax(0,1fr) 150px minmax(0,1fr);gap:16px 40px;position:relative}
+.hub-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.hub-lines line{stroke:var(--line);stroke-width:2;transition:stroke .2s}
+.hub-lines circle{fill:var(--bg);stroke:var(--line);stroke-width:2;transition:fill .2s,stroke .2s}
+.hub-lines .on line{stroke:var(--link);stroke-width:3}
+.hub-lines .on circle{fill:var(--link);stroke:var(--link)}
+.hub-core{grid-column:2;grid-row:1 / span 3;align-self:center;justify-self:center;position:relative;width:140px;height:156px;display:grid;place-items:center}
+.hub-core::before{content:"";position:absolute;inset:-26px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c-agent) 30%,transparent) 0%,transparent 68%)}
+.hub-hex{position:relative;width:100%;height:100%;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:var(--c-agent)}
+.hub-hex-in{position:absolute;inset:4px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(160deg,var(--c-agent-soft) 15%,color-mix(in srgb,var(--c-agent) 40%,var(--c-agent-soft)));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-family:var(--font-head);font-weight:800;font-size:22px;color:var(--ink)}
+.hub-hex-in svg{width:30px;height:30px;fill:var(--c-agent)}
+.hub-node{position:relative;z-index:1;display:flex;align-items:center;gap:12px;width:100%;min-height:68px;padding:10px 20px 10px 12px;border:1.5px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink);font:inherit;font-weight:700;font-size:15.5px;line-height:1.25;text-align:left;cursor:pointer;box-shadow:0 2px 8px rgba(11,61,69,.08);transition:background .2s,border-color .2s,color .2s,transform .2s}
+.hub-node .chip{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);transition:background .2s}
+.hub-node .icon{width:24px;height:24px;stroke:var(--link);transition:stroke .2s}
+.hub-node:hover{border-color:var(--link);transform:translateY(-1px)}
+.hub-node[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.hub-node[aria-pressed="true"] .chip{background:rgba(255,255,255,.18)}
+.hub-node[aria-pressed="true"] .icon{stroke:var(--on-brand)}
+.hub-node:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.hub-l{grid-column:1;grid-row:var(--r)}.hub-r{grid-column:3;grid-row:var(--r)}
+.hub-detail{position:relative;margin:26px 0 0;padding:18px 22px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg);box-shadow:0 4px 16px rgba(11,61,69,.10)}
+.hub-detail::before{content:"";position:absolute;top:-11px;left:var(--tail,40px);width:20px;height:20px;margin-left:-10px;background:var(--bg);border-left:1.5px solid var(--line);border-top:1.5px solid var(--line);transform:rotate(45deg);transition:left .25s}
+.hub-detail h4{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-size:17px}
+.hub-detail h4 .icon{flex:none;box-sizing:content-box;width:20px;height:20px;padding:7px;border-radius:50%;background:var(--brand);stroke:var(--on-brand)}
+.hub-detail p{margin:0}
+.hub-detail.in{animation:hubIn .25s ease-out}
+@keyframes hubIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.hub-node,.hub-detail::before,.hub-lines line,.hub-lines circle{transition:none}.hub-detail.in{animation:none}.hub-node:hover{transform:none}}
+@media (max-width:600px){.hub{grid-template-columns:1fr;gap:10px}.hub-lines{display:none}.hub-core{display:none}.hub .hub-l,.hub .hub-r{grid-column:1;grid-row:auto}.hub .hub-detail{margin:6px 0 8px}}
 .note.skip{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
 .tbl{overflow-x:auto}
 /* Fredrickson callouts share the brand stripe: "At Fredrickson" facts, "Job aid" pointers and "Set up" steps. */
@@ -149,7 +181,7 @@ th{font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted
 .app dl{margin:0;display:flex;flex-direction:column;gap:10px}
 .app dt{font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:700}
 .app dd{margin:2px 0 0}
-ul.list{margin:0;padding-left:44px;display:flex;flex-direction:column;gap:6px}
+ul.list,.stack ol.list{margin:0;padding-left:44px;display:flex;flex-direction:column;gap:6px}
 p:empty,h2:empty,h3:empty,li:empty{display:none}
 
 /* Knowledge check */
@@ -174,6 +206,7 @@ textarea.write{font:inherit;color:var(--ink);background:var(--bg);border:1.5px s
 .card.shake{animation:shake .35s}
 @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .piles{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:8px}
+@media (max-width:760px){.piles{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:560px){.piles{grid-template-columns:1fr}}
 .pile{border:1.5px dashed var(--field-line);border-radius:8px;padding:10px 12px;background:var(--bg);display:flex;flex-direction:column;gap:6px;text-align:left;cursor:pointer;color:var(--ink);min-height:56px}
 .pile.over{border-color:var(--accent);background:var(--accent-soft)}
@@ -269,6 +302,15 @@ textarea.write{font:inherit;color:var(--ink);background:var(--bg);border:1.5px s
 .ltabs .panel>p:first-child{margin-top:0}
 /* Quiet list: a label on the left, the text on the right, thin lines between rows. Stacks on a phone. */
 .qlist{margin:0;padding:0}
+/* Setup ladder: one task, set up a little more at each step. A quiet numbered rail, no boxes. */
+.ladder{list-style:none;margin:0;padding:0}
+.ladder li{position:relative;padding:0 0 22px 52px}
+.ladder li:last-child{padding-bottom:0}
+.ladder li::before{content:counter(list-item);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-weight:800;font-size:15px;background:var(--bg)}
+.ladder li:not(:last-child)::after{content:"";position:absolute;left:16px;top:36px;bottom:4px;width:2px;margin-left:-1px;background:var(--line)}
+.ladder h4{margin:4px 0 4px;font-size:17px}
+.ladder p{margin:0 0 4px}
+.ladder .uses{color:var(--muted);font-size:15px}
 /* App comparison: questions down the left, apps across the top, alternating row shading. */
 .appt{border:1px solid var(--line);border-radius:12px;background:var(--bg);box-shadow:var(--shadow);padding:8px;overflow:hidden}
 .appt table{table-layout:fixed;font-size:15px;line-height:1.5}
@@ -418,7 +460,8 @@ details.acc .body{padding:0 18px 16px 48px}
 .ft h3{margin:0;font-size:19px}
 .ft-ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .ft-sky{position:relative;height:300px;overflow:hidden;border-radius:10px 10px 0 0;background:var(--fm-live-soft);border-bottom:4px solid var(--ink)}
-.ft-idle{position:absolute;inset:0;margin:0;display:flex;align-items:center;justify-content:center;padding:16px;text-align:center;color:var(--muted);font-size:15px}
+.ft-idle{position:absolute;inset:0;margin:0;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;padding:16px;text-align:center;color:var(--muted);font-size:15px}
+.ft-idle p{margin:0}
 .ft-idle[hidden]{display:none}
 .ft-drop{position:absolute;top:0;width:min(85%,360px);box-sizing:border-box;padding:10px 12px;border-radius:8px;background:var(--bg);border:1.5px solid var(--line);border-top:3px solid var(--turn);font-size:15px;line-height:1.45;color:var(--ink);box-shadow:var(--shadow);will-change:transform}
 .ft-drop.got{border-color:var(--good);background:var(--good-soft)}
@@ -484,16 +527,18 @@ section.seg h2{scroll-margin-top:64px}
 section.seg h2:focus{outline:none}
 .fb .why-head{margin-top:8px;font-weight:600}
 /* Color jobs (Nov 22, 2026): each color has one job, everywhere. Teal = you can click it. Tangerine = your turn. Green = right or done. Marigold = not quite or a caution. Diagram colors = one per idea. */
-:root{--link:#136977;--turn:#FF9C01;--turn-ink:#6B4200;--brand-ink:#20383E;--eyebrow:#597075;--bad:#6A5704;--bad-soft:#FFF8DD;--note-line:#D6E0DF;
+:root{--link:#136977;--turn:#FF9C01;--turn-ink:#6B4200;--brand-ink:#20383E;--eyebrow:#597075;--bad:#6A5704;--bad-soft:#FFF8DD;--note-line:#D6E0DF;--note-bg:#F1F5F5;
   --c-chat:#8AA04A;--c-chat-soft:#F6FAEA;--c-proj:#E08109;--c-proj-soft:#FBEDDD;--c-agent:#B8AE3A;--c-agent-soft:#FFFDE7}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--link:#8ECFDC;--turn:#FFBE57;--turn-ink:#FFBE57;--brand-ink:#EEF4F4;--eyebrow:#ADD8DF;--bad:#FEDF5D;--bad-soft:#3A3108;--note-line:#34525A;
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--link:#8ECFDC;--turn:#FFBE57;--turn-ink:#FFBE57;--brand-ink:#EEF4F4;--eyebrow:#ADD8DF;--bad:#FEDF5D;--bad-soft:#3A3108;--note-line:#34525A;--note-bg:#17353A;
   --c-chat-soft:#2A3214;--c-proj-soft:#3A2504;--c-agent-soft:#33300F}}
-:root[data-theme="dark"]{--link:#8ECFDC;--turn:#FFBE57;--turn-ink:#FFBE57;--brand-ink:#EEF4F4;--eyebrow:#ADD8DF;--bad:#FEDF5D;--bad-soft:#3A3108;--note-line:#34525A;
+:root[data-theme="dark"]{--link:#8ECFDC;--turn:#FFBE57;--turn-ink:#FFBE57;--brand-ink:#EEF4F4;--eyebrow:#ADD8DF;--bad:#FEDF5D;--bad-soft:#3A3108;--note-line:#34525A;--note-bg:#17353A;
   --c-chat-soft:#2A3214;--c-proj-soft:#3A2504;--c-agent-soft:#33300F}
 /* 1. Teal means "you can click this." Headings and labels go Deep Ink; only controls keep teal. */
 a,.otitle:hover,.howto>summary,details.acc>summary,.btn.ghost,.copybtn,.burger,.tab[aria-selected="true"],.oparts button[aria-current],.olesson.cur .num,.pile .pn{color:var(--link)}
 .tab[aria-selected="true"]{border-bottom-color:var(--link)}
-.scenario,.goal,.note{border-left-color:var(--note-line)}
+.scenario,.goal{border-left-color:var(--note-line)}
+/* Callouts (Nov 23, 2026): a quiet neutral panel with a Deep Ink edge, so a note reads as a side note. No hue, because no color has this job. */
+.note{background:var(--note-bg);border-left:4px solid var(--brand-ink);border-radius:0 6px 6px 0;padding:12px 18px}
 .statement,.statement::before{color:var(--ink)}
 .statement{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
 .statement::before{color:var(--muted)}
@@ -596,7 +641,7 @@ const LESSONS = [
   terms: "",
   builds: "Choose the app, the model, how long it thinks and where in the app to work. ",
   fits: "",
-  intro: "Many weak replies start before you type anything, because you chose the wrong app or the wrong model for the task. This lesson shows you how to choose the app, the model, how long the model thinks and where in the app to work.",
+  intro: "Many weak replies start before you type anything, because you chose the wrong app or the wrong model for the task. This lesson shows you how to choose the app and the model. Additionally, you will learn when you should adjust the model’s thinking level, and if you should begin your work in a chat, project, or with an agent.",
   blocks: [
     {t:"h", text:"Part 1. Choose the right app for your task", why:""},
     {t:"p", html:`Copilot, ChatGPT, Claude and Gemini are each an <b>app</b>: the window you sign in to, type in and upload files to. All four can write, summarize and answer questions, so most tasks can start in any of them. They differ in three ways: what each app can read with no setup, what each one does well, and how each company handles your chats.`},
@@ -608,9 +653,9 @@ const LESSONS = [
       {title:"Does it train on my chats?", cells:["No, when you sign in with your Fredrickson account","Yes on personal plans, until you turn it off in Data controls","Only if you allow it in Privacy settings. Anthropic then keeps those chats up to five years.","Yes on personal accounts while Keep Activity is on, which is the default. People at Google read a sample of chats."]}]},
     {t:"p", html:`*Copilot reads your email, meetings and files only with a <b>paid Microsoft 365 Copilot license</b>. Without one, Copilot Chat reads the web and the files you add, like the other apps.`},
     {t:"pq", title:"Practice: choose the app", intro:"Choose the app that fits each task best. These questions do not count toward your score.", items:[
-      {q:"You missed a Teams meeting with your project team. You want the decisions and your action items. You have a Copilot license.", choices:["Copilot","ChatGPT","Gemini"], correct:0,
-        others:[null, "ChatGPT reads only the files you upload, unless you link Microsoft 365. You would find and upload the transcript first.", "Fredrickson has no paid license for Gemini, so keep Fredrickson information out of it. Your team’s meeting is Fredrickson information."],
-        right:"Correct. With a Copilot license, Copilot already reads your Teams meetings, so you upload nothing.", wrong:"Not quite. With a Copilot license, Copilot already reads your Teams meetings, so you upload nothing."},
+      {q:"A client shares a Google Doc of interview notes and asks you to summarize them. The client said you may use AI on the notes.", choices:["Gemini, because it already reads Google Docs","Claude, after you download the doc and upload the file","ChatGPT on your personal plan"], correct:1,
+        others:["Gemini reads Google Docs with no setup, but Fredrickson has no paid license for Gemini. Client information stays out of Gemini.", null, "ChatGPT trains on chats on personal plans until you turn it off, so the client’s notes could train the model. Use one of Fredrickson’s paid apps."],
+        right:"Correct. Claude is one of Fredrickson’s paid apps. You download the Google Doc and upload the file, so the client’s notes stay out of Gemini.", wrong:"Not quite. Gemini reads Google Docs, but client information stays out of Gemini. Download the doc and upload the file to Claude."},
       {q:"You’re turning your rough draft in Word into an internal process document. You want the AI to edit the file you have open.", choices:["Copilot","Claude","ChatGPT"], correct:0,
         others:[null, "Claude is its own app, so you would copy the text out of Word and paste the edits back.", "ChatGPT is its own app, so you would copy the text out of Word and paste the edits back."],
         right:"Correct. Copilot is built into Word, so it edits the file you have open.", wrong:"Not quite. Copilot is built into Word, so it edits the file you have open."}]},
@@ -625,21 +670,21 @@ const LESSONS = [
       ["A long document, a plan with many steps, or writing that must follow many rules at once","A larger model"]]},
     {t:"p", html:`As of November 2026, each app’s menu lists the models below. Select an app to see its models. Companies rename and replace models every few months, so check the menu in your app.`},
     {t:"tabs", tabs:[
-      {title:"Copilot", html:`<p>Copilot has a model menu in Chat, Word, Excel, PowerPoint and Copilot Cowork. Cowork does whole tasks for you, and Part 4 covers it. Your admin decides which models appear, and the list can differ by license and region.</p><p>In the Copilot app, the model menu is at the top of the chat. It says <b>Auto</b> until you choose a model.</p><img class="shot" src="img/copilot-model-menu.png" width="304" height="50" alt="The top of a Copilot chat, with the model menu button, Auto, outlined" loading="lazy"><!-- screenshot checked Nov 23, 2026 -->${qrows([
+      {title:"Copilot", html:`<p>Copilot has a model menu in Chat, Word, Excel, PowerPoint and Copilot Cowork. Cowork does whole tasks for you, and Part 4 covers it. Your admin decides which models appear, and the list can differ by license and region.<br><br></p><p>In the Copilot app, the model menu is at the top of the chat. It says <b>Auto</b> until you choose a model.</p><img class="shot" src="img/copilot-model-menu.png" width="304" height="50" alt="The top of a Copilot chat, with the model menu button, Auto, outlined" loading="lazy"><!-- screenshot checked Nov 23, 2026 -->${qrows([
         ["Auto (the default)","Everyday questions, such as “What did I miss in this email thread?” Copilot chooses a model for each message.","You don’t see which model wrote the reply."],
         ["Claude Opus 5.5","Complex, high-stakes work, such as comparing two versions of a document or turning a long report into a plan with dates. Microsoft recommends it for this work.","Slower than Sonnet. Anthropic runs it outside Microsoft’s own data centers."],
         ["Claude Sonnet 5.5","Everyday work, such as drafting a reply to an email or turning meeting notes into a to-do list. It’s fast.","Less capable than Opus on the hardest work."],
         ["GPT-6.1 Sol","The same everyday work as Sonnet. It’s there when your admin turns off the Claude models.","Like every model you choose by name, it has a usage limit. At the limit, Copilot switches you to Auto."]])}<p>Copilot Cowork lists more models, such as GPT-6 Astra and Grok 4.7.</p>`},
-      {title:"ChatGPT", html:`<p>ChatGPT has two modes. In <b>Chat</b>, you can’t choose a model. ChatGPT chooses one for you. In <b>Work</b>, you choose the model.</p><p>In Work, select the model name in the message box, next to the microphone.</p><img class="shot" src="img/chatgpt-model-menu.png" width="768" height="44" alt="The ChatGPT message box, with the model name outlined next to the microphone" loading="lazy"><!-- screenshot checked Nov 23, 2026 -->${qrows([
+      {title:"ChatGPT", html:`<p>ChatGPT has two modes. In <b>Chat</b>, you can’t choose a model. ChatGPT chooses one for you. In <b>Work</b>, you choose the model.<br><br></p><p>In Work, select the model name in the message box, next to the microphone.</p><img class="shot" src="img/chatgpt-model-menu.png" width="768" height="44" alt="The ChatGPT message box, with the model name outlined next to the microphone" loading="lazy"><!-- screenshot checked Nov 23, 2026 -->${qrows([
         ["Sol","Most work, such as a reply to a client email or a summary of one file.","Less careful than Astra on hard work."],
         ["Astra","Hard work, such as a plan with many steps or a long report that must follow many rules.","Uses more of your usage limit than Sol."],
         ["Luna","Quick, simple work, such as fixing the grammar in one paragraph.","Less careful than Sol, so check its replies on anything a client will read."]])}<p>Each choice also names a thinking level, such as Sol Light or Astra Medium. Part 3 covers thinking levels.</p>`},
-      {title:"Claude", html:`<p><b>Tip:</b> For most work, switch between Sonnet and Opus. Start with Sonnet, and switch to Opus when the task is long or hard. Save Fable for work that Opus does poorly.</p><p>Select the model name in the message box, next to the microphone. Older models are under <b>More models</b>.</p><img class="shot" src="img/claude-model-menu.png" width="598" height="40" alt="The Claude message box, with the model name outlined next to the microphone" loading="lazy"><!-- screenshot checked Nov 23, 2026 -->${qrows([
+      {title:"Claude", html:`<p><b>Tip:</b> For most work, switch between Sonnet and Opus. Start with Sonnet, and switch to Opus when the task is long or hard. Save Fable for work that Opus does poorly.<br><br></p><p>Select the model name in the message box, next to the microphone. Older models are under <b>More models</b>.</p><img class="shot" src="img/claude-model-menu.png" width="598" height="40" alt="The Claude message box, with the model name outlined next to the microphone" loading="lazy"><!-- screenshot checked Nov 23, 2026 -->${qrows([
         ["Claude Fable 5.2","The hardest, longest jobs, such as checking a 100-page proposal against every requirement in the request.","The slowest model, and it uses your usage limit the fastest."],
         ["Claude Opus 5.5","Long documents, plans and agent tasks, such as a one-page summary of a long report or a project plan with steps, owners and dates.","Slower than Sonnet."],
         ["Claude Sonnet 5.5","Everyday work, such as drafting an email, rewriting a paragraph in plainer words or summarizing a meeting. It’s fast.","Less capable than Opus and Fable on the hardest tasks."],
         ["Claude Haiku 5.5","Short, simple tasks, such as fixing the grammar in a sentence or turning a list into a table. It’s the fastest.","The smallest model. Choose a larger one for hard work."]])}`},
-      {title:"Gemini", html:`<p><b>Fredrickson does not have a paid license for Gemini.</b> Keep Fredrickson and client information out of Gemini.</p><p>Which models you see depends on your Google plan. With <b>Auto</b> on, Gemini chooses the model for each prompt.</p>${qrows([
+      {title:"Gemini", html:`<p><b>Fredrickson does not have a paid license for Gemini.</b> Keep Fredrickson and client information out of Gemini.<br><br></p><p>Which models you see depends on your Google plan. With <b>Auto</b> on, Gemini chooses the model for each prompt.</p>${qrows([
         ["Flash-Lite","A quick fact or a one-line rewrite. It’s fast, and it’s on every plan.","The least capable model in the menu. Gemini switches you to it when you reach your limit."],
         ["Gemini 4 Hydrogen","Everyday tasks, such as drafting a reply in Gmail or summarizing a Google Doc. It follows tone and format rules.","Brand new, and not built for long, deep reasoning."],
         ["Gemini Pro","A question with several steps, such as comparing three vendor quotes.","Older than the Gemini 4 models."],
@@ -669,8 +714,8 @@ const LESSONS = [
     {t:"vis", layout:"pair", label:"Two different settings", items:[
       ["model","Choose a model","Change which model answers the task. A larger model may handle harder work.","warm"],
       ["thinking","Choose thinking time","Keep the same model. Give it more or less time to work through the problem."]]},
-    {t:"p", html:`<ul class="list"><li>The reply takes longer, from several seconds to a few minutes.</li><li>On hard tasks, the reply is right more often.</li><li>On easy tasks, the reply stays the same. The model often skips thinking.</li></ul>`},
-    {t:"p", html:`As of November 2026, each app sets thinking time in its own place.`},
+    {t:"p", html:`<div>Thinking affects...</div><ul class="list"><li> Response time: more thinking makes the reply take longer, from several seconds to a few minutes.</li><li>Accuracy: Increased thinking time increases accuracy on difficult tasks. On easy tasks, the reply stays the same. The model often skips thinking.</li></ul>`},
+    {t:"p", html:`Review the information below for where to adjust the thinking level in each app:`},
     {t:"tabs", hint:"Select an app to see where to set thinking time.", tabs:[
       {title:"Copilot", html:`<p>In Chat, choose Auto, Quick response or Think deeper.</p><p>In Copilot Cowork, <b>reasoning effort</b> offers Light, Medium, High, Extra High or Max.</p>`},
       {title:"ChatGPT", html:`<p>In <b>Chat</b>, choose Instant, Medium or High.</p><p>In <b>Work</b>, the thinking level comes with the model you choose. Your menu may list Luna High, Sol Light, Sol Medium, Astra Light and Astra Medium.</p>`},
@@ -719,13 +764,13 @@ const LESSONS = [
     {t:"p", html:`<b>Let the AI help you choose.</b> Use any of these four ways to choose the model and the thinking setting. The first three work in every app.`},
     {t:"table", head:["Way","What to do"], rows:[
       ["Ask about the task","Ask: “Before you answer, tell me whether this task needs careful step-by-step reasoning or a quick answer.” Ask about the task, not about model names. A model knows little about models released after it was trained."],
-      ["Save an instruction","Add a saved instruction: “If a task needs more thinking time than this setting gives, say so before you answer.”"],
+      ["Save a rule","Save this rule in the app’s settings, so every chat follows it: “If a task needs more thinking time than this setting gives, say so before you answer.”"],
       ["Test once","For a task you repeat, send the same prompt with two settings. Compare the replies, and keep the better setting for that task."],
       ["Use Auto","In Copilot and Gemini, leave the setting on Auto. The app then chooses the setting for each message."]]},
     {t:"gate"},
     {t:"h", text:"Part 4. Choose chat, a project or an agent", why:""},
-    {t:"p", html:`You have the app, the model and the thinking setting. Last, choose where in the app to work. A chat, a project and an agent each take on a different share of the work. Each app offers more than one place to work.<ul class="list"><li>In a <b>chat</b>, you type a request, the AI replies, and you do the rest. </li><li>A <b>project</b> is a workspace that keeps the same files and instructions ready for every chat inside it. Claude and ChatGPT call it a project. In Copilot, look for Projects, Notebooks or Workspaces.</li><li>An <b>agent</b> does the steps of a task itself, such as opening files, searching the web and building a document. Some agents also have projects. For example, a project in Claude Cowork keeps the same files and instructions ready for every Cowork task inside it. Lesson 3 covers agents in full: how they work, and how to brief them, keep them safe and check their work.</li></ul>`},
-    {t:"p", html:`<b>Same word, different meaning.</b> Most apps use these words the same way. As of November 2026, watch for three differences.<ul class="list"><li><b>Agent:</b> In this course, an agent does a task with several steps for you, such as Claude Cowork, ChatGPT Work or Copilot Cowork. In Copilot, “agent” can also mean an assistant that someone set up for one job. That kind mostly answers questions, like a project.</li><li><b>Connector:</b> ChatGPT calls connectors “apps.” Lesson 2 covers connectors.</li><li><b>Skill:</b> Copilot has no skills. Lesson 4 covers skills.</li></ul>`},
+    {t:"p", html:`You have the app, the model and the thinking setting. Last, choose where in the app to work. A chat, a project and an agent each take on a different share of the work. Each app offers more than one place to work.<br><br><ul class="list"><li>In a <b>chat</b>, you type a request, the AI replies, and you do the rest. </li><li>A <b>project</b> is a workspace that keeps the same files and instructions ready for every chat inside it. Claude and ChatGPT call it a project. In Copilot, look for Projects, Notebooks or Workspaces.</li><li>An <b>agent</b> is AI that does the work by itself, including checking its own work. For example, an agent opens files, searches the web and builds a document. Some agents also have projects. For example, a project in Claude Cowork (an agent) keeps the same files and instructions ready for every Cowork task inside it. Lesson 3 covers agents in full: how they work, and how to brief them, work with them safely, and check their work.</li></ul>`},
+    {t:"note", html:`<b>Same word, different meaning.</b> Most apps use these words the same way. As of November 2026, watch for three differences.<ul class="list"><li><b>Agent:</b> In this course, an agent is AI that does the work by itself, including checking its own work. Claude Cowork, ChatGPT Work and Copilot Cowork are agents. In Copilot, “agent” can also mean an assistant that someone set up for one job. That kind mostly answers questions, like a project.</li><li><b>Connector:</b> ChatGPT calls connectors “apps.” Lesson 2 covers connectors.</li><li><b>Skill:</b> Copilot has no skills. Lesson 4 covers skills.</li></ul>`},
     {t:"p", html:`Choose the simplest option that can do the task. Check the options in this order: chat, then a project, then an agent.`},
     {t:"flow"},
     {t:"p", html:`Answer the questions from the top. The first question checks whether chat or a project can do the task. You need an agent only when the answer is yes.`},
@@ -772,33 +817,34 @@ const LESSONS = [
       {title:"Prompt", html:`<p>Applies to one message.</p><ul class="list"><li>“Summarize this email in three bullets,” with the email pasted below.</li><li>“This summary is for the client’s CFO, so lead with cost.”</li></ul>`},
       {title:"Custom instructions", html:`<p>Apply to every chat you start.</p><ul class="list"><li>“I am an instructional designer. My audience is usually HR leaders.”</li><li>“Check today’s date before you answer.”</li></ul>`}]},
     {t:"note", html:`<b>Easy to mix up.</b> Ask: do I want this in every chat, or only now? Every chat: custom instructions. Only now: the prompt. A rule for only one client goes in a project, which Part 2 covers.`},
+    {t:"p", html:`Some apps also have <b>memory</b>, a feature that saves a few facts about you between chats. Memory works differently from custom instructions. You write custom instructions, and the app adds every word to every chat. With memory, the app chooses which facts to save, and it may skip the one you need. So put any rule you need in every chat in custom instructions.`},
     {t:"p", html:`A good prompt holds four parts: the <b>goal</b>, the <b>reader</b>, the <b>format</b> and an <b>example</b> when you have one. Your custom instructions already say who you are, so the prompt holds what changes with each task.`},
     {t:"tabs", tabs:[
       {title:"Prompt missing parts", html:`<p>“Help me plan the workshop.”</p><p>The AI has to guess the goal, the audience, the length and what you want back, so the reply is generic.</p>`},
       {title:"Prompt with all four parts", html:`<p>“Plan a 90-minute workshop on giving feedback. <b>Goal:</b> new managers leave able to give one piece of feedback this week. <b>Reader:</b> the HR lead who approves the agenda. <b>Format:</b> a table with the time, the activity and the materials. <b>Example:</b> the attached agenda from last year’s workshop.”</p>`}]},
-    {t:"sim", prompt:"Find the right place for each rule.", unit:"Rule", label:"Put the rule in",
-      steps:["Select Start. The app runs two chats, with the rule typed into your first prompt.","Select Custom instructions at the top of the app. The app runs the same two chats with the rule saved instead.","Compare the replies in the new chat, then go to the next rule."], settings:[["Prompt"],["Custom instructions"]], start:0, ruleIn:1,
+    {t:"sim", prompt:"Where should each rule go: in your prompt, or in custom instructions?", unit:"Rule", label:"Put the rule in", newChat:"New chat, different task",
+      steps:["Select Start. The app adds the rule to your first message. Then the app opens a new chat and asks for something else.","Read the reply in the new chat. Check whether the AI followed the rule there.","Select Custom instructions at the top of the app. The app saves the rule instead and runs the same two chats again.","Compare the two replies in the new chat. The best place for the rule shows below the replies. Then select Next rule."], settings:[["Prompt"],["Custom instructions"]], start:0, ruleIn:1,
       bestLabel:"Best place for this rule",
       tasks:[
         {rule:"Use plain language, with no jargon.", asks:["Draft a welcome note for new learners.","Write a reminder about Friday’s workshop."], best:1,
           replies:[
-            [[`<p>Welcome! Over the next four weeks, you’ll learn how to give feedback your team can act on. Each week takes about an hour.</p>`, `<p>Reminder: Friday’s workshop will leverage best-practice frameworks to drive alignment on feedback culture and optimize team performance outcomes.</p>`], "The welcome note is plain. The rule was only in the first chat’s prompt, so the reminder is full of jargon.", "poor"],
-            [[`<p>Welcome! Over the next four weeks, you’ll learn how to give feedback your team can act on. Each week takes about an hour.</p>`, `<p>Reminder: Friday’s workshop is about giving feedback. Bring one conversation you’ve been putting off, and we’ll practice it together.</p>`], "Both drafts are plain, and you wrote the rule once.", "good"]],
+            [[`<p>Welcome! Over the next four weeks, you’ll learn how to give feedback your team can act on. Each week takes about an hour.</p>`, `<p>Reminder: Friday’s workshop will leverage best-practice frameworks to drive alignment on feedback culture and optimize team performance outcomes.</p>`], "The welcome note is plain. The rule was only in the first chat’s prompt, so the reminder in the new chat is full of jargon.", "poor"],
+            [[`<p>Welcome! Over the next four weeks, you’ll learn how to give feedback your team can act on. Each week takes about an hour.</p>`, `<p>Reminder: Friday’s workshop is about giving feedback. Bring one conversation you’ve been putting off, and we’ll practice it together.</p>`], "Both drafts are plain. The saved rule reached the new chat, and you wrote the rule once.", "good"]],
           why:"You want plain language in every chat, so the rule goes in custom instructions."},
         {rule:"The reader is the client’s CFO, so lead with cost.", asks:["Summarize this proposal for the client.","Write a thank-you note to Dana, who led yesterday’s session."], file:"Client proposal.pdf", best:0,
           replies:[
-            [[`<ul class="list"><li>Cost: $48,000, paid in two parts.</li><li>Return: managers trained in 12 weeks instead of 6 months.</li><li>Scope: 40 managers across three sites.</li></ul>`, `<p>Dana, thank you for yesterday. The group was engaged the whole time, and three people asked when you’re coming back.</p>`], "The summary leads with cost, and the thank-you note sounds like a thank-you note.", "good"],
-            [[`<ul class="list"><li>Cost: $48,000, paid in two parts.</li><li>Return: managers trained in 12 weeks instead of 6 months.</li><li>Scope: 40 managers across three sites.</li></ul>`, `<p>Dana, thank you for yesterday. At $3,200, the session came in under budget, at $160 per participant.</p>`], "The thank-you note leads with cost too. Custom instructions applied the rule to a chat that didn’t need it.", "poor"]],
+            [[`<ul class="list"><li>Cost: $48,000, paid in two parts.</li><li>Return: managers trained in 12 weeks instead of 6 months.</li><li>Scope: 40 managers across three sites.</li></ul>`, `<p>Dana, thank you for yesterday. The group was engaged the whole time, and three people asked when you’re coming back.</p>`], "The summary leads with cost. The rule stayed in the first chat, so the thank-you note in the new chat sounds like a thank-you note.", "good"],
+            [[`<ul class="list"><li>Cost: $48,000, paid in two parts.</li><li>Return: managers trained in 12 weeks instead of 6 months.</li><li>Scope: 40 managers across three sites.</li></ul>`, `<p>Dana, thank you for yesterday. At $3,200, the session came in under budget, at $160 per participant.</p>`], "The thank-you note in the new chat leads with cost too. The saved rule reached a chat that didn’t need it.", "poor"]],
           why:"The reader changes with each task, so the rule goes in the prompt."},
         {rule:"Check today’s date before you answer.", asks:["How many weeks until our March 3 launch?","Draft an invite to next Friday’s planning meeting."], best:1,
           replies:[
-            [[`<p>I checked today’s date. The March 3 launch is about 16 weeks away.</p>`, `<p>Please join us for planning next Friday, [date], at 10 a.m. in the main conference room.</p>`], "The first reply counts from today. The new chat didn’t check the date, so it left a blank.", "poor"],
+            [[`<p>I checked today’s date. The March 3 launch is about 16 weeks away.</p>`, `<p>Please join us for planning next Friday, [date], at 10 a.m. in the main conference room.</p>`], "The first reply counts from today. The new chat didn’t check the date, so the invite has a blank where the date belongs.", "poor"],
             [[`<p>I checked today’s date. The March 3 launch is about 16 weeks away.</p>`, `<p>Please join us for planning next Friday, the 20th, at 10 a.m. in the main conference room.</p>`], "Both chats checked the date, so the invite is ready to send.", "good"]],
           why:"You want every chat to know the date, so the rule goes in custom instructions."},
         {rule:"Make the case against my proposal.", asks:["Here’s my proposal for a mentoring program.","Write a note congratulating Priya on her promotion."], file:"Mentoring proposal.docx", best:0,
           replies:[
-            [[`<ul class="list"><li>Mentors give up two hours a month, and the proposal doesn’t say what they stop doing.</li><li>There’s no way to measure success after the first year.</li><li>Pairing by department limits what new hires learn.</li></ul>`, `<p>Congratulations, Priya! The promotion is well earned, and your team is lucky to have you.</p>`], "You got the case against your proposal, and the congratulations stayed warm.", "good"],
-            [[`<ul class="list"><li>Mentors give up two hours a month, and the proposal doesn’t say what they stop doing.</li><li>There’s no way to measure success after the first year.</li><li>Pairing by department limits what new hires learn.</li></ul>`, `<p>Congratulations, Priya. Before you celebrate, here are three risks in your new role: a larger team, less time for your own work and higher expectations.</p>`], "The note to Priya became a list of risks.", "poor"]],
+            [[`<ul class="list"><li>Mentors give up two hours a month, and the proposal doesn’t say what they stop doing.</li><li>There’s no way to measure success after the first year.</li><li>Pairing by department limits what new hires learn.</li></ul>`, `<p>Congratulations, Priya! The promotion is well earned, and your team is lucky to have you.</p>`], "You got the case against your proposal. The rule stayed in the first chat, so the note to Priya in the new chat stayed warm.", "good"],
+            [[`<ul class="list"><li>Mentors give up two hours a month, and the proposal doesn’t say what they stop doing.</li><li>There’s no way to measure success after the first year.</li><li>Pairing by department limits what new hires learn.</li></ul>`, `<p>Congratulations, Priya. Before you celebrate, here are three risks in your new role: a larger team, less time for your own work and higher expectations.</p>`], "The saved rule reached the new chat, so the note to Priya became a list of risks.", "poor"]],
           why:"You want criticism of this proposal only, so the rule goes in the prompt."}]},
     {t:"frd", kind:"job", html:`${a(L.directions,"Get AI to Follow Your Directions")} shows how to set up custom instructions in Claude, ChatGPT and Copilot.`},
     {t:"gate"},
@@ -837,36 +883,32 @@ const LESSONS = [
     {t:"frd", kind:"job", html:`${a(L.directions,"Get AI to Follow Your Directions")} shows how to set up projects in Claude, ChatGPT and Copilot.`},
     {t:"gate"},
     {t:"h", text:"Part 3. Find out why the AI seems to forget", why:""},
-    {t:"p", html:`Two of the causes depend on the <b>context window</b>: the most text a model can read at one time, including the whole chat, any files and the model’s own replies. Each message adds to it. Each new chat starts with an empty context window.`},
-    {t:"p", html:`AI apps measure the text in a context window in <b>tokens</b>. One token is about three-quarters of an English word. Context windows and usage limits both count tokens.`},
-    {t:"vis", layout:"pair", label:"What the AI can read now", items:[
-      ["longchat","A long chat","The AI may no longer read details from early in the chat."],
-      ["newchat","A new chat","Starts with an empty context window. Your earlier chat is not in that window.","warm"]]},
-    {t:"process", label:"Cause", intro:"Select Start to see each cause, what it looks like in the chat and its fix.", steps:[
-      ["The chat got longer than the context window","The app dropped or shortened early messages, so answers get worse.", qrows([["What you see","The AI misses a rule or a file from the start of a long chat."],["The fix",`Start a new chat. Paste in a <b>handoff note</b>: a short summary of the work so far. ${a(L.limits,"Make Your AI Usage Limits Last Longer")} shows how.`]], true)],
+    {t:"p", html:`Sometimes the AI seems to forget the rules and feedback you gave it. The AI can miss them for seven reasons.`},
+    {t:"process", label:"Cause", intro:"Select Start to see each cause, what it looks like in the chat and how to fix it.", steps:[
+      ["The chat got longer than the context window",`The <b>context window</b> is the most text a model can read at one time. It holds the whole chat, any files and the model’s own replies, and each message adds to it. AI apps measure this text in <b>tokens</b>. One token is about three-quarters of an English word. When a chat gets longer than the context window, the app drops or shortens early messages, so answers get worse. The AI won’t warn you, because it can’t see what the app removed.`, qrows([["What you see","The AI misses a rule or a file from the start of a long chat."],["The fix",`Start a new chat. Paste in a <b>handoff note</b>: a short summary of the work so far. ${a(L.limits,"Make Your AI Usage Limits Last Longer")} shows how.`]], true)],
       ["The rule is in the middle of a long chat","Even when the whole chat fits in the context window, models follow the start and the end of a chat more closely than the middle.", qrows([["What you see","The AI follows some of your earlier rules and skips others."],["The fix","Repeat the rule at the end of your prompt."]], true)],
       ["A newer message disagrees with an older rule","The AI usually follows what it read most recently.", qrows([["What you see","You asked for 100 words, then pasted a long example. The reply is as long as the example."],["The fix","Repeat the rule in the same prompt as the example."]], true)],
-      ["Memory did not save it",`<b>Memory</b> is a feature that saves a few facts about you between chats. The app chooses what to save, and it saves a short note, not the whole chat.`, qrows([["What you see","The AI uses some facts from past chats, but not the one you need."],["The fix",`Check what memory saved in the app’s settings. ${a(L.directions,"Get AI to Follow Your Directions")} shows where. Put rules you need every time in custom instructions, not memory.`]], true)],
-      ["It is a new chat","Each chat starts empty. The AI does not read your other chats, except for what memory saved.", qrows([["What you see","The AI does not know what you told it yesterday."],["The fix","Put rules you use often in custom instructions or a project."]], true)],
+      ["Memory did not save it",`Memory saves only a few facts between chats, and the app chooses which ones. Memory keeps a short note, not the whole chat.`, qrows([["What you see","The AI uses some facts from past chats, but not the one you need."],["The fix",`Check what memory saved in the app’s settings. ${a(L.directions,"Get AI to Follow Your Directions")} shows where. Put rules you need every time in custom instructions, not memory.`]], true)],
+      ["It is a new chat","Each new chat starts with an empty context window. The AI reads none of your other chats, except for what memory saved.", qrows([["What you see","The AI does not know what you told it yesterday."],["The fix","Put rules you use often in custom instructions or a project."]], true)],
       ["It never read the whole file","The file was too long, a scanned image, or a type the app cannot open.", qrows([["What you see","The AI knows nothing about part of a file you attached."],["The fix","Ask which pages it could read, and ask for the page of each point."]], true)],
       ["Two sets of instructions disagree","Your custom instructions, a project’s instructions and your prompt say different things, so the AI follows one of them.", qrows([["What you see","The AI follows one rule and ignores a rule you wrote somewhere else."],["The fix","Delete the rule from the place where it does not belong."]], true)]]},
-    {t:"statement", text:"When the AI seems to forget, ask where the information was: early in this chat, in another chat, in a file, or in another set of instructions. The fix depends on where it was."},
-    {t:"sort", goal:"At work, you see what went wrong, not why. Practice choosing the first fix to try for six problems.", prompt:"Drag each problem to the fix that works, or select a pile.", piles:["Start a new chat","Repeat the rule in your prompt","Change your saved instructions","Ask what it could read"],
-      cards:[["After three hours in one chat, Claude no longer uses the client name you gave it at the start.",0,"The chat got longer than the context window. Paste a handoff note with the client name into the new chat."],
-        ["You ask for a bulleted list and paste a long paragraph to edit, all in one message. The AI replies with a paragraph.",1,"The AI followed the paragraph, because it read the paragraph last. Put “Reply in bullets” after the paragraph."],
-        ["Every Monday you start a new chat and type the same five rules for the newsletter.",2,"A new chat starts empty, so save the rules in a newsletter project."],
-        ["ChatGPT summarizes a 90-page report and says nothing about the last chapter.",3,"Ask which pages it could read. If it missed the last chapter, give it that chapter on its own."],
-        ["Your custom instructions say “Be brief.” Your client project says “Explain each step in detail.” Replies in the project are sometimes short and sometimes long.",2,"The two sets of instructions disagree. Delete “Be brief” from custom instructions, or add “except in this project” to it."],
-        ["In a long chat that still fits in the context window, Copilot skips one rule you gave halfway through.",1,"The chat fits, but the model follows the middle of a chat less closely than the end."]]},
+    {t:"statement", text:"When the AI seems to forget, ask where the information was: earlier in this chat, in another chat, in a file, or in another set of instructions. The fix depends on where it was."},
+    {t:"sort", goal:"At work, you see what went wrong, not why. Practice finding where the missing information was, so you know which fix to try first.", prompt:"Drag each problem to where the information was, or select a pile.", piles:["Earlier in this chat","In another chat","In a file","In another set of instructions"], say:"the information was", sayNot:"the information was not",
+      cards:[["After three hours in one chat, Claude no longer uses the client name you gave it at the start.",0,"After three hours, the chat got longer than the context window, so the app dropped the start. Start a new chat and paste a handoff note with the client name."],
+        ["Early in a chat, you ask for replies in bullets. Later, you paste a long paragraph to edit, and the AI replies with a paragraph.",0,"The AI usually follows what it read most recently, and the paragraph came last. Put “Reply in bullets” after the paragraph."],
+        ["Every Monday you start a new newsletter chat. The AI doesn’t know the five rules you gave it last Monday.",1,"A new chat starts empty and reads none of your other chats. Save the rules in a newsletter project, so every newsletter chat starts with them."],
+        ["ChatGPT summarizes a 90-page report and says nothing about the last chapter.",2,"The AI may not have read all 90 pages. Ask which pages it could read. If it missed the last chapter, give it that chapter on its own."],
+        ["Your custom instructions say “Be brief.” Your client project says “Explain each step in detail.” Replies in the project are sometimes short and sometimes long.",3,"Your custom instructions and your project disagree, so the AI follows one or the other. Delete “Be brief” from custom instructions, or add “except in client projects” to it."],
+        ["In a long chat that still fits in the context window, Copilot skips one rule you gave halfway through.",0,"The chat still fits, but models follow the middle of a chat less closely than the start and the end. Repeat the rule at the end of your prompt."]]},
     {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
-      <li>The client name after three hours: start a new chat. The chat got longer than the context window. Paste a handoff note with the client name into the new chat.</li>
-      <li>The paragraph instead of bullets: repeat the rule in your prompt. The AI followed the paragraph, because it read the paragraph last. Put “Reply in bullets” after the paragraph.</li>
-      <li>The five newsletter rules: change your saved instructions. A new chat starts empty, so save the rules in a newsletter project.</li>
-      <li>The missing last chapter: ask what it could read. Ask which pages it could read. If it missed the last chapter, give it that chapter on its own.</li>
-      <li>Short and long replies: change your saved instructions. The two sets of instructions disagree. Delete “Be brief” from custom instructions, or add “except in this project” to it.</li>
-      <li>The skipped rule from halfway through: repeat the rule in your prompt. The chat fits, but the model follows the middle of a chat less closely than the end.</li></ul>`},
+      <li>The client name after three hours: earlier in this chat. The chat got longer than the context window, so the app dropped the start. Start a new chat and paste a handoff note with the client name.</li>
+      <li>The paragraph instead of bullets: earlier in this chat. The AI usually follows what it read most recently, and the paragraph came last. Put “Reply in bullets” after the paragraph.</li>
+      <li>The five newsletter rules: in another chat. A new chat starts empty and reads none of your other chats. Save the rules in a newsletter project.</li>
+      <li>The missing last chapter: in a file. The AI may not have read all 90 pages. Ask which pages it could read. If it missed the last chapter, give it that chapter on its own.</li>
+      <li>Short and long replies: in another set of instructions. Your custom instructions and your project disagree. Delete “Be brief” from custom instructions, or add “except in client projects” to it.</li>
+      <li>The skipped rule from halfway through: earlier in this chat. The chat still fits, but models follow the middle of a chat less closely than the start and the end. Repeat the rule at the end of your prompt.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 4. Fix a wrong reply", why:""},
+    {t:"h", text:"Part 4. Fix weak or false replies", why:""},
     {t:"p", html:`When a reply fails, check the causes in this order. First, the prompt: most weak replies come from a prompt that leaves out the goal, the reader or the format. Second, what the app can read. Third, the <b>knowledge cutoff</b>: the date the model’s learning stops. The model knows nothing that happened after that date, in any chat. Change the model last, after the prompt and the files are right.`},
     {t:"note", html:`<b>Prompt or model?</b> Imagine giving the same prompt and files to a capable new hire. If the new hire would need to ask questions or guess, the prompt is missing something, so rewrite the prompt. If the new hire would get it right and the AI does not, choose a more capable model or more thinking time.`},
     {t:"p", html:`Some apps search the web when a question needs current facts. The app runs the search and lists the sources, and the model still writes the summary. Check the summary against the sources.`},
@@ -880,19 +922,19 @@ const LESSONS = [
       ["Questions that suggest an answer", `<p>Ask “Isn’t this the best option?” and the reply usually says yes.</p>${qrows([["Set up once","Add a custom instruction: name weaknesses, and disagree when the evidence does."],["Still up to you","Ask a neutral question. No setting can rewrite your question for you."]], true)}`]]},
     {t:"note", html:`<b>Easy to mix up.</b> A hallucination and an out-of-date answer need different guards. Ask: was this ever true? If never, the guard is a source for every fact. If it was true before the cutoff, the guard is the date and a web search.`},
     {t:"p", html:`The custom instructions, web search and code settings from <a href="#setup">Before you start</a> set up most of these guards. The “Still up to you” row in each kind is what no setting does for you.`},
-    {t:"sort", goal:"Practice finding the cause of a wrong reply, so you change the right thing first.", prompt:"Drag each problem to the change that fixes it, or select a pile.", piles:["Rewrite the prompt","Add or link the file","Turn on web search","Choose a different model"],
+    {t:"sort", goal:"Practice finding the cause of a wrong reply, so you change the right thing first.", prompt:"Drag each problem to the change that fixes it, or select a pile.", piles:["Rewrite the prompt","Upload the file or use a connector","Turn on web search","Choose a different model"],
       cards:[["You ask, “Help me plan the workshop,” and the reply is generic.",0,"Add the goal, the audience, the length and what you want back."],
-        ["Claude cannot see a client email in your Outlook inbox.",1,"Copilot reads Outlook, or you can link Microsoft 365 to Claude. A different model cannot read the email either."],
+        ["Claude cannot see a client email in your Outlook inbox.",1,"An email is kept in another app, so Claude needs a connector to read it. Use the Microsoft 365 connector in Claude, or ask Copilot, which already reads Outlook. A different model cannot read the email either."],
         ["You need a press release the client posted on its public website this week.",2,"The page is newer than the model’s knowledge cutoff, and it is public, so a search can find it. A search cannot find news that is not public."],
         ["The draft uses the wrong tone, and your prompt never said who will read it.",0,"Say who the reader is."],
-        ["ChatGPT cannot open a job aid page in Notion.",1,"Paste the page in, or link Notion to ChatGPT."],
+        ["ChatGPT cannot open a job aid page in Notion.",1,"Paste the page into the chat, or use the Notion connector in ChatGPT."],
         ["Your prompt gives the goal, the reader, the format and an example. The app has every file it needs. The plan still skips steps.",3,"The prompt and the files are right, so a more capable model or more thinking time is the next change."]]},
     {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
       <li>The generic workshop plan: rewrite the prompt. Add the goal, the audience, the length and what you want back.</li>
-      <li>The Outlook email: add or link the file. Copilot reads Outlook, or you can link Microsoft 365 to Claude. A different model cannot read the email either.</li>
+      <li>The Outlook email: use a connector. An email is kept in another app, so Claude needs a connector to read it. Use the Microsoft 365 connector in Claude, or ask Copilot, which already reads Outlook. A different model cannot read the email either.</li>
       <li>The public press release: turn on web search. The page is newer than the model’s knowledge cutoff, and it is public, so a search can find it. A search cannot find news that is not public.</li>
       <li>The wrong tone: rewrite the prompt. Say who the reader is.</li>
-      <li>The Notion page: add or link the file. Paste the page in, or link Notion to ChatGPT.</li>
+      <li>The Notion page: upload the file or use a connector. Paste the page into the chat, or use the Notion connector in ChatGPT.</li>
       <li>The plan that still skips steps: choose a different model. The prompt and the files are right, so a more capable model or more thinking time is the next change.</li></ul>`},
     {t:"statement", text:"Set up once what you can. Then check the facts a client will rely on."},
     {t:"gate"},
@@ -933,24 +975,26 @@ const LESSONS = [
 {
   title: "Let an agent do the work", min: 12,
   terms: "",
-  builds: "Learn how an agent works, how to brief one, how to keep it safe, and how to check and undo what it changed.",
-  fits: "In Lessons 1 and 2, you used chats. In a chat, the AI writes a reply, and you do the work yourself. An agent does the work for you, one step at a time, and you check the result.",
-  intro: "Some tasks take you an hour. An agent can finish them in a few minutes. This lesson shows you how to brief an agent, keep it safe and check its work before anyone else sees it.",
+  builds: "Learn how an agent works, how to brief one, how to use it safely, and how to check and undo what it changed.",
+  fits: "",
+  intro: "In a chat, the AI writes a reply and you do the work. An agent does the work itself, and some hour-long tasks take it a few minutes. This lesson shows you how to brief an agent, use it safely and check its work before anyone else sees it.",
   blocks: [
     {t:"h", text:"Part 1. Learn how an agent works", why:""},
     {t:"p", html:`<b>Tool use</b> is an action an AI takes outside the conversation, such as searching the web, reading a file or sending an email.`},
     {t:"p", html:`<b>Agentic AI</b> works toward a goal on its own. It makes a plan, takes actions, checks the results, and repeats until the task is done.`},
-    {t:"p", html:`An <b>agent</b> is an AI tool that completes a task with several steps. Claude Cowork, Claude Code, ChatGPT Work and Codex are agents.`},
-    {t:"process", intro:"An agent repeats four steps until the task is done.", steps:[
-      ["Plan","The agent reads your request and decides which steps the task needs."],
-      ["Act","The agent takes a step, such as opening a file, searching the web or writing a draft."],
-      ["Check","The agent looks at the result of that step."],
-      ["Repeat","If the task is not done, the agent plans the next step. When it is done, the agent gives you the result."]]},
+    {t:"p", html:`An <b>agent</b> is AI that does the work by itself, including checking its own work. Claude Cowork, Claude Code, ChatGPT Work and Codex are agents.`},
+    {t:"hub", title:"What an agent does", hint:"Select each part to see what the agent does.", core:"Agent", parts:[
+      ["brief","Follows your instructions","You give the agent the goal, the files to use, what the finished work looks like and what it must not do. Part 2 calls these instructions a brief and shows how to write one."],
+      ["folder","Opens files and apps you give it","The agent can open only the folders, apps and websites you give it, such as one OneDrive folder or your Outlook email."],
+      ["web","Uses the web and other tools","The agent can search the web, read a file, run a script or build a Word file. Each of these actions is tool use."],
+      ["loop","Works in steps and checks each one","The agent plans the steps the task needs, then takes one step at a time. After each step, the agent checks the result. If the result is wrong, the agent fixes it. If the task isn’t done, the agent takes the next step."],
+      ["ask","Asks before risky actions","Most agents ask for your approval before they delete, send or overwrite something. Read each request before you approve it. Part 3 shows how to use an agent safely."],
+      ["done","Gives you the finished work","When the task is done, the agent gives you the result, such as a report saved in a folder. Part 4 shows how to check and undo what the agent changed."]]},
     {t:"statement", text:"A chat answers one message and waits for you. An agent keeps working between your messages."},
     {t:"tabs", tabs:[
       {title:"Agent", html:`<p>The AI does the steps itself.</p><ul class="list"><li>Claude Cowork opens five files in a folder and builds one status report.</li><li>ChatGPT Work researches a market on the web and builds a briefing deck.</li><li>Claude Code fixes a broken script, runs it, and fixes it again until it works.</li></ul>`},
       {title:"Looks like an agent, but isn’t", html:`<p>The AI writes a reply, and you do the work.</p><ul class="list"><li>ChatGPT lists six steps for building a report. You do the steps. That is a chat.</li><li>Claude searches the web once and answers your question. That is tool use in a chat. Claude stops after one answer and waits for you.</li></ul>`}]},
-    {t:"note", html:`<b>Easy to mix up.</b> Microsoft 365 Copilot uses the word “agent” for something else. A Copilot agent is an assistant that someone set up for one job, such as answering questions about one team’s SharePoint site. It mostly answers questions in a chat, like a project in Lesson 2. In this course, an agent is an AI that does a task with several steps for you.`},
+    {t:"note", html:`<b>Easy to mix up.</b> Microsoft 365 Copilot uses the word “agent” for something else. A Copilot agent is an assistant that someone set up for one job, such as answering questions about one team’s SharePoint site. It mostly answers questions in a chat, like a project in Lesson 2. In this course, an agent is AI that does the work by itself, including checking its own work.`},
     {t:"sort", goal:"Practice spotting an agent, so you know when the rest of this lesson applies.", prompt:"Drag each description to Agent or Chat, or select a pile.", piles:["Agent","Chat"],
       cards:[["Claude Cowork sorts a folder of notes into subfolders by client.",0,"Cowork opens and moves the files itself."],["Copilot Chat drafts a meeting agenda, and you copy it into an email.",1,"Copilot writes one reply, and you do the rest."],
         ["ChatGPT gives you code. You paste it into a file and run it yourself.",1,"You run the code yourself, so you do the work."],["ChatGPT Work researches three competitors and builds a briefing.",0,"ChatGPT Work searches, reads and builds the briefing itself."],
@@ -963,8 +1007,8 @@ const LESSONS = [
       <li>The web search: chat. Claude used a tool once, then stopped and waited for you.</li></ul>`},
     {t:"gate"},
     {t:"h", text:"Part 2. Brief an agent", why:""},
-    {t:"p", html:`An agent works for minutes without you, so it cannot ask what you meant at each step. Before it starts, give it what a new colleague would need.`},
-    {t:"p", html:`A brief answers four questions. What is the work for? What should the agent use? What does the finished work look like? What must the agent not do without asking you?`},
+    {t:"p", html:`An agent works on its own for several minutes, so it can’t stop to ask what you meant. Before it starts, give it a <b>brief</b>: the details a new colleague would need to do the task without asking you questions.`},
+    {t:"p", html:`A brief answers four questions:<ol class="list"><li><b>Goal:</b> What is the work for?</li><li><b>Sources:</b> What should the agent use?</li><li><b>Done:</b> What does the finished work look like?</li><li><b>Limits:</b> What must the agent not do without asking you?</li></ol>`},
     {t:"brief", title:"A sample brief, with each part labeled", rows:[
       ["Goal","Write this week’s status report for Acme’s training director, so the director knows what the team finished and what comes next."],
       ["Sources","Read the five team notes in the Acme > Week 46 folder, and use last week’s report as the model. Don’t open any other folder."],
@@ -985,8 +1029,8 @@ const LESSONS = [
       <li>The half-page Word summary: done. It says what the finished work looks like and where it goes.</li>
       <li>Ask before you email: limits. It says what the agent must ask you about first.</li></ul>`},
     {t:"gate"},
-    {t:"h", text:"Part 3. Keep an agent safe", why:""},
-    {t:"p", html:`An agent takes real actions, such as sending email or deleting files. Two terms help you keep it safe.`},
+    {t:"h", text:"Part 3. Use an agent safely", why:""},
+    {t:"p", html:`An agent takes real actions, such as sending email or deleting files. Two terms help you use an agent safely.`},
     {t:"p", html:`An <b>approval prompt</b> is a pause in which the agent asks you before it takes an action. You allow the action or stop it.`},
     {t:"p", html:`A <b>prompt injection</b> is an instruction that someone hides in a web page, email or file to make the AI do something you did not ask for. The agent reads the text and may follow it.`},
     {t:"p", html:`<b>Where the risk is highest.</b> An injection can do real harm only when the agent can do three things at once. Ask these three questions before you start an agent.<ul class="list"><li>Can the agent read private information, such as your email, client files or SharePoint?</li><li>Will the agent read something written outside Fredrickson, such as a web page, an outside email or a file a vendor sent?</li><li>Can the agent send information out, such as by sending an email, posting a message, filling in a form or opening a link?</li></ul>`},
@@ -1012,23 +1056,36 @@ const LESSONS = [
       <li>The white text: prompt injection. The instruction was hidden in the document the AI read.</li></ul>`},
     {t:"gate"},
     {t:"h", text:"Part 4. Check and undo what an agent changed", why:""},
-    {t:"p", html:`The agent did the steps, but you send the result. Before anyone else sees it, open the files it changed, compare the result with your brief, and check the facts a client will rely on.`},
+    {t:"p", html:`The agent did the steps, but you send the result. You check an agent’s work in three steps. Save a version before the agent starts, see what the agent changed, then undo what you don’t want.`},
     {t:"p", html:`<b>Version control</b> saves each version of your files, shows what changed, and lets you go back. An agent can change dozens of files in one run. With version control, you can undo the agent’s changes, or keep some and undo the rest.`},
-    {t:"p", html:`You can use two kinds of version control.`},
-    {t:"table", head:["Use","When the files are"], rows:[
-      ["OneDrive or SharePoint version history","Office documents that people edit in Word, Excel or PowerPoint"],
-      ["GitHub","Text files that an agent creates or changes, such as scripts, web pages or instruction files"]]},
     {t:"p", html:`A copy named “Report final v2” is a second file, not version control. Nothing records what changed between the copies, and an agent can overwrite both.`},
+    {t:"p", html:`<b>Step 1. Save a version before the agent starts.</b> You can use two kinds of version control: OneDrive or SharePoint version history, and Git.`},
+    {t:"p", html:`<b>Git</b> is version control for text files, such as scripts, web pages and instruction files. Git runs on your computer. Git calls each saved version a <b>commit</b>. A <b>Git site</b> keeps a copy of your commits online, so the history survives if your computer fails. GitHub is the best-known Git site. GitLab, Bitbucket and Microsoft’s Azure DevOps are other Git sites.`},
+    {t:"compare", cols:["OneDrive or SharePoint version history","Git"], rows:[
+      ["Best for","Office documents that people edit in Word, Excel or PowerPoint","Text files that an agent creates or changes"],
+      ["Setup","None. OneDrive and SharePoint save a new version each time a file changes.","Set up Git once on your computer. Ask Luke before you install Git or choose a Git site."],
+      ["What you save","Each file keeps its own history.","Each commit saves the whole folder at once."],
+      ["How you see changes","Word marks every change between two versions. Excel and PowerPoint open the older version for you to read.","Git marks every added and removed line in every file."],
+      ["Watch out","You check and restore files one at a time. Your admin sets how long OneDrive keeps versions.","Git shows no line changes inside Word or Excel files. Keep a Git folder outside OneDrive, because OneDrive syncing can damage Git’s files."]]},
     {t:"statement", text:"Save a version before the agent starts. Check what changed before anyone else sees it."},
-    {t:"sort", goal:"Practice choosing where to save a version before an agent starts.", prompt:"Drag each project to OneDrive version history or GitHub, or select a pile.", piles:["OneDrive version history","GitHub"],
-      cards:[["A Word proposal that three colleagues edit at the same time",0,"Colleagues edit an Office document together, and GitHub cannot combine their changes inside a Word file."],["A folder of instruction files that Claude Code will change",1,"They are text files an agent will change."],
-        ["An Excel budget your manager updates each month",0,"It is an Office document a person edits in Excel."],["A script an agent will fix, where you want to see which lines changed",1,"GitHub shows exactly which lines the agent changed."]]},
+    {t:"sort", goal:"Practice choosing where to save a version before an agent starts.", prompt:"Drag each project to OneDrive version history or Git, or select a pile.", piles:["OneDrive version history","Git"],
+      cards:[["A Word proposal that three colleagues edit at the same time",0,"Colleagues edit an Office document together, and Git cannot combine their changes inside a Word file."],["A folder of instruction files that Claude Code will change",1,"They are text files an agent will change."],
+        ["An Excel budget your manager updates each month",0,"It is an Office document a person edits in Excel."],["A script an agent will fix, where you want to see which lines changed",1,"Git shows exactly which lines the agent changed."]]},
     {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
-      <li>The Word proposal: OneDrive. Colleagues edit an Office document together, and GitHub cannot combine their changes inside a Word file.</li>
-      <li>The instruction files: GitHub. They are text files an agent will change.</li>
+      <li>The Word proposal: OneDrive. Colleagues edit an Office document together, and Git cannot combine their changes inside a Word file.</li>
+      <li>The instruction files: Git. They are text files an agent will change.</li>
       <li>The Excel budget: OneDrive. It is an Office document a person edits in Excel.</li>
-      <li>The script: GitHub. GitHub shows exactly which lines the agent changed.</li></ul>`},
-    {t:"frd", kind:"job", html:`${a(L.versions,"Choose Version Control for Your Work")} shows how to go back to an earlier version in each option. If you choose GitHub, ${a(L.github,"Save and Restore Versions with GitHub")} shows how to set it up.`},
+      <li>The script: Git. Git shows exactly which lines the agent changed.</li></ul>`},
+    {t:"p", html:`<b>Step 2. See what the agent changed.</b> Ask the agent to list every file it changed and why. Then compare that list with what your version control shows, because the agent’s summary can leave a change out.`},
+    {t:"tabs", hint:"Select the tool you use.", tabs:[
+      {title:"Git", html:`<ol class="list"><li>Open your Git app, such as GitHub Desktop, and select the <b>Changes</b> tab. If the agent made its own commit, select <b>History</b>, then select that commit.</li><li>Read the list of changed files. Check that the brief let the agent change each one.</li><li>Select each file. Added lines show a plus sign, and removed lines show a minus sign.</li></ol>`},
+      {title:"Word file", html:`<ol class="list"><li>Open the document in Word.</li><li>Select the file name at the top of the window, then select <b>Version history</b>.</li><li>Select the version from before the agent started, then select <b>Compare</b>.</li><li>Read each marked change.</li></ol>`}]},
+    {t:"p", html:`Then compare the result with your brief. Check the goal, the sources the agent used, the finished work and the limits. Check every fact a client will rely on, such as names, numbers and dates.`},
+    {t:"p", html:`<b>Step 3. Undo what you don’t want.</b> Keep the changes that are right, and undo the rest.`},
+    {t:"tabs", hint:"Select the tool you use.", tabs:[
+      {title:"Git", html:`<ul class="list"><li>To undo changes that are not in a commit yet, right-click the file in <b>Changes</b>, then select <b>Discard Changes</b>.</li><li>To undo a commit, select <b>History</b>, right-click the commit, then select <b>Revert Changes in Commit</b>.</li></ul>`},
+      {title:"Word file", html:`<p>In <b>Version history</b>, select the version you want to keep, then select <b>Restore</b>.</p>`}]},
+    {t:"frd", kind:"job", html:`${a(L.versions,"Choose Version Control for Your Work")} compares the two options in more detail. ${a(L.github,"Save and Restore Versions with GitHub")} shows how to set up Git with GitHub as your Git site.`},
     {t:"gate"},
     {t:"h", text:"Knowledge Check: apply what you learned"},
     {t:"p", html:`Answer five questions and write one brief. Your score appears after the last question. The brief is not scored. You check it against a model brief.`},
@@ -1048,47 +1105,51 @@ const LESSONS = [
     {t:"kc", check:true, others:[null, "The agent checks each step. It does not check whether the result fits your brief and your client.", "Cowork wrote the report, so its own answer is not a check.", "A report can sound right and still have a wrong fact or miss part of your brief."], q:"Cowork finished the client report. What do you do before it goes to the client?",
       choices:["Open what it changed, compare it with your brief, and check the facts the client will rely on.", "Send it. The agent checked its own work.", "Ask Cowork whether the report is ready to send.", "Read the first paragraph, and send it if it sounds right."], correct:0,
       right:"Correct. The agent did the steps, but you send the result.", wrong:"Not quite. The agent checks each step, not whether the result fits your client. Open what it changed and check it against your brief."},
-    {t:"kc", check:true, others:["A connector links the AI to another app. It does not save versions of your files.", "An approval prompt asks you before an action. It does not let you undo changes afterward.", null, "A copy named “final v2” is a second file. It does not record what changed, and it cannot undo the agent’s changes."], q:"You save a version in GitHub before Claude Code changes a folder of scripts. Afterward, you undo every change the agent made. What did GitHub give you?",
+    {t:"kc", check:true, others:["A connector links the AI to another app. It does not save versions of your files.", "An approval prompt asks you before an action. It does not let you undo changes afterward.", null, "A copy named “final v2” is a second file. It does not record what changed, and it cannot undo the agent’s changes."], q:"You make a commit in Git before Claude Code changes a folder of scripts. Afterward, you undo every change the agent made. What did Git give you?",
       choices:["A connector", "An approval prompt", "Version control", "A backup copy named “final v2”"], correct:2,
-      right:"Correct. GitHub saved a version you could go back to.", wrong:"Not quite. GitHub saved a version and let you go back to it. That is version control."},
+      right:"Correct. Git saved a version you could go back to.", wrong:"Not quite. Git saved a version and let you go back to it. That is version control."},
     {t:"score", pass:4},
     {t:"cards", cards:[
       ["Tool use","An action an AI takes outside the conversation, such as searching the web, reading a file or sending an email."],
       ["Agentic AI","AI that works toward a goal on its own: it plans, acts, checks the results and repeats until the task is done."],
-      ["Agent","An AI tool that completes a task with several steps, such as Claude Cowork, Claude Code, ChatGPT Work or Codex."],
+      ["Agent","AI that does the work by itself, including checking its own work, such as Claude Cowork, Claude Code, ChatGPT Work or Codex."],
       ["Approval prompt","A pause in which the agent asks you before it takes an action."],
       ["Prompt injection","An instruction that someone hides in a web page, email or file to make the AI do something you did not ask for."],
       ["Version control","A system that saves each change to your files, shows what changed and lets you go back to an earlier point."],
       ["Repository","A folder that version control tracks, together with the history of every saved version."],
+      ["Git","Version control for text files, such as scripts, web pages and instruction files."],
       ["Commit","One saved version of the files in a repository, with a short note about what changed."],
-      ["GitHub","A website that stores repositories online and keeps their full history."],
+      ["Git site","A website that keeps a copy of your commits online, such as GitHub, GitLab, Bitbucket or Azure DevOps."],
       ["Restore","Return a file or folder to an earlier saved version."]]},
     {t:"end", html:`You can now tell an agent from a chat, brief an agent, tell an approval prompt from a prompt injection, and check and undo what an agent changed. Post a question or something you tried in the ${a(L.teams,"Learning and practicing with AI tools")} channel in Teams. Lesson 4 shows how to save a task so it runs the same way every time.`}
   ]
 },
 {
-  title: "Make it repeatable", min: 8,
+  title: "Make it repeatable", min: 12,
   terms: "",
-  builds: "Save a method once, share it, and run it on a schedule.",
-  fits: "Lessons 2 and 3 showed how to give the AI good directions and a clear brief. Lesson 4 shows how to save that work, so you never rebuild it for a task you repeat.",
-  intro: "When you do the same task every week, save the method once. Then share it with colleagues and let it run on a schedule.",
+  builds: "Save a method once, share it, run it on a schedule, see how the pieces work together, and use different models for different steps.",
+  fits: "",
+  intro: "With AI, you can set a task you repeat to run on a schedule you choose. For example, a scheduled task can sort your inbox, send your team an update or pull this week’s industry news into a short summary.",
   blocks: [
     {t:"h", text:"Part 1. Save a method as a skill", why:""},
-    {t:"p", html:`A <b>skill</b> is a saved set of instructions an agent loads for one kind of task, such as building a Fredrickson job aid. The agent follows the same method every time, and you never retype it.`},
-    {t:"p", html:`<b>Custom instructions</b> are saved directions the AI follows in every chat. Custom instructions load every time, so keep them short and general. A skill loads only when a task needs it, so it can contain a full method.`},
+    {t:"p", html:`A <b>skill</b> is a saved set of instructions the AI loads for one kind of task, such as building a job aid according to best practices. The AI follows the same method every time, and you never have to repeat the directions. In Claude, a skill works in a regular chat and in an agent such as Cowork.`},
+    {t:"p", html:`Lesson 2 showed <b>custom instructions</b>: saved directions the AI follows in every chat. A skill also saves directions, so the two are easy to confuse. Custom instructions load in every chat, so keep them short and general. A skill loads only when a task needs it, so it can hold a full method.`},
     {t:"statement", text:"Does it load in every chat, or only for one kind of task? Every chat: custom instructions. One kind of task: a skill."},
     {t:"tabs", tabs:[
       {title:"Skill", html:`<p>Loads when one kind of task needs it.</p><ul class="list"><li>The full Fredrickson method for building a job aid, loaded when you ask for a job aid.</li><li>The steps and checks for the weekly status report, loaded when you ask for the report.</li></ul>`},
-      {title:"Custom instructions", html:`<p>Load in every chat you start.</p><ul class="list"><li>“I am an instructional designer. My audience is usually HR leaders.”</li><li>“Write in US English.”</li></ul>`}]},
+      {title:"Custom instructions", html:`<p>Load in every chat you start.</p><ul class="list"><li>“I am an instructional designer. My audience is usually HR leaders.”</li><li>“Write in US English.”</li></ul><p>Custom instructions can also tell the AI to use a skill every time. For example: “Use the plain-writing skill for everything you write.” The custom instructions stay short, and the skill holds the full method.</p>`}]},
     {t:"note", html:`<b>Easy to mix up.</b> Copilot has no feature called a skill. The closest match is an agent someone built for one job in Agent Builder.`},
     {t:"sort", goal:"Practice choosing where a saved direction belongs.", prompt:"Drag each item to Skill or Custom instructions, or select a pile.", piles:["Skill","Custom instructions"],
       cards:[["Your job title and your usual audience",1,"They are true in every chat."],["Fredrickson’s method for building a job aid, used whenever you ask for one",0,"It loads only for job aids, and it is a full method."],
-        ["“Keep answers short unless I ask for detail,” for every chat",1,"You want it in every chat."],["The rules for writing a client proposal, which the agent loads when you ask for a proposal",0,"The agent loads them only for proposals."]]},
+        ["“Keep answers short unless I ask for detail,” for every chat",1,"You want it in every chat."],["The rules for writing a client proposal, which the AI loads when you ask for a proposal",0,"The AI loads them only for proposals."]]},
     {t:"acc", title:"See where each card goes and why", html:`<ul class="list">
       <li>Your job title and audience: custom instructions. They are true in every chat.</li>
       <li>The job aid method: skill. It loads only for job aids, and it is a full method.</li>
       <li>“Keep answers short”: custom instructions. You want it in every chat.</li>
-      <li>The proposal rules: skill. The agent loads them only for proposals.</li></ul>`},
+      <li>The proposal rules: skill. The AI loads them only for proposals.</li></ul>`},
+    {t:"p", html:`<b>Make a skill with the AI’s help.</b> You don’t have to write a skill from scratch. As of November 2026, the quickest way is to build one with Claude.`},
+    {t:"html", html:`<ol class="list"><li>Do the task once in a chat. Fix the reply until it’s right.</li><li>In the same chat, ask: “Turn what we just did into a skill. Ask me about anything you would have to guess.”</li><li>Answer Claude’s questions. Claude then writes the skill as a file.</li><li>Add the file in Claude’s settings, where your skills are listed.</li><li>Try the skill on two or three real tasks. When a reply misses, tell Claude what to change in the skill.</li></ol>`},
+    {t:"p", html:`<b>Build a skill that works well.</b> Check your skill for these five things.<ul class="list"><li><b>A description that says when to use it.</b> The AI reads only the description to decide whether to load the skill. Name the task and the words people use to ask for it, such as “job aid” or “quick reference.”</li><li><b>One kind of task.</b> A skill for job aids and proposals does both poorly. Make two skills.</li><li><b>Steps in order, each with its reason.</b> The AI follows a rule better when it knows why the rule exists.</li><li><b>One example of a good result.</b> One finished job aid shows more than a page of rules.</li><li><b>Tests on real work.</b> Try the skill on two or three real tasks before you share it.</li></ul>`},
     {t:"gate"},
     {t:"h", text:"Part 2. Share a method as a plugin", why:""},
     {t:"p", html:`A <b>plugin</b> is an add-on you install that gives an AI tool new commands, skills or connectors. One install can add several of them at once, so a colleague gets your whole method in one step.`},
@@ -1143,6 +1204,23 @@ const LESSONS = [
       <li>The Friday draft: scheduled task. It runs at a set time without you starting it.</li>
       <li>The Monday summary: scheduled task. It also runs at a set time without you starting it.</li></ul>`},
     {t:"gate"},
+    {t:"h", text:"Part 4. See how the pieces work together", why:""},
+    {t:"p", html:`Each piece in this course does one job. Real work often uses several pieces at once. Here is one task, the weekly status report for Acme, set up five ways. Each setup adds one or two pieces.`},
+    {t:"ladder", steps:[
+      ["Chat","You paste the team’s notes into a chat and ask for a draft.","You copy the draft into Word, fix it and save it.","Uses: a chat"],
+      ["Project","The notes and last week’s report sit in a project, so every chat starts with them.","You still start the chat, copy the draft and save it.","Uses: a project"],
+      ["Agent with a brief","Claude Cowork reads the five notes in the Acme > Week 46 folder, builds the Word file and saves it.","You make a commit or check version history first, then check what the agent changed.","Uses: an agent, a brief and version control"],
+      ["Agent with a skill and a schedule","Every Friday at 7 a.m., Cowork loads the status report skill, reads the week’s notes through the SharePoint connector, and saves a draft.","You read each draft before the client sees it.","Uses: an agent, a skill, a connector and a scheduled task"],
+      ["Team setup","A plugin gives every project lead the status report skill and the SharePoint connector in one install. Each lead schedules the report for their own client.","Each lead reads each draft. Luke reviews the connector before anyone installs the plugin.","Uses: a plugin, a skill, a connector and a scheduled task"]]},
+    {t:"statement", text:"Start with the simplest setup that works. Add a piece when you repeat the task."},
+    {t:"p", html:`Each piece you add saves you a step, but it also needs setup and checking. A chat is enough for a task you do once. Move to a skill, a schedule or a plugin when you do the same task every week, or when your team does it too.`},
+    {t:"gate"},
+    {t:"h", text:"Part 5. Use different models for different steps", why:""},
+    {t:"p", html:`Lesson 1 showed how to choose one model for a task. A larger piece of work often has steps that need different strengths. You can give each step to the model that does that step best, even in a different app.`},
+    {t:"p", html:`Here are four pieces of work, each split across models.<ul class="list"><li><b>A short video:</b> Claude writes the script, and ChatGPT makes the pictures. Gemini turns the pictures into a video clip. Use Gemini only when the video holds no Fredrickson or client information.</li><li><b>A job aid:</b> Sonnet drafts the steps. Opus then checks the draft against all 20 rules in the style guide.</li><li><b>A plan from a meeting:</b> Copilot, with a license, lists the decisions from the Teams meeting. Claude turns the decisions into a plan with owners and dates.</li><li><b>A market briefing:</b> ChatGPT Work searches the web for news about three competitors. Claude turns the findings into a two-page briefing.</li></ul>`},
+    {t:"note", html:`<b>Check before you move work to another app.</b> Each move copies your work into that app. Gemini may hold no Fredrickson or client information. Lesson 5 covers the rules for the three paid apps.`},
+    {t:"statement", text:"Give each step to the model that does it best. Write down which model did each step, so you can send each step to the same model next time."},
+    {t:"gate"},
     {t:"h", text:"Knowledge Check: decide what each task needs, and why"},
     {t:"p", html:`Each choice gives an answer and the reason for it. Pick the one with the right answer and the right reason. Answer all four, then write one definition. Your score appears after the last question.`},
     {t:"kc", check:true, q:"Each time you ask Cowork for a job aid, you want it to follow Fredrickson’s full method for building one. Where do you save the method?",
@@ -1169,7 +1247,7 @@ const LESSONS = [
       ["Skill","A saved set of instructions an agent loads for one kind of task, such as building a job aid."],
       ["Plugin","An add-on you install that gives an AI tool new commands, skills or connectors."],
       ["Scheduled task","A saved prompt that an app runs at the times you set, without you starting it."]]},
-    {t:"end", html:`You can now save a method as a skill, choose when a plugin is better than a skill, and choose when to schedule a task. Post a question or something you tried in the ${a(L.teams,"Learning and practicing with AI tools")} channel in Teams. Lesson 5 shows the Fredrickson rules for using AI at work.`}
+    {t:"end", html:`You can now save a method as a skill, choose when a plugin is better than a skill, choose when to schedule a task, and give each step of a piece of work to the model that suits it. Post a question or something you tried in the ${a(L.teams,"Learning and practicing with AI tools")} channel in Teams. Lesson 5 shows the Fredrickson rules for using AI at work.`}
   ]
 },
 /* Lesson 5: DRAFT, Nov 20, 2026. Holds no client names, client data or client samples.
@@ -1287,23 +1365,19 @@ const SETUP = {
   intro: "Complete these quick steps before you start the course. They set up your AI app to follow some of the course’s best practices for you.",
   blocks: [
     {t:"h", text:"Step 1. Paste one set of custom instructions"},
-    {t:"p", html:`<b>Custom instructions</b> are saved directions the AI follows in every chat you start. You write them once in the app’s settings.`},
-    {t:"p", html:`<b>What you get:</b> The AI knows your job and audience, and checks its own facts, without you retyping that in every chat.`},
+    {t:"p", html:`<b>Custom instructions</b> are saved directions the AI follows in every chat you start. You write them once in the app’s settings. In this step, you will fill out your custom instructions so that your AI tool of choice knows about your role and preferences so you don’t need to repeat it across prompts or project instructions.`},
     {t:"p", html:`Open the section for your app. Each section has your box. As of November 2026, the steps below the box show where to add it.`},
     {t:"acc", title:"Copilot", html:`<div class="copybox"><p class="copytext">About me: I work at Fredrickson Learning. My job title is [job title]. My audience is usually [who reads my work].<br>- When I give a length, format or number of items, match it exactly.<br>- If two of my rules conflict, or a rule is unclear, ask me one question before you write anything.<br>- Write [how it should sound, for example: plainly and directly]. Use [how to lay it out, for example: short paragraphs, with bullets only for lists].<br><br>Fact checks:<br>- Link a source for every fact. If you found no source, say so.<br>- Check today’s date, and search the web for anything that may have changed since your knowledge cutoff.<br>- Calculate numbers with your code or data analysis tool. Do not estimate.<br>- For each point you take from a file, give the page or section. Say what you could not read.<br>- Name the weaknesses in my ideas, and disagree with me when the evidence does.</p><button type="button" class="copybtn">Copy</button></div>${ciSteps("In the Copilot app, select the gear next to your name in the lower left. Select <b>Personalization</b>, then select <b>Manage</b> next to <b>Customize Copilot</b>. In Copilot in a browser, select <b>... Settings and more</b> &gt; <b>Chat settings</b> &gt; <b>Personalization</b> &gt; <b>Custom instructions</b> &gt; <b>Edit instructions</b>.<img class='shot' style='margin-top:10px' src='img/copilot-personalization.png' width='780' height='405' alt='Copilot Settings, Personalization page, with the Manage button next to Customize Copilot outlined' loading='lazy'><!-- screenshot checked Nov 23, 2026 -->", "Select <b>Save customization</b>. In a browser, select <b>Save instructions</b>.<img class='shot' style='margin-top:10px' src='img/copilot-customize.png' width='555' height='550' alt='The Customize Copilot page, with the box for your instructions and the Save customization button outlined' loading='lazy'><!-- screenshot checked Nov 23, 2026 -->")}`},
     {t:"acc", title:"ChatGPT", html:`<div class="copybox"><p class="copytext">About me: I work at Fredrickson Learning. My job title is [job title]. My audience is usually [who reads my work].<br>- When I give a length, format or number of items, match it exactly.<br>- If two of my rules conflict, or a rule is unclear, ask me one question before you write anything.<br>- Write [how it should sound, for example: plainly and directly]. Use [how to lay it out, for example: short paragraphs, with bullets only for lists].<br><br>Fact checks:<br>- Link a source for every fact. If you found no source, say so.<br>- Check today’s date, and search the web for anything that may have changed since your knowledge cutoff.<br>- Calculate numbers with your code or data analysis tool. Do not estimate.<br>- For each point you take from a file, give the page or section. Say what you could not read.<br>- Name the weaknesses in my ideas, and disagree with me when the evidence does.</p><button type="button" class="copybtn">Copy</button></div>${ciSteps("Select your name in the lower left &gt; <b>Personalization</b>. If <b>Enable customization</b> is off, turn it on. Under <b>Custom instructions</b>, select <b>ChatGPT</b>, then select the box.", "Select <b>Save</b> in the upper right.")}`},
     {t:"acc", title:"Claude", html:`<p>Claude gets a shorter box. Fredrickson plans a Starter Pack: shared instructions and skills turned on for every Claude account. The Starter Pack will cover sources, today’s date, clear writing and model choice, so your own box can stay short.</p><div class="copybox"><p class="copytext">About me: I work at Fredrickson Learning. My job title is [job title]. My audience is usually [who reads my work].<br>- When I give a length, format or number of items, match it exactly.<br>- If two of my rules conflict, or a rule is unclear, ask me one question before you write anything.<br><br>Fact checks:<br>- Search the web for anything that may have changed since your knowledge cutoff.<br>- Calculate numbers with your code tool. Do not estimate.<br>- For each point you take from a file, give the page or section. Say what you could not read.<br>- Name the weaknesses in my ideas, and disagree with me when the evidence does.</p><button type="button" class="copybtn">Copy</button></div><p><b>Until Fredrickson tells you the Starter Pack is on,</b> copy the box in the Copilot or ChatGPT section instead, and add this model choice box. Claude then tells you when a task needs a more capable model, and when a faster one would do. Lesson 1 Part 2 covers models.</p><div class="copybox"><p class="copytext">Model choice: If a task is long or hard, such as a long document, a plan with many steps or a detailed analysis, and you are not Opus, say so in one line at the start of your reply and suggest I switch to Opus. If a task is short and routine and you are Opus or Fable, suggest Sonnet in one line. Suggest each switch once per chat.</p><button type="button" class="copybtn">Copy</button></div>${ciSteps("Select your name in the lower left &gt; <b>Settings</b> &gt; <b>Your Claude</b>, then select the <b>Instructions</b> box.", "Repeat these steps for each box you add. Then save the instructions.")}`},
-    {t:"p", html:`<b>Done when:</b> you start a new chat and ask, “What do you know about how I want you to work?” The reply names your job title and at least one rule from your box.`},
     {t:"h", text:"Step 2. Turn on web search"},
-    {t:"p", html:`<b>What you get:</b> Answers include facts newer than what the model learned, with links to the sources so you can check them.`},
+    {t:"p", html:`Turning on web search allows your AI app of choice to include facts newer than what the model learned, with links to the sources so you can check them.`},
     {t:"p", html:`<b>Is it safe to turn on?</b> Yes. Web search is a setting in your own account. Turning it on installs nothing on your computer, and the search runs on the app maker’s servers. You don’t need to ask IT first. Fredrickson’s admins control which settings you see.`},
     {t:"html", html:`<p>As of November 2026, here’s where each app keeps the setting.</p><ul class="list"><li><b>Copilot:</b> In the Copilot app, select the gear next to your name in the lower left. Select <b>Personalization</b> &gt; <b>Advanced</b>, then turn on <b>Web search</b>. In a browser, select <b>... Settings and more</b> &gt; <b>Chat settings</b> &gt; <b>Personalization</b> &gt; <b>Advanced</b>. If the setting is missing, Fredrickson has turned it off.<img class="shot" style="margin-top:10px" src="img/copilot-web-search.png" width="550" height="115" alt="Copilot Settings, Advanced section, with the Web search switch outlined" loading="lazy"><!-- screenshot checked Nov 23, 2026 --></li><li><b>ChatGPT:</b> ChatGPT has no setting that keeps search on, and it may search on its own. To make it search, type <b>/</b> in the message box and choose <b>Search</b>. Or type “Search the web and cite current sources” in the prompt.</li><li><b>Claude:</b> In the message box, select <b>+</b> &gt; <b>Web search</b>. A check mark shows that web search is on.</li></ul>`},
-    {t:"p", html:`<b>Done when:</b> you ask, “What changed in Microsoft 365 this week?” The reply lists sources with links.`},
     {t:"h", text:"Step 3. Let the app run code to calculate"},
-    {t:"p", html:`<b>What you get:</b> Numbers come from a real calculation. Without code, a model writes likely digits instead of calculating.`},
+    {t:"p", html:`Turning on code lets your AI app calculate numbers instead of guessing them. A model writes each reply by predicting the most likely next word, and it predicts digits the same way. So without code, a total, a percentage or a count of days can look right and still be wrong. With code turned on, the app runs a real calculation and shows you the result.`},
     {t:"p", html:`<b>Is it safe to turn on?</b> Yes. The code runs on the app maker’s servers, in a closed space apart from your computer. The code can’t reach your files or Fredrickson’s network, and nothing installs on your computer. You don’t need to ask IT first. Fredrickson’s admins control which settings you see.`},
     {t:"html", html:`<p>As of November 2026, here’s how each app does it.</p><ul class="list"><li><b>Claude:</b> Select your name in the lower left &gt; <b>Settings</b> &gt; <b>Capabilities</b>, then turn on <b>Code execution and file creation</b>.</li><li><b>ChatGPT</b> and <b>Copilot:</b> No setting is needed. In the prompt, type “Run code to calculate this, and show me the output.”</li></ul><p><b>Check that the code ran.</b> When the code runs, ChatGPT shows <b>Analyzed</b> and Copilot shows <b>Coding and executing</b>, with the output below the code. If the reply shows only a number, or code with a <b>Run</b> button, the app didn’t run the code. Ask, “Run the code and show me the output.”</p>`},
-    {t:"p", html:`<b>Done when:</b> you ask, “How many days are there from January 15 to March 3, 2027? Run code to calculate this, and show me the output.” The reply shows the output of the code it ran: 47.`},
     {t:"setupend", html:`You’re set up. Lesson 1 shows you how to choose the app, the model and where in the app to work.`}
   ]
 };
@@ -1341,7 +1415,13 @@ const ICONS = {
   check: '<path d="M8.5 5H7a2.5 2.5 0 0 0-2.5 2.5V18A2.5 2.5 0 0 0 7 20.5h10a2.5 2.5 0 0 0 2.5-2.5V7.5A2.5 2.5 0 0 0 17 5h-1.5"/><rect x="8.5" y="3.5" width="7" height="3.6" rx="1.3"/><path d="m8.6 13.6 2.6 2.6 4.5-4.7"/>',
   terms: '<path d="M12 7C9.7 5.3 6.8 4.9 3.5 5.5v13c3.2-.6 6.2-.2 8.5 1.6"/><path d="M12 7c2.3-1.7 5.2-2.1 8.5-1.5v13c-3.2-.6-6.2-.2-8.5 1.6"/><path d="M12 7v13.1"/>',
   fred: '<path d="M12 3.5 19.5 6v5.4c0 4.7-2.6 7.5-7.5 9.1-4.9-1.6-7.5-4.4-7.5-9.1V6L12 3.5Z"/><path d="m8.8 12 2.1 2.1 4.4-4.4"/>',
-  job: '<path d="M6.5 3.5h7.2l5.8 5.8v9.2a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z"/><path d="M13.7 3.5v5.8h5.8"/><path d="M8.2 13.5h7.6M8.2 17h5.2"/>'
+  job: '<path d="M6.5 3.5h7.2l5.8 5.8v9.2a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z"/><path d="M13.7 3.5v5.8h5.8"/><path d="M8.2 13.5h7.6M8.2 17h5.2"/>',
+  brief: '<path d="M6.5 3.5h7.2l5.8 5.8v9.2a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z"/><path d="M13.7 3.5v5.8h5.8"/><path d="M8.2 13.5h7.6M8.2 17h5.2"/>',
+  folder: '<path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2Z"/>',
+  web: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.3 2.4 3.4 5.2 3.4 8.5s-1.1 6.1-3.4 8.5c-2.3-2.4-3.4-5.2-3.4-8.5s1.1-6.1 3.4-8.5Z"/>',
+  loop: '<path d="M19.5 12a7.5 7.5 0 0 1-13 5.1"/><path d="M4.5 12a7.5 7.5 0 0 1 13-5.1"/><path d="M17.5 3.5v3.4h-3.4"/><path d="M6.5 20.5v-3.4h3.4"/>',
+  ask: '<path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v8.5a1.5 1.5 0 0 1-1.5 1.5h-7l-4.5 3.5V17H5a1.5 1.5 0 0 1-1.5-1.5V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M10 9.6a2 2 0 1 1 2.6 1.9c-.4.2-.6.5-.6.9v.4"/><path d="M12 14.6v.1"/>',
+  done: '<circle cx="12" cy="12" r="8.5"/><path d="m8.3 12.2 2.5 2.5 5-5"/>'
 };
 const icon = k => `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${ICONS[k]}</svg>`;
 const ICON_RULES = [
@@ -1390,7 +1470,7 @@ function renderHome(){
     <p class="lede">This course takes about <b>an hour</b>. You learn to talk about AI with confidence, choose the right app and model, catch and fix wrong AI answers, and follow Fredrickson’s AI rules.</p>
     <p><b>Last updated ${UPDATED}.</b> AI apps change every few months, so your app may look different from this course.</p>`));
   wrap.append(el("div","stack",`<h2>Each lesson uses what the lesson before it taught</h2>
-    <p>The lessons follow the order you work in. Before Lesson 1, set up your apps once.</p><ul class="list"><li><b>Lesson 1</b> shows you how to choose the app, the model and where in the app to work.</li><li><b>Lesson 2</b> shows you where to put your directions and files, and how to fix a wrong reply.</li><li><b>Lesson 3</b> shows you how an agent works, and how to brief it, keep it safe and check its work.</li><li><b>Lesson 4</b> shows you how to save a method as a skill, share it as a plugin and run a task on a schedule.</li><li><b>Lesson 5</b> shows you which AI apps Fredrickson approves, when you may add client content, what you tell a client and how to ask for a new tool.</li></ul>`));
+    <p>The lessons follow the order you work in. Before Lesson 1, set up your apps once.</p><ul class="list"><li><b>Lesson 1</b> shows you how to choose the app, the model and where in the app to work.</li><li><b>Lesson 2</b> shows you where to put your directions and files, and how to fix a wrong reply.</li><li><b>Lesson 3</b> shows you how an agent works, and how to brief it, use it safely and check its work.</li><li><b>Lesson 4</b> shows you how to save a method as a skill, share it as a plugin, run a task on a schedule and fit the pieces together.</li><li><b>Lesson 5</b> shows you which AI apps Fredrickson approves, when you may add client content, what you tell a client and how to ask for a new tool.</li></ul>`));
   const sDone = setupDone();
   const pre = el("li","lrow pre"+(sDone?" done":""));
   pre.append(el("span","num",sDone?"✓":""));
@@ -1529,7 +1609,7 @@ function renderLesson(n){
 }
 
 /* ---------- before you start ---------- */
-// One page, no parts or Continue buttons: four short setup steps, each with a "Done when" check.
+// One page, no parts or Continue buttons: three short setup steps.
 function renderSetup(){
   window.onscroll = null;
   document.title = "Before you start: " + SETUP.title;
@@ -1715,6 +1795,8 @@ function renderBlock(b, ctx, seg, n){
     }
     case "pq": return shade(pqBlock(b, ctx, seg));
     case "process": return shade(processBlock(b));
+    // One task, set up a little more at each step: [title, what happens, what you still do, pieces it uses].
+    case "ladder": { const w = el("div"); w.innerHTML = `<ol class="ladder">${b.steps.map(x => `<li><h4>${x[0]}</h4><p>${x[1]}</p><p>${x[2]}</p><p class="uses">${x[3]}</p></li>`).join("")}</ol>`; return w; }
     case "cards": return shade(cardsBlock(b));
     case "kc": return shade(kcBlock(b, ctx, seg));
     case "sort": return shade(sortBlock(b, ctx, seg));
@@ -1723,10 +1805,11 @@ function renderBlock(b, ctx, seg, n){
     case "score": { const s = el("div","score"); s.hidden = true; ctx.scoreEls.push({s, pass:b.pass}); return s; }
     case "end": return endBlock(b, n);
     case "html": return el("div","stack",b.html);
-    // A sample brief: each line of the brief sits beside the label of the part it covers.
+    case "hub": return shade(hubBlock(b));
+    // A sample brief: one message, as the learner would send it. Each part sits on its own line, with its label in a column on the left.
     case "brief": {
       const w = el("div","brief");
-      w.innerHTML = `<p class="brief-t">${b.title}</p><dl>${b.rows.map(r => `<div><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join("")}</dl>`;
+      w.innerHTML = `<p class="brief-t">${b.title}</p><dl class="brief-msg">${b.rows.map(r => `<div class="brief-row"><dt class="brief-tag">${r[0]}</dt><dd class="brief-text">${r[1]}</dd></div>`).join("")}</dl>`;
       return shade(w);
     }
     case "setupend": {
@@ -1868,6 +1951,64 @@ function practiceQ(b, parent, onDone){
   w.append(fs, submit, fb); parent.append(w); return st;
 }
 
+// What an agent does: the agent in the middle and its parts around it, half on each side.
+// Selecting a part turns it teal, lights its line to the agent, and opens a callout whose pointer aims at that part.
+// The callout sits under the diagram, or right under the selected part on a phone. The first part starts selected.
+function hubBlock(b){
+  const w = el("div","hubwrap");
+  w.append(el("h3",null,b.title), el("p",null,b.hint));
+  const g = el("div","hub"); const half = Math.ceil(b.parts.length / 2);
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(NS,"svg"); svg.setAttribute("class","hub-lines"); svg.setAttribute("aria-hidden","true"); svg.setAttribute("focusable","false");
+  const core = el("div","hub-core",`<div class="hub-hex"><div class="hub-hex-in"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2c.6 4.8 2.2 6.4 7 7-4.8.6-6.4 2.2-7 7-.6-4.8-2.2-6.4-7-7 4.8-.6 6.4-2.2 7-7Z"/><path d="M19 15c.3 2 .9 2.7 3 3-2.1.3-2.7.9-3 3-.3-2.1-.9-2.7-3-3 2.1-.3 2.7-1 3-3Z"/></svg>${b.core}</div></div>`);
+  g.append(svg, core);
+  const detail = el("div","hub-detail"); detail.setAttribute("aria-live","polite");
+  const links = b.parts.map(() => { const k = document.createElementNS(NS,"g"); k.append(document.createElementNS(NS,"line"), document.createElementNS(NS,"circle")); svg.append(k); return k; });
+  const btns = b.parts.map((p, i) => {
+    const bt = el("button","hub-node " + (i < half ? "hub-l" : "hub-r"), `<span class="chip">${icon(p[0])}</span><span>${p[1]}</span>`); bt.type = "button";
+    bt.style.setProperty("--r", i % half + 1);
+    bt.addEventListener("click", () => pick(i)); g.append(bt); return bt;
+  });
+  const phone = matchMedia("(max-width:600px)");
+  let sel = 0;
+  // Lines run from the inner edge of each part to the agent, measured from the real layout.
+  function draw(){
+    const G = g.getBoundingClientRect(); if(!G.width) return;
+    const C = core.getBoundingClientRect(), cx = C.left + C.width / 2 - G.left, cy = C.top + C.height / 2 - G.top;
+    btns.forEach((bt, i) => {
+      const R = bt.getBoundingClientRect(), left = i < half;
+      const x = (left ? R.right : R.left) - G.left, y = R.top + R.height / 2 - G.top;
+      const [ln, dot] = links[i].children;
+      ln.setAttribute("x1", x); ln.setAttribute("y1", y); ln.setAttribute("x2", cx); ln.setAttribute("y2", cy);
+      dot.setAttribute("cx", x); dot.setAttribute("cy", y); dot.setAttribute("r", 5);
+    });
+  }
+  // The pointer aims at the selected part.
+  function aim(){
+    const D = detail.getBoundingClientRect(); if(!D.width) return;
+    const R = btns[sel].getBoundingClientRect();
+    const x = Math.min(Math.max(R.left + Math.min(R.width / 2, 60) - D.left, 28), D.width - 28);
+    detail.style.setProperty("--tail", x + "px");
+  }
+  function place(){
+    if(phone.matches){ if(btns[sel].nextSibling !== detail) btns[sel].after(detail); }
+    else if(g.nextSibling !== detail) g.after(detail);
+    draw(); aim();
+  }
+  function pick(i){
+    sel = i;
+    btns.forEach((x, k) => x.setAttribute("aria-pressed", String(k === i)));
+    links.forEach((k, j) => k.classList.toggle("on", j === i));
+    detail.innerHTML = `<h4>${icon(b.parts[i][0])}<span>${b.parts[i][1]}</span></h4><p>${b.parts[i][2]}</p>`;
+    detail.classList.remove("in"); void detail.offsetWidth; detail.classList.add("in");
+    place();
+  }
+  w.append(g);
+  pick(0); detail.classList.remove("in");
+  phone.addEventListener("change", place);
+  new ResizeObserver(() => { draw(); aim(); }).observe(w);
+  return w;
+}
 function shade(node){ if(!node) return node; const s = el("div","ishade"); s.append(node); return s; }
 
 function caseBlock(b){
@@ -1960,10 +2101,13 @@ function fallBlock(terms, upTo){
     ? "This is the final round. It holds every term from the course."
     : "You'll see this game again in every lesson. Each time it adds that lesson's terms, so it gets harder as you go."));
   const ctl = el("div","ft-ctl");
-  const startBtn = el("button","btn","Start"); startBtn.type = "button"; ctl.append(startBtn);
+  // Start sits on the game screen, where the eye already is. Restart stays below while a game runs.
+  const startBtn = el("button","btn","Start"); startBtn.type = "button";
+  const restartBtn = el("button","btn ghost","Restart"); restartBtn.type = "button"; restartBtn.hidden = true; ctl.append(restartBtn);
   const stat = el("p","omstat");
   const sky = el("div","ft-sky");
-  const idle = el("p","ft-idle",still ? "Select Start below. The first definition appears right away." : "Select Start below. The first definition falls right away.");
+  const idle = el("div","ft-idle");
+  idle.append(startBtn);
   sky.append(idle);
   const sr = el("p","vh"); sr.setAttribute("aria-live","polite");
   const form = el("form","ft-form");
@@ -1991,7 +2135,7 @@ function fallBlock(terms, upTo){
     sky.querySelectorAll(".ft-drop").forEach(x => x.remove()); idle.hidden = true;
     queue = shuffle(terms.map((_,i)=>i)); cur = null; misses = 0; caught = 0; streak = 0;
     fallMs = 16000;
-    playing = true; startBtn.textContent = "Restart"; startBtn.className = "btn ghost";
+    playing = true; restartBtn.hidden = false;
     setInputs(true); input.value = ""; input.focus({preventScroll:true}); say("", "");
     showStat(); next();
     last = performance.now(); raf = requestAnimationFrame(loop);
@@ -2041,7 +2185,8 @@ function fallBlock(terms, upTo){
     }
     msg += lastLesson ? " You know every term in the course." : ` The game in Lesson ${upTo + 2} adds new terms.`;
     say("ok", msg + "</p>"); showStat();
-    startBtn.textContent = "Play again"; startBtn.className = "btn"; startBtn.focus({preventScroll:true});
+    restartBtn.hidden = true; startBtn.textContent = "Play again";
+    idle.hidden = false; startBtn.focus({preventScroll:true});
   }
   form.addEventListener("submit", e => {
     e.preventDefault();
@@ -2062,7 +2207,7 @@ function fallBlock(terms, upTo){
       input.select();
     }
   });
-  startBtn.addEventListener("click", start);
+  startBtn.addEventListener("click", start); restartBtn.addEventListener("click", start);
   if("IntersectionObserver" in window) new IntersectionObserver(es => { onScreen = es[0].isIntersecting; }, {threshold:0.5}).observe(sky);
   showStat();
   return box;
@@ -2207,7 +2352,7 @@ function sortBlock(b, ctx, seg){
   w.append(el("p","eyebrow","Practice"));
   if(b.goal) w.append(el("p",null,`<b>${b.goal}</b>`));
   w.append(el("p",null,b.goal ? b.prompt : `<b>${b.prompt}</b>`));
-  const deck = el("div","deck"); const piles = el("div","piles"); piles.style.setProperty("--n", b.piles.length===4 ? 2 : b.piles.length); const status = el("p","status"); status.setAttribute("aria-live","polite");
+  const deck = el("div","deck"); const piles = el("div","piles"); piles.style.setProperty("--n", b.piles.length); const status = el("p","status"); status.setAttribute("aria-live","polite");
   const pileEls = b.piles.map((name,pi)=>{
     const p = el("div","pile"); p.dataset.pi = pi; p.tabIndex = 0; p.setAttribute("role","button");
     p.innerHTML = `<span class="pn">${name}</span><ul></ul>`;
@@ -2236,12 +2381,15 @@ function sortBlock(b, ctx, seg){
     if(pi === ans){
       pileEls[pi].querySelector("ul").append(el("li",null,text));
       // Name the card that was placed, because the next card is already showing.
-      status.textContent = `Correct. “${text.replace(/[.]$/,"")}” goes in ${b.piles[pi]}.` + (why ? " " + why : "");
+      // A sort can set `say` (for example "the information was") when its pile names don't read well after "goes in".
+      const placed = b.say ? `For “${text.replace(/[.]$/,"")}”, ${b.say} ${b.piles[pi].toLowerCase()}.` : `“${text.replace(/[.]$/,"")}” goes in ${b.piles[pi]}.`;
+      status.textContent = `Correct. ${placed}` + (why ? " " + why : "");
       if(missed) misses++; missed = false; k++; show();
     } else {
       missed = true;
       // Give the reason as a clue toward the right pile, so a wrong choice still teaches something.
-      status.textContent = `Not quite. This card does not go in ${b.piles[pi]}.` + (why ? ` A clue: ${why}` : "") + " Try again.";
+      const notHere = b.sayNot ? `For this card, ${b.sayNot} ${b.piles[pi].toLowerCase()}.` : `This card does not go in ${b.piles[pi]}.`;
+      status.textContent = `Not quite. ${notHere}` + (why ? ` A clue: ${why}` : "") + " Try again.";
       card.classList.remove("shake"); void card.offsetWidth; card.classList.add("shake");
     }
   }
@@ -2416,7 +2564,7 @@ function simBlock(b, ctx, seg){
     thread.innerHTML = ""; clearField(); setRule();
     thread.setAttribute("aria-busy","true");
     for(let c = 0; c < A.length; c++){
-      if(c > 0) thread.append(pill("New chat"));
+      if(c > 0) thread.append(pill(b.newChat || "New chat"));
       const file = c === 0 ? t.file : null;
       if(animate){ if(!(await typeIt(A[c], file, id))) return; }
       const you = youEl(A[c], file); if(animate) you.classList.add("in");
@@ -2494,10 +2642,8 @@ function endBlock(b, n){
   const last = n === LESSONS.length - 1;
   const btn = el("button","btn", nextOpen ? `Finish and start Lesson ${n+2}` : last ? "Finish the course" : "Finish this lesson"); btn.type="button";
   btn.addEventListener("click",()=>{ setDone(n); location.hash = nextOpen ? "#lesson-"+(n+2) : "#home"; });
-  const home = el("a","btn ghost","All lessons"); home.href="#home";
   f.append(btn);
-  if(n > 0){ const prev = el("a","btn ghost",`Back to Lesson ${n}`); prev.href = "#lesson-"+n; f.append(prev); }
-  f.append(home); w.append(f); return w;
+  w.append(f); return w;
 }
 
 /* ---------- routing ---------- */
