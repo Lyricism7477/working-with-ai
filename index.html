@@ -788,6 +788,7 @@ const LESSONS = [
   intro: "Many weak replies start before you type anything, because you chose the wrong app or the wrong model for the task. This lesson shows you how to choose the app and the model. Additionally, you will learn when you should adjust the model’s thinking level, and if you should begin your work in a chat, project, or with an agent.",
   blocks: [
     {t:"h", text:"Part 1. Choose the right app for your task", why:""},
+    {t:"sh", text:"Compare the four apps"},
     {t:"p", html:`Copilot, ChatGPT, Claude and Gemini are each an <b>app</b>: the window you sign in to, type in and upload files to. All four can write, summarize and answer questions, so most tasks can start in any of them. They differ in three ways: what each app can read with no setup, what each one does well, and how each company handles your chats.`},
     {t:"frd", html:`Fredrickson has paid licenses for Copilot, ChatGPT and Claude. Fredrickson does not have a paid license for Gemini, so keep Fredrickson and client information out of Gemini. This course still covers Gemini, so you can talk with clients about it. Lesson 5 covers the rules for the three paid apps.`},
     {t:"appq", apps:[["Copilot","Microsoft",true],["ChatGPT","OpenAI",true],["Claude","Anthropic",true],["Gemini","Google",false]], tabs:[
@@ -1057,6 +1058,7 @@ const LESSONS = [
     {t:"frd", kind:"job", html:`${a(L.directions,"Get AI to Follow Your Directions")} shows how to set up projects in Claude, ChatGPT and Copilot.`},
     {t:"gate"},
     {t:"h", text:"Part 3. Find out why the AI seems to forget", why:""},
+    {t:"sh", text:"Learn the seven reasons the AI misses a rule"},
     {t:"p", html:`Sometimes the AI seems to forget the rules and feedback you gave it. The AI can miss them for seven reasons.`},
     {t:"process", label:"Cause", listSteps:true, intro:"Select Start to see each cause, what it looks like in the chat and how to fix it.", steps:[
       ["The chat got longer than the context window",`The <b>context window</b> is the most text a model can read at one time. It holds the whole chat, any files and the model’s own replies, and each message adds to it. AI apps measure this text in <b>tokens</b>. One token is about three-quarters of an English word. When a chat gets longer than the context window, the app drops or shortens early messages, so answers get worse. The AI won’t warn you, because it can’t see what the app removed.`, qrows([["What you see","The AI misses a rule or a file from the start of a long chat."],["The fix",`Start a new chat. Paste in a <b>handoff note</b>: a short summary of the work so far. ${a(L.limits,"Make Your AI Usage Limits Last Longer")} shows how.`]], true)],
@@ -1409,6 +1411,7 @@ const LESSONS = [
     {t:"statement", text:"Start with a skill. Choose a plugin when several skills should arrive together, or when the method needs a part that runs or connects to another app."},
     {t:"gate"},
     {t:"h", text:"Part 3. Run a task on a schedule", why:""},
+    {t:"sh", text:"Choose what to put on a schedule"},
     {t:"p", html:`A <b>scheduled task</b> is a saved prompt that an app runs on a schedule you set, such as every weekday at 8 a.m., without you starting it. As of November 2026, Claude Cowork, ChatGPT, Copilot and Gemini each offer scheduled tasks, on paid plans or with the right license.`},
     {t:"tabs", tabs:[
       {title:"Good for a schedule", html:`<ul class="list"><li>Every Monday, summarize last week’s client emails.</li><li>Every weekday, list news about three clients.</li><li>Every Friday at 7 a.m., draft the status report from the team’s notes for that week.</li></ul>`},
@@ -1428,6 +1431,7 @@ const LESSONS = [
     {t:"statement", text:"Save the method as a skill. Install it as a plugin to share it. Schedule it when you need it at the same time each week."},
     {t:"gate"},
     {t:"h", text:"Part 4. See how the pieces work together", why:""},
+    {t:"sh", text:"Follow one task through five setups"},
     {t:"p", html:`Each piece in this course does one job. Real work often uses several pieces at once. Here is one task, the weekly status report for Acme, set up five ways. Each setup adds one or two pieces.`},
     {t:"ladder", steps:[
       ["Chat","You paste the team’s notes into a chat and ask for a draft.","You copy the draft into Word, fix it and save it.","Uses: a chat"],
@@ -1446,6 +1450,7 @@ const LESSONS = [
     {t:"statement", text:"Start with the simplest setup that works. Add a piece when you repeat the task."},
     {t:"gate"},
     {t:"h", text:"Part 5. Use different models for different steps", why:""},
+    {t:"sh", text:"Split one piece of work across models"},
     {t:"p", html:`Lesson 1 showed how to choose one model for a task. A larger piece of work often has steps that need different strengths. You can give each step to the model that does that step best, even in a different app.`},
     {t:"p", html:`Here are four pieces of work, each split across models.<ul class="list"><li><b>A short video:</b> Claude writes the script, and ChatGPT makes the pictures. Gemini turns the pictures into a video clip. Use Gemini only when the video holds no Fredrickson or client information.</li><li><b>A job aid:</b> Sonnet drafts the steps. Opus then checks the draft against all 20 rules in the style guide.</li><li><b>A plan from a meeting:</b> Copilot, with a license, lists the decisions from the Teams meeting. Claude turns the decisions into a plan with owners and dates.</li><li><b>A market briefing:</b> ChatGPT Work searches the web for news about three competitors. Claude turns the findings into a two-page briefing.</li></ul>`},
     {t:"note", html:`<b>Check before you move work to another app.</b> Each move copies your work into that app. Gemini may hold no Fredrickson or client information. Lesson 5 covers the rules for the three paid apps.`},
@@ -1503,6 +1508,7 @@ const LESSONS = [
   intro: "Fredrickson’s AI policy sets a few rules for every staff member. This lesson shows which apps you may use, when you may add client content, what you tell a client and how to ask for a new tool.",
   blocks: [
     {t:"h", text:"Part 1. Use an approved app in your work account", why:""},
+    {t:"sh", text:"Check the app and the account"},
     {t:"p", html:`Fredrickson approves three AI apps: <b>Claude</b>, <b>ChatGPT</b> and <b>Microsoft 365 Copilot</b>. You use them in your Fredrickson <b>work account</b>: the account the company set up, which a company contract covers.`},
     {t:"p", html:`An account you pay for or sign up for yourself is <b>your own account</b>. It is not a work account, even when you sign up with your work email.`},
     {t:"table", plain:true, head:["Where you work","Use it for client work?"], rows:[
@@ -1525,6 +1531,7 @@ const LESSONS = [
     {t:"statement", text:"Use an approved app, and sign in to your work account."},
     {t:"gate"},
     {t:"h", text:"Part 2. Get the client’s permission before you add client content", why:""},
+    {t:"sh", text:"Check both conditions first"},
     {t:"p", html:`<b>Client content</b> is anything that comes from a client or describes the client’s business, such as documents, data, names and call notes. You add client content to AI only when both of these are true:`},
     {t:"vis", layout:"both", label:"Both conditions are required", join:"And", items:[
       ["account","Approved app","You are in an approved app, in your work account."],
@@ -1552,6 +1559,7 @@ const LESSONS = [
     {t:"statement", text:"Get the client’s permission first. Then add client content only in an approved app, in your work account."},
     {t:"gate"},
     {t:"h", text:"Part 3. Tell clients how you used AI", why:""},
+    {t:"sh", text:"Use the sample wording"},
     {t:"p", html:`Tell each client how you used AI on their project. The policy gives this sample wording. Keep the lines that are true for your project, and replace the words in brackets.`},
     {t:"note", html:`“Generative AI was used as part of the process of creating this [eLearning, deliverable], in the following ways:<ul class="list"><li>Gathering and summarizing non-copyrighted data about [topic]</li><li>Reviewing of a writing sample for tone and against a style guide</li><li>Creating initial drafts of content or assets to provide initial sample examples for discussion prior to developing training</li><li>Initial drafts of outlines, quiz questions and scenarios for ideation purposes</li></ul>No proprietary content was used in these processes.”`},
     {t:"p", html:`Keep the last line only when it is true. If you added client content with the client’s permission, remove that line.`},
@@ -1562,6 +1570,7 @@ const LESSONS = [
     {t:"statement", text:"Tell each client how you used AI on their project."},
     {t:"gate"},
     {t:"h", text:"Part 4. Ask Luke before you use a new AI tool", why:""},
+    {t:"sh", text:"Follow the four steps"},
     {t:"p", html:`The policy calls this process <b>AI License Management</b>. Luke, the Technology Manager, reviews and approves each AI tool.`},
     {t:"process", intro:"Follow four steps, in order.", steps:[
       ["Check the tool’s website","Spend 15 minutes or less. Check that the tool is legitimate and safe, stores data in a secure place, does not use your data to train its model, and does not share your data outside that secure place."],
