@@ -362,6 +362,8 @@ details.acc>summary::-webkit-details-marker{display:none}
 details.acc>summary::before{content:"+";font-size:20px;width:20px;color:var(--accent);font-weight:800}
 details.acc[open]>summary::before{content:"\2212"}
 details.acc .body{padding:0 18px 16px 48px}
+details.acc.flow-pin{position:sticky;top:var(--where-h,49px);z-index:15;box-shadow:var(--shadow)}
+details.acc.flow-pin[open]>.body{max-height:calc(100vh - var(--where-h,49px) - 80px);overflow-y:auto}
 
 /* Process */
 .proc{border:1px solid var(--line);border-radius:12px;padding:20px;background:var(--bg);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px}
@@ -1776,6 +1778,8 @@ function mountOutline(n, heads, jump){
   if(drawer.open) drawer.close();
   document.body.classList.add("in-lesson");
   const where = el("div","where");
+  // The flowchart panel in the practice sticks just below this bar, so share the bar's height.
+  if(window.ResizeObserver) new ResizeObserver(() => { if(where.isConnected && where.offsetHeight) document.documentElement.style.setProperty("--where-h", where.offsetHeight+"px"); }).observe(where);
   const wlabel = el("span","wlabel"); wlabel.setAttribute("aria-hidden","true");
   const burger = burgerButton("Course outline");
   burger.addEventListener("click", () => {
@@ -2004,7 +2008,7 @@ function practiceBlock(ctx, seg){
   const w = el("div","stack");
   w.append(el("h3",null,"Practice: choose the option in the app"));
   w.append(el("p",null,"Choose the option for each task. Open the flowchart if you need it. These questions do not count toward your score."));
-  const fc = el("details","acc"); fc.innerHTML = `<summary>Show the flowchart</summary>`;
+  const fc = el("details","acc flow-pin"); fc.innerHTML = `<summary>Show the flowchart</summary>`;
   const fcb = el("div","body"); fcb.append(flowBlock(ctx)); fc.append(fcb); w.append(fc);
   const qs = PRACTICE.map(item => practiceQ(item, w, () => check()));
   function check(){
