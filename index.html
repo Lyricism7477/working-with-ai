@@ -368,6 +368,7 @@ details.acc .body{padding:0 18px 16px 48px}
 .dots{display:flex;gap:6px}
 .dots span{height:6px;flex:1;border-radius:3px;background:var(--line)}
 .dots span.on{background:var(--accent)}
+.proc .stepart{display:block;width:100%;height:auto;margin-top:4px}
 .proc .stepname{font-size:20px;font-weight:800;color:var(--brand-ink)}
 .proc .nav{display:flex;justify-content:space-between;gap:10px}
 .pfit{display:grid}
@@ -1063,12 +1064,17 @@ const LESSONS = [
     {t:"p", html:`<b>Tool use</b> is an action an AI takes outside the conversation, such as searching the web, reading a file or sending an email.`},
     {t:"p", html:`<b>Agentic AI</b> works toward a goal on its own. It makes a plan, takes actions, checks the results, and repeats until the task is done.`},
     {t:"p", html:`An <b>agent</b> is AI that does the work by itself, including checking its own work. Claude Cowork, Claude Code, ChatGPT Work and Codex are agents.`},
+    {t:"sh", text:"See how an agent works through a task"},
+    {t:"process", label:"Step", listSteps:true, intro:"An agent works through a task in four steps. Select Start to see each one.", steps:[
+      ["Plan","The agent reads your brief and breaks the task into smaller steps, like a checklist. Nothing is done yet.", `<img class="stepart" src="img/agent-plan.webp" alt="" width="960" height="472" loading="lazy" decoding="async">`],
+      ["Act","The agent takes one step, such as reading the files in a folder or drafting one part of a report. It uses tools to do the step.", `<img class="stepart" src="img/agent-act.webp" alt="" width="960" height="472" loading="lazy" decoding="async">`],
+      ["Check","The agent checks the result against your brief. If something is wrong or missing, the agent goes back and fixes it.", `<img class="stepart" src="img/agent-check.webp" alt="" width="960" height="472" loading="lazy" decoding="async">`],
+      ["Repeat","The agent takes the next step and checks it, until every step on the list is done. Then it gives you the finished work.", `<img class="stepart" src="img/agent-repeat.webp" alt="" width="960" height="472" loading="lazy" decoding="async">`]]},
     {t:"sh", text:"See what an agent does"},
     {t:"hub", title:"What an agent does", hint:"Select each part to see what the agent does.", core:"Agent", parts:[
       ["brief","Follows your instructions","You give the agent the goal, the files to use, what the finished work looks like and what it must not do. Part 2 calls these instructions a brief and shows how to write one."],
       ["folder","Opens files and apps you give it","The agent can open only the folders, apps and websites you give it, such as one OneDrive folder or your Outlook email."],
       ["web","Uses the web and other tools","The agent can search the web, read a file, run a script or build a Word file. Each of these actions is tool use."],
-      ["loop","Works in steps and checks each one","The agent plans the steps the task needs, then takes one step at a time. After each step, the agent checks the result. If the result is wrong, the agent fixes it. If the task isn’t done, the agent takes the next step."],
       ["ask","Asks before risky actions","Most agents ask for your approval before they delete, send or overwrite something. Read each request before you approve it. Part 3 shows how to use an agent safely."],
       ["done","Gives you the finished work","When the task is done, the agent gives you the result, such as a report saved in a folder. Part 4 shows how to check and undo what the agent changed."]]},
     {t:"statement", text:"A chat answers one message and waits for you. An agent keeps working between your messages."},
