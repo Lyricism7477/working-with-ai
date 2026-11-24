@@ -72,7 +72,7 @@ p{margin:0}
 .chip.ok{border-color:var(--good);color:var(--good);background:var(--good-soft)}
 @media (max-width:520px){.lrow{grid-template-columns:40px 1fr}.lrow .go{grid-column:1 / -1}}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:8px;padding:10px 20px;background:var(--brand);color:var(--on-brand);font-weight:700;cursor:pointer;text-decoration:none;min-height:44px;box-shadow:inset 0 0 0 2px var(--btn-edge)}
+.btn{box-sizing:border-box;line-height:1.2;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:8px;padding:10px 20px;background:var(--brand);color:var(--on-brand);font-weight:700;cursor:pointer;text-decoration:none;min-height:44px;box-shadow:inset 0 0 0 2px var(--btn-edge)}
 .btn:hover{filter:brightness(1.12)}
 .btn:disabled{opacity:.4;cursor:not-allowed;filter:none}
 .btn.ghost{background:transparent;color:var(--brand-ink);border:1.5px solid var(--line);box-shadow:none}
@@ -577,9 +577,9 @@ a,.otitle:hover,.howto>summary,details.acc>summary,.btn.ghost,.copybtn,.burger,.
 /* Home page: a card for each kind of block, with a small sample on top. */
 .peeks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 24px;margin-top:6px}
 .peek-card{display:flex;flex-direction:column;gap:4px;min-width:0}
-.peek-card > h4{margin:10px 0 0;font-size:17px;color:var(--brand-ink)}
+.peek-card > h4{margin:0 0 6px;font-size:17px;color:var(--brand-ink)}
 .peek-group{margin:22px 0 0;font-size:20px;color:var(--brand-ink)}
-.peek-card > p{margin:0;color:var(--muted);font-size:15.5px;line-height:1.5}
+.peek-card > p{margin:6px 0 0;color:var(--muted);font-size:15.5px;line-height:1.5}
 .peek{height:206px;border-radius:12px;background:var(--surface);padding:16px;display:flex;align-items:center;overflow:hidden;pointer-events:none;user-select:none;font-size:13.5px;line-height:1.4}
 .peek-in{width:100%;display:flex;flex-direction:column;gap:8px}
 .peek .kc,.peek .slist,.peek .score{padding:12px;gap:6px;box-shadow:none}
@@ -609,6 +609,7 @@ a,.otitle:hover,.howto>summary,details.acc>summary,.btn.ghost,.copybtn,.burger,.
 .peek-apps > div{background:var(--bg);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
 .peek-apps b{font-size:15px;color:var(--brand-ink)}
 .peek-apps span{color:var(--muted);font-size:13px}
+.peek .btn.peek-btn{align-self:flex-start;min-height:0;padding:4px 14px;font-size:13px}
 .peek-fb{margin:0;color:var(--good);font-weight:600}
 .peek u{color:var(--link)}
 @media (max-width:640px){.peeks{grid-template-columns:1fr}.peek{height:auto;min-height:150px}}
@@ -1708,14 +1709,12 @@ wideMQ.addEventListener("change", () => { if(wideMQ.matches && drawer.open) draw
 // Small, non-working samples of each kind of block, shown on the home page. They use the course's own classes, so they always match.
 // PEEKS_LEARN help the learner learn; PEEKS_WORK help them set up their own AI work as they go.
 const PEEKS_LEARN = [
-  ["All four major AI apps", "The course covers Copilot, ChatGPT, Claude and Gemini. You learn what each app does well and where each setting is.",
-    `<div class="peek-apps">${[["Copilot","Microsoft"],["ChatGPT","OpenAI"],["Claude","Anthropic"],["Gemini","Google"]].map(([a, m]) => `<div><b>${a}</b><span>${m}</span></div>`).join("")}</div>`],
-  ["Try it", "Compare AI settings in a sample app, without opening a real AI app.",
+  ["Try it", "A sample AI app inside the course. You change a setting, such as the model, and see how the reply changes.",
     `<div class="simwin"><div class="simbar"><span class="simapp">Sample AI app</span><span class="simsp"></span><div class="simset"><label><input type="radio" name="peek-sim" disabled><span>Smaller</span></label><label><input type="radio" name="peek-sim" checked disabled><span>Larger</span></label></div></div><div class="simthread"><div class="simyou"><p>Total the hours in this table.</p></div><div class="simreply"><p>The total is 182 hours.</p></div></div></div>`],
-  ["Practice", "Short questions after each topic. Each answer explains why. Practice doesn’t count toward your score.",
+  ["Practice", "A few questions at the end of each part, to check that you understood it. Each answer explains why. Practice doesn’t count toward your score.",
     `<div class="kc"><p class="eyebrow ico">${icon("practice")}Practice</p><p class="q">Edit the Word file you have open.</p><div class="opts"><span class="opt right"><input type="radio" checked disabled><span>Copilot</span></span><span class="opt"><input type="radio" disabled><span>Claude</span></span></div><p class="peek-fb">Correct. Copilot is built into Word.</p></div>`],
-  ["Knowledge Check", "Graded questions at the end of each lesson. Your score appears after the last question.",
-    `<div class="score"><p class="eyebrow">Your score</p><p class="big">3 of 4 right</p></div>`]
+  ["Knowledge Check", "Graded questions at the end of each lesson, on the whole lesson. Your score appears after the last question.",
+    `<div class="kc"><p class="eyebrow">Question</p><p class="q">Which app reads your Teams meetings with no setup?</p><div class="opts"><span class="opt"><input type="radio" disabled><span>Copilot, with a license</span></span><span class="opt"><input type="radio" disabled><span>Gemini</span></span></div><span class="btn peek-btn">Submit</span></div>`]
 ];
 const PEEKS_WORK = [
   ["Your setup list", "One list that grows each lesson: what you set up once, and the habits to keep. At the end of Lesson 5, download it as a PDF.",
@@ -1723,7 +1722,7 @@ const PEEKS_WORK = [
   ["Job aid and At Fredrickson", "Links to Fredrickson job aids in Notion that you keep using at work, and how each topic works at Fredrickson.",
     `<div class="frd"><p class="frd-label ico">${icon("job")}Job aid</p><div class="frd-body"><u>Choose the Right AI Tool for a Task</u></div></div>`]
 ];
-const peekGrid = list => `<div class="peeks">${list.map(([t, d, v]) => `<div class="peek-card"><div class="peek" aria-hidden="true" inert><div class="peek-in">${v}</div></div><h4>${t}</h4><p>${d}</p></div>`).join("")}</div>`;
+const peekGrid = list => `<div class="peeks">${list.map(([t, d, v]) => `<div class="peek-card"><h4>${t}</h4><div class="peek" aria-hidden="true" inert><div class="peek-in">${v}</div></div><p>${d}</p></div>`).join("")}</div>`;
 function renderHome(){
   window.onscroll = null;
   const {where} = mountOutline(-1, [], () => {});
@@ -1733,11 +1732,12 @@ function renderHome(){
   wrap.append(el("div","stack hero",`<h1>AI Basics Course</h1>
     <p class="lede">The whole course takes about <b>an hour and a half</b> from start to finish. You can open any lesson in any order, so skip what you already know. You learn to talk about AI with confidence, choose the right app and model, catch and fix wrong AI answers, and follow Fredrickson’s AI rules.</p>
     <p><b>Last updated ${UPDATED}.</b> AI apps change every few months, so your app may look different from this course.</p>`));
-  wrap.append(el("div","stack",`<h2>Each lesson uses what the lesson before it taught</h2>
-    <p>The lessons follow the order you work in. Before Lesson 1, set up your apps once.</p><ul class="list"><li><b>Lesson 1</b> shows you how to choose the app, the model and where in the app to work.</li><li><b>Lesson 2</b> shows you where to put your directions and files, and how to fix a wrong reply.</li><li><b>Lesson 3</b> shows you how an agent works, and how to brief it, use it safely and check its work.</li><li><b>Lesson 4</b> shows you how to save a method as a skill, share it as a plugin, run a task on a schedule and fit the pieces together.</li><li><b>Lesson 5</b> shows you which AI apps Fredrickson approves, when you may add client content, what you tell a client and how to ask for a new tool.</li></ul>`));
+  wrap.append(el("div","stack",`<h2>Go from asking AI a question to handing it a whole task</h2>
+    <p>Most people start with AI the same way. They type a question and hope the reply is useful. This course takes you further, one step at a time, in Copilot, ChatGPT, Claude and Gemini. Each lesson uses what the lesson before it taught.</p><ul class="list"><li><b>Before you start,</b> set up your AI apps once, so every lesson works in the apps you use.</li><li><b>Lesson 1: Start in the right place.</b> Choose the app, the model and the place in the app that fit the task. Your first reply comes closer to what you need.</li><li><b>Lesson 2: Give the AI what it needs.</b> Put your directions and files where the AI reads them. When a reply is wrong, you fix it instead of starting over.</li><li><b>Lesson 3: Let an agent do the work.</b> An agent is AI that does a whole task by itself, such as opening files and building a document. You learn to brief an agent, keep it safe and check its work.</li><li><b>Lesson 4: Make it repeatable.</b> Save a method that works as a skill, a set of directions the AI reuses. Share your skills with colleagues and run tasks on a schedule, so you stop typing the same directions.</li><li><b>Lesson 5: Follow the Fredrickson AI rules.</b> Learn which AI apps Fredrickson approves, when you may add client content, what you tell a client and how to ask for a new tool.</li></ul>
+    <p>By the end, you can hand AI a real task, check the result and reuse what works, all within Fredrickson’s rules.</p>`));
   wrap.append(el("div","stack",`<h2>Know what you will see in each lesson</h2>
-    <p>Every part of a lesson ends the same way: a practice, then a key point, then a link to a job aid when the part has one, then a Continue button. Every lesson ends the same way too: you add to your setup list, then you take the Knowledge Check.</p>
-    <h3 class="peek-group">To help you learn</h3><p>These help you learn each topic and check what you know.</p>${peekGrid(PEEKS_LEARN)}
+    <p>Every part of a lesson ends the same way: a practice, then a link to a job aid when the part has one. Every lesson ends the same way too: you add to your setup list, then you take the Knowledge Check.</p>
+    <h3 class="peek-group">To help you learn</h3><p>Each one does a different job. Try it shows you what a setting does. Practice checks that you understood each part, with no score. The Knowledge Check scores what you learned in the whole lesson.</p>${peekGrid(PEEKS_LEARN)}
     <h3 class="peek-group">To set up your AI work</h3><p>These help you set up your AI apps for work as you go, so they’re ready when you finish the course.</p>${peekGrid(PEEKS_WORK)}`));
   const sDone = setupDone();
   const pre = el("li","lrow pre"+(sDone?" done":""));
