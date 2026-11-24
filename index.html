@@ -574,6 +574,44 @@ a,.otitle:hover,.howto>summary,details.acc>summary,.btn.ghost,.copybtn,.burger,.
 /* 2. Tangerine means "your turn": every activity gets a Tangerine top edge and label. */
 .kc,.sort,.sim,.ciact{box-shadow:var(--shadow),inset 0 4px 0 var(--turn)}
 .ciact{border:1px solid var(--line);border-radius:12px;padding:20px;background:var(--bg)}
+/* Home page: a card for each kind of block, with a small sample on top. */
+.peeks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 24px;margin-top:6px}
+.peek-card{display:flex;flex-direction:column;gap:4px;min-width:0}
+.peek-card > h4{margin:10px 0 0;font-size:17px;color:var(--brand-ink)}
+.peek-group{margin:22px 0 0;font-size:20px;color:var(--brand-ink)}
+.peek-card > p{margin:0;color:var(--muted);font-size:15.5px;line-height:1.5}
+.peek{height:206px;border-radius:12px;background:var(--surface);padding:16px;display:flex;align-items:center;overflow:hidden;pointer-events:none;user-select:none;font-size:13.5px;line-height:1.4}
+.peek-in{width:100%;display:flex;flex-direction:column;gap:8px}
+.peek .kc,.peek .slist,.peek .score{padding:12px;gap:6px;box-shadow:none}
+.peek .kc .q{font-size:14px;margin:0}
+.peek .eyebrow{font-size:11px;margin:0}
+.peek .opts{gap:6px}
+.peek .opt{padding:4px 10px;gap:8px}
+.peek .opt input{margin-top:3px}
+.peek .tabs,.peek .acc{background:var(--bg);border-radius:8px}
+.peek .tabs{padding:0 12px}
+.peek .tab{padding:8px 10px;font-size:13.5px}
+.peek .ltabs .tab:first-child{padding-left:0}
+.peek .simbar{padding:8px 10px;gap:6px}
+.peek .simapp{font-size:13px}
+.peek .simapp::before{width:20px;height:20px;font-size:10px}
+.peek .simthread{padding:10px;gap:8px;min-height:0}
+.peek .simset span{padding:4px 8px;font-size:12px;min-height:0}
+.peek .simyou{padding:6px 10px}
+.peek .statement{padding:10px 0 12px;font-size:15px}
+.peek .frd{padding:12px 14px;background:var(--bg)}
+.peek .score{background:var(--bg)}
+.peek .score .big{font-size:22px;margin:0}
+.peek .slist h3{font-size:13.5px;margin:2px 0 0;color:var(--ink)}
+.peek .slist ul{gap:2px}
+.peek .slist p{margin:0}
+.peek-apps{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.peek-apps > div{background:var(--bg);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.peek-apps b{font-size:15px;color:var(--brand-ink)}
+.peek-apps span{color:var(--muted);font-size:13px}
+.peek-fb{margin:0;color:var(--good);font-weight:600}
+.peek u{color:var(--link)}
+@media (max-width:640px){.peeks{grid-template-columns:1fr}.peek{height:auto;min-height:150px}}
 /* The running setup list at the end of each lesson. */
 :root{--turn-soft:#FFF1DB}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--turn-soft:#3A2A0E}}
@@ -801,7 +839,7 @@ const LESSONS = [
         ["Gemini 4 Argon","Most work, such as a first draft of a report from several files in Drive. It’s Google’s top model for writing, analysis and coding.","Only on the AI Pro and AI Ultra plans."],
         ["Gemini 4 Carbon","The hardest reasoning and math, such as a budget forecast with several scenarios.","Only on AI Ultra. It uses more of your limit than Argon, and Google says Argon suits most work better."]])}`}]},
     {t:"p", html:`At the end of this lesson, your setup list adds a line to your custom instructions. The AI then tells you when a task needs a larger model.`},
-    {t:"sim", label:"Model", bestLabel:"Best model for this task", prompt:"Try each task in the practice app. Every reply is real: we sent each task to Claude’s Haiku, Sonnet and Opus, and the thinking setting stayed on Low for all three. Change the model, and the app answers again.",
+    {t:"sim", label:"Model", bestLabel:"Best model for this task", prompt:"Try each task in the sample app. Every reply is real: we sent each task to Claude’s Haiku, Sonnet and Opus, and the thinking setting stayed on Low for all three. Change the model, and the app answers again.",
       key:"In Claude, these are Haiku, Sonnet and Opus. In ChatGPT Work, Sol is the everyday model and Astra is the larger one. In Copilot, choose Claude Sonnet for everyday work and Claude Opus for larger work. In Gemini, Fast is the everyday model and Pro is the larger one.",
       settings:[["Smaller model","Low"],["Everyday model","Medium"],["Larger model","High"]], start:1,
       tasks:[
@@ -838,7 +876,7 @@ const LESSONS = [
       ["A short email, a quick rewrite, or one simple step repeated many times","Less thinking"],
       ["A summary of one file or a first draft","The app’s default"],
       ["An exact length or count, exact math, or checking a draft against a contract","More thinking"]]},
-    {t:"sim", prompt:"Try each task in the practice app. Every reply is real: we sent each task to Claude’s Haiku, the smallest model, on Low, Medium and High effort. The model stays the same. Change how long it thinks, and the app answers again.",
+    {t:"sim", prompt:"Try each task in the sample app. Every reply is real: we sent each task to Claude’s Haiku, the smallest model, on Low, Medium and High effort. The model stays the same. Change how long it thinks, and the app answers again.",
       key:"Less thinking is Quick response in Copilot, Instant in ChatGPT, Low in Claude and Standard in Gemini. More thinking is Think deeper in Copilot, High in ChatGPT and Claude, and Extended in Gemini.",
       settings:[["Less thinking","Low"],["Default","Medium"],["More thinking","High"]], start:1,
       tasks:[
@@ -1667,6 +1705,25 @@ function syncBurger(){
 wideMQ.addEventListener("change", () => { if(wideMQ.matches && drawer.open) drawer.close(); syncBurger(); });
 
 /* ---------- home ---------- */
+// Small, non-working samples of each kind of block, shown on the home page. They use the course's own classes, so they always match.
+// PEEKS_LEARN help the learner learn; PEEKS_WORK help them set up their own AI work as they go.
+const PEEKS_LEARN = [
+  ["All four major AI apps", "The course covers Copilot, ChatGPT, Claude and Gemini. You learn what each app does well and where each setting is.",
+    `<div class="peek-apps">${[["Copilot","Microsoft"],["ChatGPT","OpenAI"],["Claude","Anthropic"],["Gemini","Google"]].map(([a, m]) => `<div><b>${a}</b><span>${m}</span></div>`).join("")}</div>`],
+  ["Try it", "Compare AI settings in a sample app, without opening a real AI app.",
+    `<div class="simwin"><div class="simbar"><span class="simapp">Sample AI app</span><span class="simsp"></span><div class="simset"><label><input type="radio" name="peek-sim" disabled><span>Smaller</span></label><label><input type="radio" name="peek-sim" checked disabled><span>Larger</span></label></div></div><div class="simthread"><div class="simyou"><p>Total the hours in this table.</p></div><div class="simreply"><p>The total is 182 hours.</p></div></div></div>`],
+  ["Practice", "Short questions after each topic. Each answer explains why. Practice doesn’t count toward your score.",
+    `<div class="kc"><p class="eyebrow ico">${icon("practice")}Practice</p><p class="q">Edit the Word file you have open.</p><div class="opts"><span class="opt right"><input type="radio" checked disabled><span>Copilot</span></span><span class="opt"><input type="radio" disabled><span>Claude</span></span></div><p class="peek-fb">Correct. Copilot is built into Word.</p></div>`],
+  ["Knowledge Check", "Graded questions at the end of each lesson. Your score appears after the last question.",
+    `<div class="score"><p class="eyebrow">Your score</p><p class="big">3 of 4 right</p></div>`]
+];
+const PEEKS_WORK = [
+  ["Your setup list", "One list that grows each lesson: what you set up once, and the habits to keep. At the end of Lesson 5, download it as a PDF.",
+    `<div class="slist"><p class="eyebrow">Your setup list after Lesson 2</p><h3>Set up once</h3><ul><li>Turn on web search.<span class="sl-tag done">Done</span></li><li>Lesson 2 lines.<span class="sl-tag new">New</span></li></ul><h3>Habits to keep</h3><ul><li>Start a new chat.<span class="sl-tag new">New</span></li></ul></div>`],
+  ["Job aid and At Fredrickson", "Links to Fredrickson job aids in Notion that you keep using at work, and how each topic works at Fredrickson.",
+    `<div class="frd"><p class="frd-label ico">${icon("job")}Job aid</p><div class="frd-body"><u>Choose the Right AI Tool for a Task</u></div></div>`]
+];
+const peekGrid = list => `<div class="peeks">${list.map(([t, d, v]) => `<div class="peek-card"><div class="peek" aria-hidden="true" inert><div class="peek-in">${v}</div></div><h4>${t}</h4><p>${d}</p></div>`).join("")}</div>`;
 function renderHome(){
   window.onscroll = null;
   const {where} = mountOutline(-1, [], () => {});
@@ -1679,7 +1736,9 @@ function renderHome(){
   wrap.append(el("div","stack",`<h2>Each lesson uses what the lesson before it taught</h2>
     <p>The lessons follow the order you work in. Before Lesson 1, set up your apps once.</p><ul class="list"><li><b>Lesson 1</b> shows you how to choose the app, the model and where in the app to work.</li><li><b>Lesson 2</b> shows you where to put your directions and files, and how to fix a wrong reply.</li><li><b>Lesson 3</b> shows you how an agent works, and how to brief it, use it safely and check its work.</li><li><b>Lesson 4</b> shows you how to save a method as a skill, share it as a plugin, run a task on a schedule and fit the pieces together.</li><li><b>Lesson 5</b> shows you which AI apps Fredrickson approves, when you may add client content, what you tell a client and how to ask for a new tool.</li></ul>`));
   wrap.append(el("div","stack",`<h2>Know what you will see in each lesson</h2>
-    <p>Every part of a lesson ends the same way: a practice, then a key point, then a link to a job aid when the part has one, then a Continue button. Every lesson ends the same way too: you add to your setup list, then you take the Knowledge Check.</p><ul class="list"><li><b>Select to see more.</b> Tabs, numbered steps and rows with a plus sign hold more detail. Select one to open it.</li><li><b>Try it.</b> A practice app inside the course shows sample AI replies, so you can compare settings without opening a real AI app.</li><li><b>Practice.</b> Short questions and sorting activities after each topic. Each answer explains why. Practice does not count toward your score.</li><li><b>Key point.</b> The one sentence to remember from each part.</li><li><b>At Fredrickson and Job aid.</b> How a topic works at Fredrickson, and links to Fredrickson job aids in Notion that you can use at work.</li><li><b>Your setup list.</b> One list that grows at the end of each lesson. It holds what you set up once, such as lines for your custom instructions, the saved directions the AI follows in every chat. It also holds the habits that no setting does for you. At the end of Lesson 5, you can download the full list as a PDF.</li><li><b>Knowledge Check.</b> Graded questions at the end of each lesson. Your score appears after the last question.</li></ul>`));
+    <p>Every part of a lesson ends the same way: a practice, then a key point, then a link to a job aid when the part has one, then a Continue button. Every lesson ends the same way too: you add to your setup list, then you take the Knowledge Check.</p>
+    <h3 class="peek-group">To help you learn</h3><p>These help you learn each topic and check what you know.</p>${peekGrid(PEEKS_LEARN)}
+    <h3 class="peek-group">To set up your AI work</h3><p>These help you set up your AI apps for work as you go, so they’re ready when you finish the course.</p>${peekGrid(PEEKS_WORK)}`));
   const sDone = setupDone();
   const pre = el("li","lrow pre"+(sDone?" done":""));
   pre.append(el("span","num",sDone?"✓":""));
@@ -2690,7 +2749,7 @@ function simBlock(b, ctx, seg){
     return inp;
   });
   radios[b.start].checked = true;
-  bar.append(el("span","simapp","Practice AI app"), el("span","simsp"), label, seg3);
+  bar.append(el("span","simapp","Sample AI app"), el("span","simsp"), label, seg3);
   const rulebar = el("p","simrule"); rulebar.hidden = true;
   const thread = el("div","simthread"); thread.setAttribute("aria-live","polite");
   const hello = el("div","simhello");
