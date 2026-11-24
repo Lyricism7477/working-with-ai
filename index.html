@@ -1849,7 +1849,8 @@ function renderBlock(b, ctx, seg, n){
     case "ci": { const w = el("div","stack ciact"); w.append(el("p","eyebrow",`Your custom instructions, ${b.n} of 5`)); w.append(el("div","stack",ciHtml(b))); return shade(w); }
     case "p": return el("p",null,b.html);
     case "statement": return el("p","statement",b.text);
-    case "note": return el("div","note",b.html);
+    // A note that starts with [unconfirmed or [needs is a reminder for the editors, so learners never see it.
+    case "note": return /^\[(unconfirmed|needs)/.test(b.html) ? null : el("div","note",b.html);
     // Fredrickson callout: Fredrickson's own facts, or a pointer to a Fredrickson job aid. The label sits outside the text, so the editor can still edit the text.
     case "frd": { const d = el("div","frd"); d.append(el("p","frd-label", b.kind === "job" ? "Job aid" : "At Fredrickson"), el("div","frd-body",b.html)); return d; }
     case "table": {
