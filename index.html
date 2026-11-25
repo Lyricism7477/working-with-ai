@@ -2997,3 +2997,341 @@ document.addEventListener("click", e => {
 });
 route();
 </script>
+<script>
+/* ---------- Review mode ----------
+   Open the course with ?review at the end of the link to turn it on. Nothing here runs without it.
+   Reviewers pin comments to any text, picture or question. Their comments stay in their browser until they
+   select "Send my comments", which saves a file they send to Emily. Emily's merge script adds the files to
+   review-comments.json, and every reviewer then sees everyone's comments. */
+(() => {
+if(!new URLSearchParams(location.search).has("review")) return;
+const SEND_TO = "Emily";
+const SHARED = "review-comments.json";
+const SEL = "h1,h2,h3,h4,p,li,th,td,dt,dd,summary,figcaption,img,.opt,.omcard,.reach-cell,.reach-name,.copytext";
+const ICON = `<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 2.5h12v8.5H6.5L3 14v-3H2z" fill="currentColor"/></svg>`;
+const app = document.getElementById("app");
+
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+};
+let name = store.get("rv-name", "");
+let mine = store.get("rv-mine", []);   // this reviewer's comments, kept until they appear in the shared file
+let shared = [];
+const saveMine = () => store.set("rv-mine", mine);
+
+const norm = s => (s || "").replace(/\s+/g, " ").trim();
+const textOf = e => norm(e.tagName === "IMG" ? e.alt : e.textContent);
+const pageKey = () => /^#(lesson-\d+|setup)$/.test(location.hash) ? location.hash : "#home";
+const pageName = k => k === "#setup" ? "Before you start" : /^#lesson-\d+$/.test(k) ? "Lesson " + k.slice(8) : "Home page";
+const uid = () => "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const all = () => { const ids = new Set(shared.map(c => c.id)); return shared.concat(mine.filter(c => !ids.has(c.id))); };
+const repliesTo = id => all().filter(c => c.parent === id);
+const isMine = c => mine.some(m => m.id === c.id);
+const pending = () => mine.filter(c => !shared.some(s => s.id === c.id));
+const fmtDate = iso => { const d = new Date(iso); return isNaN(d) ? "" : d.toLocaleDateString("en-US", {month:"short", day:"numeric"}); };
+const mk = (tag, cls, text) => { const e = document.createElement(tag); if(cls) e.className = cls; if(text != null) e.textContent = text; return e; };
+const btn = (label, cls, fn) => { const b = mk("button", "rv-b" + (cls ? " " + cls : ""), label); b.type = "button"; b.addEventListener("click", fn); return b; };
+
+/* ----- where a comment sits ----- */
+function anchorFor(t){
+  const tag = t.tagName.toLowerCase(), text = textOf(t).slice(0, 120);
+  const same = [...app.querySelectorAll(tag)].filter(e => textOf(e).startsWith(text));
+  return {tag, text, idx: Math.max(0, same.indexOf(t))};
+}
+function findAnchor(a){
+  if(!a || !a.tag) return null;
+  const same = [...app.querySelectorAll(a.tag)].filter(e => textOf(e).startsWith(a.text || ""));
+  return same[a.idx] || same[0] || null;
+}
+function whereFor(t){
+  const hs = [...app.querySelectorAll("h1,h2")].filter(h => h === t || (h.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING));
+  const h = hs.pop();
+  return pageName(pageKey()) + (h ? ": " + textOf(h).slice(0, 100) : "");
+}
+// Show the part a comment sits in: open every part up to it and any closed panel around it.
+function reveal(t){
+  const seg = t.closest("section.seg");
+  if(seg){
+    const segs = [...seg.parentElement.querySelectorAll(":scope > section.seg")], k = segs.indexOf(seg);
+    segs.forEach((s, j) => { if(j <= k) s.hidden = false; if(j < k){ const g = s.querySelector(":scope > .gate"); if(g) g.remove(); } });
+  }
+  for(let d = t.closest("details"); d; d = d.parentElement && d.parentElement.closest("details")) d.open = true;
+}
+
+/* ----- styles ----- */
+document.head.append(mk("style", null, `
+body.rv-on{padding-bottom:100px}
+.rv-bar{position:fixed;z-index:60;right:16px;bottom:16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:0 6px 24px rgba(11,61,69,.18);font-family:var(--font);font-size:15px}
+.rv-title{font-weight:700;color:var(--muted);font-size:12px;letter-spacing:1px;text-transform:uppercase;padding:0 6px}
+.rv-b{all:unset;box-sizing:border-box;cursor:pointer;min-height:44px;padding:0 14px;border-radius:8px;display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:15px;color:var(--link);border:1px solid var(--line);background:var(--bg)}
+.rv-b:hover{border-color:var(--link)}
+.rv-b.primary{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
+.rv-b[aria-pressed="true"]{background:var(--brand);color:var(--on-brand)}
+.rv-b:focus-visible,.rv-pin:focus-visible,.rv-link:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.rv-count{font-weight:400}
+.rv-hint{position:fixed;z-index:61;top:12px;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100vw - 32px);box-sizing:border-box;display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--line);border-left:4px solid var(--turn);border-radius:10px;padding:8px 8px 8px 14px;box-shadow:0 6px 24px rgba(11,61,69,.18);font-size:15px}
+.rv-hint[hidden]{display:none}
+body.rv-picking #app{cursor:crosshair}
+.rv-hover{outline:2px dashed var(--link) !important;outline-offset:3px}
+.rv-focus{outline:2px solid var(--turn) !important;outline-offset:3px}
+.rv-layer{position:absolute;top:0;left:0;width:0;height:0;z-index:55}
+.rv-pin{all:unset;box-sizing:border-box;position:absolute;display:inline-flex;align-items:center;gap:4px;height:28px;min-width:28px;padding:0 8px;border-radius:14px;background:var(--brand);color:var(--on-brand);font-size:13px;font-weight:700;cursor:pointer;box-shadow:var(--shadow);font-family:var(--font)}
+.rv-pin svg{width:14px;height:14px}
+.rv-sheet{position:fixed;z-index:62;top:0;right:0;bottom:0;width:min(420px,100vw);box-sizing:border-box;background:var(--bg);color:var(--ink);border-left:1px solid var(--line);box-shadow:-8px 0 30px rgba(11,61,69,.16);display:flex;flex-direction:column;font-family:var(--font)}
+.rv-sheet[hidden]{display:none}
+.rv-sh-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.rv-sh-head h2{margin:0;font-size:20px}
+.rv-sh-body{overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+.rv-sh-body p{margin:0}
+.rv-quote{margin:0;padding:6px 12px;border-left:3px solid var(--line);color:var(--muted);font-size:15px}
+.rv-where{font-size:13px;color:var(--muted);margin:0 0 4px}
+.rv-c + .rv-c{border-top:1px solid var(--line);padding-top:12px}
+.rv-meta{font-size:14px;color:var(--muted);margin:0 0 2px}
+.rv-meta b{color:var(--ink)}
+.rv-text{margin:0;white-space:pre-wrap;font-size:16px;overflow-wrap:anywhere}
+.rv-replies{margin:10px 0 0 4px;padding-left:12px;border-left:2px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.rv-tag{display:inline-block;font-size:12px;font-weight:700;padding:0 8px;border-radius:10px;background:var(--turn-soft);color:var(--turn-ink);margin-left:6px}
+.rv-form label{display:block;font-weight:700;margin-bottom:4px;font-size:15px}
+.rv-form textarea,.rv-form input{width:100%;box-sizing:border-box;font:inherit;font-size:16px;padding:10px;border:1px solid var(--field-line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.rv-form textarea{min-height:96px;resize:vertical}
+.rv-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center}
+.rv-link{all:unset;cursor:pointer;color:var(--link);text-decoration:underline;text-underline-offset:2px;font-size:14px}
+.rv-group h3{font-size:17px;margin:0 0 8px}
+.rv-item{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.rv-note{font-size:14px;color:var(--muted)}
+@media (max-width:640px){
+  body.rv-on{padding-bottom:150px}
+  .rv-bar{left:8px;right:8px;bottom:8px}
+  .rv-bar .rv-b{flex:1 1 auto;justify-content:center;padding:0 10px}
+  .rv-title{display:none}
+  .rv-sheet{top:auto;height:80vh;width:100%;border-left:0;border-top:1px solid var(--line);border-radius:14px 14px 0 0}
+}`));
+document.body.classList.add("rv-on");
+
+/* ----- bar, hint, sheet ----- */
+const bar = mk("div", "rv-bar rv-ui"); bar.setAttribute("role", "region"); bar.setAttribute("aria-label", "Review mode");
+const addB = btn("Add a comment", "primary", () => setPick(!picking)); addB.setAttribute("aria-pressed", "false");
+const listB = btn("", "", () => openList());
+const sendB = btn("", "", () => send());
+bar.append(mk("span", "rv-title", "Review mode"), addB, listB, sendB);
+document.body.append(bar);
+function updateBar(){
+  const n = all().length, p = pending().length;
+  listB.replaceChildren("All comments ", mk("span", "rv-count", `(${n})`));
+  sendB.replaceChildren("Send my comments ", mk("span", "rv-count", `(${p})`));
+}
+
+const hint = mk("div", "rv-hint rv-ui"); hint.hidden = true; hint.setAttribute("role", "status");
+hint.append(mk("span", null, "Select the text, picture or question you want to comment on."), btn("Cancel", "", () => setPick(false)));
+document.body.append(hint);
+
+const sheet = mk("aside", "rv-sheet rv-ui"); sheet.hidden = true; sheet.setAttribute("aria-labelledby", "rv-sh-t");
+const shTitle = mk("h2"); shTitle.id = "rv-sh-t"; shTitle.tabIndex = -1;
+const shBody = mk("div", "rv-sh-body");
+const shHead = mk("div", "rv-sh-head"); shHead.append(shTitle, btn("Close", "", () => closeSheet()));
+sheet.append(shHead, shBody); document.body.append(sheet);
+let focusEl = null, returnTo = null;
+function openSheet(title, nodes, focusNode){
+  if(sheet.hidden) returnTo = document.activeElement;
+  shTitle.textContent = title; shBody.replaceChildren(...nodes); sheet.hidden = false;
+  (focusNode || shTitle).focus();
+}
+function closeSheet(){
+  sheet.hidden = true; setFocusEl(null);
+  if(returnTo && document.contains(returnTo)) returnTo.focus(); returnTo = null;
+}
+function setFocusEl(t){ if(focusEl) focusEl.classList.remove("rv-focus"); focusEl = t; if(t) t.classList.add("rv-focus"); }
+
+/* ----- your name ----- */
+function needName(then){
+  if(name) return then();
+  const f = mk("form", "rv-form");
+  const inp = mk("input"); inp.id = "rv-name"; inp.maxLength = 60; inp.autocomplete = "name"; inp.required = true;
+  const lab = mk("label", null, "Your name"); lab.htmlFor = "rv-name";
+  const row = mk("div", "rv-row"); const save = mk("button", "rv-b primary", "Save"); save.type = "submit"; row.append(save);
+  f.append(lab, inp, row);
+  f.addEventListener("submit", e => { e.preventDefault(); const v = norm(inp.value).slice(0, 60); if(!v) return; name = v; store.set("rv-name", v); then(); });
+  openSheet("Before your first comment", [mk("p", null, "Enter your name. Other reviewers see it next to your comments."), mk("p", "rv-note", "Anyone who has the course link can open review mode and read the comments, so write only what you’re fine with others seeing."), f], inp);
+}
+
+/* ----- adding a comment ----- */
+let picking = false, hov = null;
+function setPick(on){
+  picking = on; document.body.classList.toggle("rv-picking", on); hint.hidden = !on; addB.setAttribute("aria-pressed", String(on));
+  if(!on && hov){ hov.classList.remove("rv-hover"); hov = null; }
+  if(on) closeSheet();
+}
+const pickTarget = e => { const t = e.target.closest ? e.target.closest(SEL) : null; return t && app.contains(t) ? t : null; };
+document.addEventListener("mouseover", e => {
+  if(!picking) return; const t = pickTarget(e);
+  if(hov && hov !== t) hov.classList.remove("rv-hover"); hov = t; if(t) t.classList.add("rv-hover");
+}, true);
+document.addEventListener("click", e => {
+  if(!picking || e.target.closest(".rv-ui")) return;
+  e.preventDefault(); e.stopPropagation();
+  const t = pickTarget(e); if(!t) return;
+  setPick(false); needName(() => commentForm(t));
+}, true);
+document.addEventListener("keydown", e => { if(e.key !== "Escape") return; if(picking) setPick(false); else if(!sheet.hidden) closeSheet(); });
+
+function textForm(label, saveLabel, onSave, onCancel){
+  const f = mk("form", "rv-form");
+  const id = "rv-t" + Math.random().toString(36).slice(2, 7);
+  const ta = mk("textarea"); ta.id = id; ta.maxLength = 2000; ta.required = true;
+  const lab = mk("label", null, label); lab.htmlFor = id;
+  const row = mk("div", "rv-row"); const save = mk("button", "rv-b primary", saveLabel); save.type = "submit"; row.append(save);
+  if(onCancel) row.append(btn("Cancel", "", onCancel));
+  f.append(lab, ta, row);
+  f.addEventListener("submit", e => { e.preventDefault(); const v = ta.value.trim().slice(0, 2000); if(v) onSave(v); });
+  return {f, ta};
+}
+function commentForm(t){
+  setFocusEl(t);
+  const {f, ta} = textForm("Your comment", "Save comment", v => {
+    const c = {id: uid(), page: pageKey(), where: whereFor(t), anchor: anchorFor(t), name, at: new Date().toISOString(), text: v};
+    mine.push(c); saveMine(); refresh(); openThread(t);
+  }, () => closeSheet());
+  openSheet("Add a comment", [quote(t), f], ta);
+}
+const quote = t => { const q = mk("p", "rv-quote", textOf(t).slice(0, 160) + (textOf(t).length > 160 ? "…" : "")); if(!textOf(t)) q.textContent = "A picture"; return q; };
+
+/* ----- reading a thread ----- */
+function commentNode(c){
+  const box = mk("div", "rv-c");
+  const meta = mk("p", "rv-meta"); meta.append(mk("b", null, c.name || "Reviewer"), " · " + fmtDate(c.at));
+  if(isMine(c) && !shared.some(s => s.id === c.id)) meta.append(mk("span", "rv-tag", c.sent ? "Sent, not shared yet" : "Not sent yet"));
+  box.append(meta, mk("p", "rv-text", c.text));
+  if(isMine(c) && !shared.some(s => s.id === c.id)){
+    const row = mk("div", "rv-row"); const del = mk("button", "rv-link", "Delete"); del.type = "button";
+    del.addEventListener("click", () => {
+      const gone = new Set([c.id, ...repliesTo(c.id).map(r => r.id)]);
+      mine = mine.filter(m => !gone.has(m.id)); saveMine(); refresh();
+      const t = focusEl; if(t && commentsOn(t).length) openThread(t); else closeSheet();
+    });
+    row.append(del); box.append(row);
+  }
+  return box;
+}
+const commentsOn = t => all().filter(c => !c.parent && c.page === pageKey() && findAnchor(c.anchor) === t);
+function openThread(t){
+  setFocusEl(t);
+  const nodes = [quote(t)];
+  commentsOn(t).forEach(c => {
+    const box = commentNode(c);
+    const reps = repliesTo(c.id);
+    const wrap = mk("div", "rv-replies"); reps.forEach(r => wrap.append(commentNode(r)));
+    const rb = mk("button", "rv-link", "Reply"); rb.type = "button";
+    rb.addEventListener("click", () => needName(() => {
+      openThread(t);
+      const {f, ta} = textForm("Your reply", "Save reply", v => {
+        mine.push({id: uid(), parent: c.id, page: c.page, name, at: new Date().toISOString(), text: v}); saveMine(); refresh(); openThread(t);
+      }, () => openThread(t));
+      const target = [...shBody.querySelectorAll(".rv-replies")].find(w => w.dataset.for === c.id);
+      target.hidden = false; target.append(f); ta.focus();
+    }));
+    wrap.dataset.for = c.id; if(!reps.length) wrap.hidden = true;
+    const row = mk("div", "rv-row"); row.append(rb);
+    box.append(wrap, row); nodes.push(box);
+  });
+  nodes.push(btn("Add another comment here", "", () => needName(() => commentForm(t))));
+  openSheet("Comments", nodes);
+}
+
+/* ----- every comment in the course ----- */
+function openList(){
+  const tops = all().filter(c => !c.parent);
+  const nodes = [];
+  if(!tops.length) nodes.push(mk("p", null, "No comments yet. Select Add a comment to leave the first one."));
+  const order = ["#home", "#setup", ...[...new Set(tops.map(c => c.page))].filter(k => /^#lesson-/.test(k)).sort((a, b) => +a.slice(8) - +b.slice(8))];
+  order.forEach(k => {
+    const list = tops.filter(c => c.page === k); if(!list.length) return;
+    const g = mk("section", "rv-group"); g.append(mk("h3", null, pageName(k)));
+    list.forEach(c => {
+      const it = mk("div", "rv-item");
+      const n = repliesTo(c.id).length;
+      it.append(mk("p", "rv-where", c.where || pageName(k)), mk("p", "rv-meta"), mk("p", "rv-text", c.text));
+      it.children[1].append(mk("b", null, c.name || "Reviewer"), " · " + fmtDate(c.at) + (n ? ` · ${n} repl${n > 1 ? "ies" : "y"}` : ""));
+      const row = mk("div", "rv-row"); const go = mk("button", "rv-link", "Show on the page"); go.type = "button";
+      go.addEventListener("click", () => goTo(c)); row.append(go); it.append(row);
+      g.append(it);
+    });
+    nodes.push(g);
+  });
+  const foot = mk("div", "rv-row");
+  if(name){ const ch = mk("button", "rv-link", `Change your name (${name})`); ch.type = "button"; ch.addEventListener("click", () => { name = ""; store.set("rv-name", ""); needName(() => openList()); }); foot.append(ch); }
+  const leave = mk("a", "rv-link", "Leave review mode"); leave.href = location.pathname + location.hash; foot.append(leave);
+  nodes.push(foot);
+  openSheet("All comments", nodes);
+}
+function goTo(c){
+  const show = () => {
+    const t = findAnchor(c.anchor);
+    if(!t){ openSheet("Comments", [mk("p", null, "This comment’s spot has changed since the comment was written. Here’s the comment."), commentNode(c)]); return; }
+    reveal(t); t.scrollIntoView({block: "center"}); drawPins(); openThread(t);
+  };
+  if(c.page === pageKey()) show(); else { closeSheet(); location.hash = c.page === "#home" ? "#home" : c.page; setTimeout(show, 400); }
+}
+
+/* ----- sending ----- */
+function send(){
+  const p = pending();
+  if(!p.length){ openSheet("Send my comments", [mk("p", null, all().length ? "You have no new comments to send." : "You have no comments yet. Select Add a comment to leave one.")]); return; }
+  const day = new Date().toISOString().slice(0, 10);
+  const who = (name || "reviewer").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "reviewer";
+  const file = `course-comments-${who}-${day}.json`;
+  const blob = new Blob([JSON.stringify({reviewer: name, saved: new Date().toISOString(), comments: p}, null, 2)], {type: "application/json"});
+  const a = mk("a"); a.href = URL.createObjectURL(blob); a.download = file; document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  mine.forEach(m => { if(p.includes(m)) m.sent = true; }); saveMine(); refresh();
+  const nodes = [
+    mk("p", null, `Your browser saved your ${p.length === 1 ? "comment" : p.length + " comments"} in a file called ${file}. Look for the file in your Downloads folder.`),
+    mk("p", null, `Send the file to ${SEND_TO} in Teams or email. Other reviewers see your comments after ${SEND_TO} adds them to the course, usually within a day.`),
+    mk("p", "rv-note", "You can keep commenting. Next time, Send my comments saves only the comments that aren’t shared yet.")];
+  openSheet("Send my comments", nodes);
+}
+
+/* ----- pins ----- */
+const layer = mk("div", "rv-layer rv-ui"); document.body.append(layer);
+function drawPins(){
+  layer.replaceChildren();
+  const groups = new Map();
+  all().filter(c => !c.parent && c.page === pageKey()).forEach(c => {
+    const t = findAnchor(c.anchor); if(!t) return;
+    if(!groups.has(t)) groups.set(t, []); groups.get(t).push(c);
+  });
+  const vw = document.documentElement.clientWidth;
+  groups.forEach((list, t) => {
+    const r = t.getBoundingClientRect(); if(!r.width && !r.height) return;
+    const n = list.reduce((s, c) => s + 1 + repliesTo(c.id).length, 0);
+    const pin = mk("button", "rv-pin"); pin.type = "button";
+    pin.innerHTML = ICON; pin.append(String(n));
+    pin.setAttribute("aria-label", `${n} comment${n > 1 ? "s" : ""} on: ${textOf(t).slice(0, 60) || "a picture"}`);
+    let left = r.right + 8, top = r.top - 2;
+    if(left > vw - 44){ left = Math.min(r.right, vw - 4) - 40; top = r.top - 30; } /* no room beside: sit above the top-right corner, off the text */
+    pin.style.top = (top + scrollY) + "px"; pin.style.left = (Math.max(4, left) + scrollX) + "px";
+    pin.addEventListener("click", () => openThread(t));
+    layer.append(pin);
+  });
+}
+let raf = 0;
+const schedule = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(drawPins); };
+function refresh(){ updateBar(); drawPins(); }
+new MutationObserver(schedule).observe(app, {childList: true, subtree: true, attributes: true, attributeFilter: ["hidden", "open", "aria-selected"]});
+addEventListener("resize", schedule);
+document.addEventListener("click", () => setTimeout(schedule, 60));
+document.addEventListener("toggle", schedule, true);
+addEventListener("hashchange", () => { if(picking) setPick(false); });
+
+/* ----- shared comments ----- */
+function loadShared(){
+  fetch(SHARED + "?t=" + Date.now(), {cache: "no-store"}).then(r => r.ok ? r.json() : {comments: []}).catch(() => ({comments: []})).then(d => {
+    shared = Array.isArray(d.comments) ? d.comments.filter(c => c && typeof c.id === "string" && typeof c.text === "string") : [];
+    const ids = new Set(shared.map(c => c.id));
+    if(mine.some(m => ids.has(m.id))){ mine = mine.filter(m => !ids.has(m.id)); saveMine(); }
+    refresh();
+  });
+}
+refresh(); loadShared();
+})();
+</script>
