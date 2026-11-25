@@ -362,7 +362,9 @@ details.acc>summary::before{content:"+";font-size:20px;width:20px;color:var(--ac
 details.acc[open]>summary::before{content:"\2212"}
 details.acc .body{padding:0 18px 16px 48px}
 details.acc.flow-pin{position:sticky;top:var(--where-h,49px);z-index:15;box-shadow:var(--shadow)}
-details.acc.flow-pin[open]>.body{max-height:calc(100vh - var(--where-h,49px) - 80px);overflow-y:auto}
+details.acc.flow-pin[open]>.body{max-height:45vh;overflow-y:auto}
+details.acc.flow-pin .fp-hide,details.acc.flow-pin[open] .fp-show{display:none}
+details.acc.flow-pin[open] .fp-hide{display:inline}
 
 /* Process */
 .proc{border:1px solid var(--line);border-radius:12px;padding:20px;background:var(--bg);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px}
@@ -467,18 +469,21 @@ details.acc.flow-pin[open]>.body{max-height:calc(100vh - var(--where-h,49px) - 8
 
 /* Term match: terms and definitions stay face up. The learner selects a term, then its definition, in either order.
    Teal = a card to click, filled teal = the selected card. Green with a check = a matched pair. Marigold = not a match. */
-.om{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:16px;align-items:start}
-.om-col{display:flex;flex-direction:column;gap:8px}
-.om-head{margin:0;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-.omcard{all:unset;box-sizing:border-box;cursor:pointer;border:1.5px solid var(--link);border-radius:8px;background:var(--accent-soft);padding:9px 12px;font-size:15px;line-height:1.45;color:var(--ink);text-align:left}
-.omcard.term{font-weight:700}
-.omcard[aria-pressed="true"]{background:var(--link);color:var(--bg)}
-.omcard.found{border-color:var(--good);background:var(--good-soft);color:var(--ink);cursor:default}
-.omcard.found.term::before{content:"✓ ";color:var(--good)}
+.om{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:20px;align-items:start}
+.om-col{display:flex;flex-direction:column;gap:10px}
+.om-head{margin:0 0 2px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.omcard{all:unset;box-sizing:border-box;cursor:pointer;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:12px 14px;font-size:15px;line-height:1.45;color:var(--ink);text-align:left;box-shadow:0 1px 2px rgba(32,56,62,.06);transition:border-color .15s,box-shadow .15s,background .15s}
+.omcard:hover:not(.found){border-color:var(--link);box-shadow:0 3px 10px rgba(19,105,119,.14)}
+.omcard.term{font-weight:700;color:var(--link)}
+.omcard[aria-pressed="true"]{background:var(--link);border-color:var(--link);color:var(--bg)}
+.omcard.found{border-color:var(--good);background:var(--good-soft);color:var(--ink);cursor:default;box-shadow:none}
+.omcard.found.term::before{content:"✓ ";color:var(--good)}
 .omcard .om-tag{display:block;font-weight:700}
 .omcard.miss{border-color:var(--bad);background:var(--bad-soft);color:var(--ink)}
 .omcard:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-.omstat{font-size:15px;color:var(--muted);margin:0}
+.omstat{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--muted);margin:0 0 4px}
+.ombar{flex:1;max-width:220px;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.ombar i{display:block;height:100%;background:var(--good);border-radius:3px;transition:width .3s}
 .omfb:empty{display:none}
 @media (max-width:560px){.om{grid-template-columns:1fr}.om-terms{flex-direction:row;flex-wrap:wrap}.om-terms .om-head{flex-basis:100%}.omcard{font-size:14.5px}}
 /* Bonus game (falling terms): a definition falls toward the ground line, and the learner types its term.
@@ -926,7 +931,7 @@ const LESSONS = [
     {t:"h", text:"Part 4. Choose chat, a project or an agent", why:""},
     {t:"sh", text:"Learn the three places to work"},
     {t:"p", html:`You have the app, the model and the thinking setting. Last, choose where in the app to work. A chat, a project and an agent each take on a different share of the work. Each app offers more than one place to work.<br><br><ul class="list"><li>In a <b>chat</b>, you type a request, the AI replies, and you do the rest. </li><li>A <b>project</b> is a workspace that keeps the same files and instructions ready for every chat inside it. Claude and ChatGPT call it a project. In Copilot, look for Projects, Notebooks or Workspaces. Gemini calls it a notebook.</li><li>An <b>agent</b> is AI that does the work by itself, including checking its own work. For example, an agent opens files, searches the web and builds a document. Some agents also have projects. For example, a project in Claude Cowork (an agent) keeps the same files and instructions ready for every Cowork task inside it. Lesson 3 covers agents in full: how they work, and how to brief them, work with them safely, and check their work.</li></ul>`},
-    {t:"note", html:`<b>Same word, different meaning.</b> Most apps use these words the same way. As of November 2026, watch for three differences.<p class="sub"><b>Agent</b></p><ul class="list"><li>In this course, an agent is AI that <b>does the work by itself</b>, including checking its own work.</li><li><b>Claude Cowork, ChatGPT Work and Copilot Cowork</b> are agents.</li><li>In Gemini, select <b>Task</b> above the message box to use its agent.</li><li>In Copilot, “agent” can also mean an <b>assistant someone set up for one job</b>. That kind mostly answers questions, like a project. For example, HR could set up a Copilot agent that answers staff questions from the employee handbook in SharePoint.</li></ul><p class="sub"><b>Connector</b></p><ul class="list"><li>ChatGPT calls connectors <b>“apps.”</b></li><li>Gemini calls them <b>“connected apps.”</b></li><li>Lesson 2 covers connectors.</li></ul><p class="sub"><b>Skill</b></p><ul class="list"><li><b>Copilot has no skills.</b></li><li>Lesson 4 covers skills.</li></ul>`},
+    {t:"note", html:`<b>Same word, different meaning.</b> Most apps use these words the same way. As of November 2026, watch for two differences.<p class="sub"><b>Agent</b></p><ul class="list"><li>In this course, an agent is AI that <b>does the work by itself</b>, including checking its own work.</li><li><b>Claude Cowork, ChatGPT Work and Copilot Cowork</b> are agents.</li><li>In Gemini, select <b>Task</b> above the message box to use its agent.</li><li>In Copilot, “agent” can also mean an <b>assistant someone set up for one job</b>. That kind mostly answers questions, like a project. For example, HR could set up a Copilot agent that answers staff questions from the employee handbook in SharePoint.</li></ul><p class="sub"><b>Connector</b></p><ul class="list"><li>ChatGPT calls connectors <b>“apps.”</b></li><li>Gemini calls them <b>“connected apps.”</b></li><li>Lesson 2 covers connectors.</li></ul>`},
     {t:"sh", text:"Use the flowchart to choose"},
     {t:"p", html:`Choose the simplest option that can do the task. Check the options in this order: chat, then a project, then an agent.`},
     {t:"flow"},
@@ -1357,7 +1362,7 @@ const LESSONS = [
     {t:"tabs", tabs:[
       {title:"Skill", html:`<p>Loads when one kind of task needs it.</p><ul class="list"><li>The full Fredrickson method for building a job aid, loaded when you ask for a job aid.</li><li>The steps and checks for the weekly status report, loaded when you ask for the report.</li></ul>`},
       {title:"Custom instructions", html:`<p>Load in every chat you start.</p><ul class="list"><li>“I am an instructional designer. My audience is usually HR leaders.”</li><li>“Write in US English.”</li></ul><p>Custom instructions can also tell the AI to use a skill every time. For example: “Use the plain-writing skill for everything you write.” The custom instructions stay short, and the skill holds the full method.</p>`}]},
-    {t:"note", html:`<b>Easy to mix up.</b> Copilot has no feature called a skill. The closest match is an agent someone built for one job in Agent Builder.`},
+    {t:"note", html:`<b>Skills in Copilot.</b> As of November 2026, Copilot has skills too, and it loads a skill when your task needs it, the same way Claude does. In Copilot Chat, skills are listed under <b>Agents &amp; Skills</b>, and they need a paid Microsoft 365 Copilot license. In Copilot Cowork, skills are listed under <b>Plugins</b>. An agent from Agent Builder is different: it’s a whole assistant someone set up for one job.`},
     {t:"sh", text:"Make a skill with the AI’s help"},
     {t:"p", html:`You don’t have to write a skill from scratch. As of November 2026, the quickest way is to build one with Claude.`},
     {t:"html", html:`<ol class="list"><li>Do the task once in a chat. Fix the reply until it’s right.</li><li>In the same chat, ask: “Turn what we just did into a skill. Ask me about anything you would have to guess.”</li><li>Answer Claude’s questions. Claude then writes the skill as a file.</li><li>Add the file in Claude’s settings, where your skills are listed.</li><li>Try the skill on two or three real tasks. When a reply misses, tell Claude what to change in the skill.</li></ol>`},
@@ -1464,7 +1469,7 @@ const LESSONS = [
     {t:"statement", text:"Give each step to the model that does it best. Write down which model did each step, so you can send each step to the same model next time."},
     {t:"gate"},
     {t:"h", text:"Part 6. Add to your setup list", why:""},
-    {t:"ci", n:4, intro:`Part 1 showed how to save a method as a skill. This line asks the AI to tell you when a method is worth saving. Copilot has no skills, so in Copilot, skip this step.`, test:`Write a one-line reminder about Friday’s team meeting. Then, after the reply, send two fixes: “Make it friendlier,” then “Add that it starts at 10.”`, lines:`- When a task took two or more rounds of fixes, offer in one line to turn the method into a skill.`, where:`<p>Open your custom instructions the way you did in Lesson 1.</p>`, look:`In the first chat, the AI made your fixes and stopped. In the second chat, the AI offers to save the method as a skill after your second fix.`},
+    {t:"ci", n:4, intro:`Part 1 showed how to save a method as a skill. This line asks the AI to tell you when a method is worth saving.`, test:`Write a one-line reminder about Friday’s team meeting. Then, after the reply, send two fixes: “Make it friendlier,” then “Add that it starts at 10.”`, lines:`- When a task took two or more rounds of fixes, offer in one line to turn the method into a skill.`, where:`<p>Open your custom instructions the way you did in Lesson 1.</p>`, look:`In the first chat, the AI made your fixes and stopped. In the second chat, the AI offers to save the method as a skill after your second fix.`},
     {t:"gate"},
     {t:"h", text:"Knowledge Check: decide what each task needs, and why"},
     {t:"p", html:`Each choice gives an answer and the reason for it. Pick the one with the right answer and the right reason. Answer all four, then write one definition. Your score appears after the last question.`},
@@ -2169,7 +2174,7 @@ function practiceBlock(ctx, seg){
   const w = el("div","stack");
   w.append(el("h3",null,"Practice: choose the option in the app"));
   w.append(el("p",null,"Choose the option for each task. Open the flowchart if you need it. These questions do not count toward your score."));
-  const fc = el("details","acc flow-pin"); fc.innerHTML = `<summary>Show the flowchart</summary>`;
+  const fc = el("details","acc flow-pin"); fc.innerHTML = `<summary><span class="fp-show">Show the flowchart</span><span class="fp-hide">Hide the flowchart</span></summary>`;
   const fcb = el("div","body"); fcb.append(flowBlock(ctx)); fc.append(fcb); w.append(fc);
   const qs = PRACTICE.map(item => practiceQ(item, w, () => check()));
   function check(){
@@ -2553,7 +2558,7 @@ function cardsBlock(b){
     let sel = null, miss = null, found = 0;
     card.replaceChildren();
     const stat = el("p","omstat"); card.append(stat);
-    const showStat = () => { stat.textContent = `Matched: ${found} of ${terms.length}.`; };
+    const showStat = () => { stat.innerHTML = `<span>Matched: ${found} of ${terms.length}</span><span class="ombar" aria-hidden="true"><i style="width:${Math.round(100*found/terms.length)}%"></i></span>`; };
     const board = el("div","om"); card.append(board);
     const tcol = el("div","om-col om-terms"), dcol = el("div","om-col om-defs");
     tcol.append(el("p","om-head","Terms")); dcol.append(el("p","om-head","Definitions"));
